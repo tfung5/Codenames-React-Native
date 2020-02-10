@@ -1,3 +1,7 @@
 Tony Fung
 I am a senior at Hunter College.
 My favorite languages are C++ and JavaScript.
+
+Stella Ma
+I am a senior at Hunter College.
+I enjoy working on front-end.
