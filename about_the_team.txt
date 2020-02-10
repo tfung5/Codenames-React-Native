@@ -5,3 +5,7 @@ My favorite languages are C++ and JavaScript.
 Stella Ma
 I am a senior at Hunter College.
 I enjoy working on front-end.
+
+Andrew Hrabovcak
+I am also a senior at Hunter College.
+I don't have an interest in CS.
