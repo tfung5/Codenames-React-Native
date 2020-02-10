@@ -1,0 +1,3 @@
+Tony Fung
+I am a senior at Hunter College.
+My favorite languages are C++ and JavaScript.
