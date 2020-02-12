@@ -1,13 +1,17 @@
 import React from "react";
-import { StyleSheet, Image, Text, View } from "react-native";
-import Touchable from "react-native-platform-touchable";
+import { StyleSheet, Image, TouchableOpacity, Text, View } from "react-native";
+import uuid from "uuid/v4";
+
+const RED = "RED";
+const BLUE = "BLUE";
 
 export default class CodenamesView extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      board: []
+      board: [],
+      team: RED
     };
 
     this.wordList = [
@@ -76,16 +80,22 @@ export default class CodenamesView extends React.Component {
   }
 
   componentDidMount = () => {
-    this.fillBoard();
+    this.createBoardFromWordList();
   };
 
-  fillBoard = () => {
+  createBoardFromWordList = () => {
     let board = [];
     let count = 0;
-    for (let i = 0; i < 5; ++i) {
+    for (let row = 0; row < 5; ++row) {
       let currRow = [];
-      for (let j = 0; j < 5; ++j) {
-        currRow.push(this.wordList[count++]);
+      for (let col = 0; col < 5; ++col) {
+        currRow.push({
+          word: this.wordList[count++],
+          cellStyle: styles.boardCell,
+          textStyle: styles.boardCellText,
+          row,
+          col
+        });
       }
       board.push(currRow);
     }
@@ -101,12 +111,17 @@ export default class CodenamesView extends React.Component {
         {board.length > 0 &&
           board.map(row => {
             return (
-              <View style={styles.boardRow} key={row}>
+              <View style={styles.boardRow} key={uuid()}>
                 {row.length > 0 &&
                   row.map(cell => {
                     return (
-                      <View style={styles.boardCell} key={cell}>
-                        <Text>{cell}</Text>
+                      <View key={cell.word}>
+                        <TouchableOpacity
+                          style={cell.cellStyle}
+                          onPress={() => this.setCellStyle(cell.row, cell.col)}
+                        >
+                          <Text style={cell.textStyle}>{cell.word}</Text>
+                        </TouchableOpacity>
                       </View>
                     );
                   })}
@@ -115,6 +130,26 @@ export default class CodenamesView extends React.Component {
           })}
       </View>
     );
+  };
+
+  setCellStyle = (row, col) => {
+    let boardCopy = this.state.board;
+    if (this.state.team === RED) {
+      boardCopy[row][col].cellStyle = [styles.boardCell, styles.boardCellRed];
+      boardCopy[row][col].textStyle = [
+        styles.boardCellText,
+        styles.boardCellTextRed
+      ];
+    } else {
+      boardCopy[row][col].cellStyle = [styles.boardCell, styles.boardCellBlue];
+      boardCopy[row][col].textStyle = [
+        styles.boardCellText,
+        styles.boardCellTextBlue
+      ];
+    }
+    this.setState({
+      board: boardCopy
+    });
   };
 
   render() {
@@ -146,5 +181,20 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center"
+  },
+  boardCellText: {
+    color: "black"
+  },
+  boardCellBlue: {
+    borderColor: "blue"
+  },
+  boardCellRed: {
+    borderColor: "red"
+  },
+  boardCellTextBlue: {
+    color: "blue"
+  },
+  boardCellTextRed: {
+    color: "red"
   }
 });
