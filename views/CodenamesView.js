@@ -11,6 +11,70 @@ export default class CodenamesView extends React.Component {
     this.state = {
       board: []
     };
+
+    this.wordList = [
+      "Hollywood",
+      "Well",
+      "Screen",
+      "Fair",
+      "Play",
+      "Tooth",
+      "Marble",
+      "Staff",
+      "Dinosaur",
+      "Bill",
+      "Cat",
+      "Shot",
+      "Pitch",
+      "King",
+      "Bond",
+      "Pan",
+      "Greece",
+      "Square",
+      "Deck",
+      "Buffalo",
+      "Spike",
+      "Scientist",
+      "Center",
+      "Chick",
+      "Vacuum",
+      "Atlantis",
+      "Unicorn",
+      "Spy",
+      "Undertaker",
+      "Mail",
+      "Sock",
+      "Nut",
+      "Loch",
+      "Ness",
+      "Log",
+      "Horse",
+      "Pirate",
+      "Berlin",
+      "Face",
+      "Platypus",
+      "Stick",
+      "Port",
+      "Disease",
+      "Chest",
+      "Yard",
+      "Box",
+      "Mount",
+      "Compound",
+      "Slug",
+      "Ship",
+      "Dice",
+      "Watch",
+      "Lead",
+      "Space",
+      "Hook",
+      "Flute",
+      "Carrot",
+      "Tower",
+      "Poison",
+      "Death",
+      "Stock"
+    ];
   }
 
   componentDidMount = () => {
@@ -19,15 +83,14 @@ export default class CodenamesView extends React.Component {
 
   fillBoard = () => {
     let board = [];
-    let currLetter = 65;
+    let count = 0;
     for (let i = 0; i < 5; ++i) {
       let currRow = [];
       for (let j = 0; j < 5; ++j) {
-        currRow.push(String.fromCharCode(currLetter++));
+        currRow.push(this.wordList[count++]);
       }
       board.push(currRow);
     }
-    console.log("fillboard's board: ", board);
     this.setState({
       board
     });
@@ -35,20 +98,20 @@ export default class CodenamesView extends React.Component {
 
   renderBoard = () => {
     const { board } = this.state;
-    console.log("board: ", board);
     return (
       <View>
         {board.length > 0 &&
           board.map(row => {
             return (
-              <View style={styles.boardRow}>
-                {row.map(cell => {
-                  return (
-                    <View style={styles.boardCell}>
-                      <Text>{cell}</Text>
-                    </View>
-                  );
-                })}
+              <View style={styles.boardRow} key={row}>
+                {row.length > 0 &&
+                  row.map(cell => {
+                    return (
+                      <View style={styles.boardCell} key={cell}>
+                        <Text>{cell}</Text>
+                      </View>
+                    );
+                  })}
               </View>
             );
           })}
@@ -135,8 +198,8 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
     margin: 2,
-    width: 30,
-    height: 30,
+    width: 100,
+    height: 100,
     display: "flex",
     alignItems: "center",
     justifyContent: "center"
