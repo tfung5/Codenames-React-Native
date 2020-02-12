@@ -7,7 +7,7 @@ import TabBarIcon from "../components/TabBarIcon";
 import HomeScreen from "../screens/HomeScreen";
 import LinksScreen from "../screens/LinksScreen";
 import SettingsScreen from "../screens/SettingsScreen";
-import CodenamesScreen from "../screens/CodenamesScreen";
+import GameScreen from "../screens/GameScreen";
 import ChatScreen from "../screens/ChatScreen";
 
 const config = Platform.select({
@@ -76,15 +76,15 @@ SettingsStack.navigationOptions = {
 
 SettingsStack.path = "";
 
-const CodenamesStack = createStackNavigator(
+const GameStack = createStackNavigator(
   {
-    Codenames: CodenamesScreen
+    Game: GameScreen
   },
   config
 );
 
-CodenamesStack.navigationOptions = {
-  tabBarLabel: "Codenames",
+GameStack.navigationOptions = {
+  tabBarLabel: "Game",
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -93,7 +93,7 @@ CodenamesStack.navigationOptions = {
   )
 };
 
-CodenamesStack.path = "";
+GameStack.path = "";
 
 const ChatStack = createStackNavigator(
   {
@@ -118,7 +118,7 @@ const tabNavigator = createBottomTabNavigator({
   HomeStack,
   LinksStack,
   SettingsStack,
-  CodenamesStack,
+  GameStack,
   ChatStack
 });
 

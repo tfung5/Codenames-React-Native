@@ -1,8 +1,8 @@
 import React from "react";
 import { TouchableOpacity, Text, View } from "react-native";
 import uuid from "uuid/v4";
-import styles from "../styles/CodenamesStyles";
-import { RED, BLUE } from "../components/Codenames";
+import styles from "../styles/GameStyles";
+import { RED, BLUE } from "../components/Game";
 
 export default props => {
   const { board, team, setCellStyle } = props;

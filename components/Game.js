@@ -1,12 +1,12 @@
 import React from "react";
 import { View } from "react-native";
-import CodenamesView from "../views/CodenamesView";
-import styles from "../styles/CodenamesStyles";
+import GameView from "../views/GameView";
+import styles from "../styles/GameStyles";
 
 export const RED = "RED";
 export const BLUE = "BLUE";
 
-export default class Codenames extends React.Component {
+export default class Game extends React.Component {
   constructor(props) {
     super(props);
 
@@ -123,11 +123,7 @@ export default class Codenames extends React.Component {
 
     return (
       <View>
-        <CodenamesView
-          board={board}
-          team={team}
-          setCellStyle={this.setCellStyle}
-        />
+        <GameView board={board} team={team} setCellStyle={this.setCellStyle} />
       </View>
     );
   }
