@@ -1,8 +1,8 @@
 import React from "react";
-import CodenamesView from "../views/CodenamesView";
+import Codenames from "../components/Codenames";
 
 export default function CodenamesScreen() {
-  return <CodenamesView />;
+  return <Codenames />;
 }
 
 CodenamesScreen.navigationOptions = {
