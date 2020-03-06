@@ -1,10 +1,12 @@
 import React from "react";
+import io from "socket.io-client";
 import { View } from "react-native";
 import GameView from "../views/GameView";
 import styles from "../styles/GameStyles";
 
 export const RED = "RED";
 export const BLUE = "BLUE";
+const UPDATE_BOARD = "UPDATE_BOARD";
 
 export default class Game extends React.Component {
   constructor(props) {
@@ -82,6 +84,18 @@ export default class Game extends React.Component {
 
   componentDidMount = () => {
     this.createBoardFromWordList();
+    this.createSocketConnections();
+  };
+
+  createSocketConnections = () => {
+    this.socket = io("http://127.0.0.1:3000");
+    this.socket.on(UPDATE_BOARD, board => {
+      this.setState({ board });
+    });
+  };
+
+  emitBoard = board => {
+    this.socket.emit(UPDATE_BOARD, board);
   };
 
   createBoardFromWordList = () => {
@@ -113,9 +127,7 @@ export default class Game extends React.Component {
     } else {
       boardCopy[row][col].style = [styles.boardCell, styles.boardCellBlue];
     }
-    this.setState({
-      board: boardCopy
-    });
+    this.emitBoard(boardCopy);
   };
 
   render() {
