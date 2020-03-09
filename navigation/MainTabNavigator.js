@@ -12,14 +12,14 @@ import ChatScreen from "../screens/ChatScreen";
 
 const config = Platform.select({
   web: { headerMode: "screen" },
-  default: {}
+  default: {},
 });
 
 const HomeStack = createStackNavigator(
   {
     Home: HomeScreen
   },
-  config
+  {headerMode: 'none'}
 );
 
 HomeStack.navigationOptions = {
@@ -42,7 +42,7 @@ const LinksStack = createStackNavigator(
   {
     Links: LinksScreen
   },
-  config
+  {headerMode: 'none'}
 );
 
 LinksStack.navigationOptions = {
@@ -61,7 +61,7 @@ const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen
   },
-  config
+  {headerMode: 'none'}
 );
 
 SettingsStack.navigationOptions = {
@@ -80,7 +80,7 @@ const GameStack = createStackNavigator(
   {
     Game: GameScreen
   },
-  config
+  {headerMode: 'none'}
 );
 
 GameStack.navigationOptions = {
@@ -99,7 +99,7 @@ const ChatStack = createStackNavigator(
   {
     Chat: ChatScreen
   },
-  config
+  {headerMode: 'none'}
 );
 
 ChatStack.navigationOptions = {
