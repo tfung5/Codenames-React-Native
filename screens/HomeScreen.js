@@ -15,6 +15,8 @@ import {
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import Clues from '../components/Clues'
+import CardsLeft from '../components/CardsLeft'
 
 const userName = {
   name: '',
@@ -24,7 +26,6 @@ const userContext = React.createContext(userName);
 
 function HomeScreen({ navigation }) {
   const { name, setName } = useContext(userContext);
-  // console.log("user: ", user)
   return (
 
     <View style={{ flex: 1, flexDirection: 'column' }}>
@@ -35,7 +36,7 @@ function HomeScreen({ navigation }) {
       <View style={{ flex: 29, flexDirection: 'column', justifyContent: 'center', backgroundColor: '#EAE7F2' }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', padding: 25 }}>
           <Text style={{ fontSize: 25 }}>Name:</Text>
-          <TextInput style={{ backgroundColor: 'white', borderWidth: 2, borderRadius: 10, borderColor: 'lightskyblue', padding: 5, width: 220 }} textAlign={'center'} onChangeText={text => { setName(text) }} value={name} />
+          <TextInput style={{ fontSize: 18, backgroundColor: 'white', borderWidth: 2, borderRadius: 10, borderColor: 'lightskyblue', padding: 5, width: 220 }} textAlign={'center'} onChangeText={text => { setName(text) }} value={name} />
         </View>
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
           <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'white', borderWidth: 2, borderRadius: 10, width: 250 }} onPress={() => navigation.navigate('LobbyView')}>
@@ -139,8 +140,20 @@ function LobbyView({ navigation }) {
         <View style={{ backgroundColor: 'white', borderColor: 'dodgerblue', borderWidth: 2, borderRadius: 10, marginHorizontal: '9%', padding: 10, marginTop: 4 }}>
           {listBlueItems}
         </View>
-        <Text style={{ fontSize: 25 }} onPress={() => navigation.navigate('HomeScreen')}>Touch for Home</Text>
+        <Text style={{ fontSize: 25 }} onPress={() => navigation.navigate('TestScreen')}>Touch for Test</Text>
       </View>
+    </View>
+  );
+}
+
+function TestScreen({ navigation }) {
+  return(
+    <View style={{flex: 1}}>
+      <Clues canEdit={false}/>
+      <Clues canEdit={true}/>
+      <Text>{'\n'}</Text>
+      <CardsLeft redLeft={6} blueLeft={3} canEnd={true}/>
+      <CardsLeft redLeft={3} blueLeft={4} canEnd={false}/>
     </View>
   );
 }
@@ -152,9 +165,10 @@ export default function App() {
   return (
     <userContext.Provider value={{ name, setName }}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="HomeScreen">
+        <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="HomeScreen">
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen name="LobbyView" component={LobbyView} />
+          <Stack.Screen name="TestScreen" component={TestScreen}/>
         </Stack.Navigator>
       </NavigationContainer>
     </userContext.Provider>
