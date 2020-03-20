@@ -86,9 +86,11 @@ export default class GameScreen extends React.Component {
     ];
   }
 
-  componentDidMount = () => {
-    this.createBoardFromWordList();
-    this.createSocketConnections();
+  componentDidMount = async () => {
+    await this.createSocketConnections();
+    await this.selectStartTeam();
+    await this.createBoardFromWordList();
+    await this.randomizeColorOfCards();
   };
 
   createSocketConnections = () => {
@@ -102,6 +104,11 @@ export default class GameScreen extends React.Component {
     this.socket.emit(UPDATE_BOARD, board);
   };
 
+  selectStartTeam = () => {
+    let startTeam = Math.floor(Math.random()* 2) + 1;
+    this.state.team = startTeam === 1 ? RED : BLUE;
+  }
+
   createBoardFromWordList = () => {
     let board = [];
     let count = 0;
@@ -111,7 +118,7 @@ export default class GameScreen extends React.Component {
       for (let col = 0; col < 5; ++col) {
         currRow.push({
           word: this.wordList[count++],
-          color: BLUE,
+          color: GRAY,
           status: UNCHECKED,
           row,
           col
@@ -124,6 +131,46 @@ export default class GameScreen extends React.Component {
       board
     });
   };
+
+  randomizeColorOfCards = () => {
+    let boardCopy = this.state.board;
+    let numRedCards = this.state.team === RED ? 9 : 8;
+    let numBlueCards = this.state.team === RED ? 8 : 9;
+    let numBlackCards = 1;
+    var row, col;
+
+    //RED CARDS
+    while (numRedCards > 0){
+      row = Math.floor(Math.random()* 5);
+      col = Math.floor(Math.random()* 5);
+      if (boardCopy[row][col].color === GRAY){
+        boardCopy[row][col].color = RED;
+        numRedCards--;
+      }
+    }
+
+    //BLUE CARDS
+    while (numBlueCards > 0){
+      row = Math.floor(Math.random()* 5);
+      col = Math.floor(Math.random()* 5);
+      if (boardCopy[row][col].color === GRAY){
+        boardCopy[row][col].color = BLUE;
+        numBlueCards--;
+      }
+    }
+
+    //BLACK CARD
+    while (numBlackCards > 0){
+      row = Math.floor(Math.random()* 5);
+      col = Math.floor(Math.random()* 5);
+      if (boardCopy[row][col].color === GRAY){
+        boardCopy[row][col].color = BLACK;
+        numBlackCards--;
+      }
+    }
+
+    this.emitBoard(boardCopy);
+  }
 
   markCellChecked = (row, col) => {
     let boardCopy = this.state.board;
