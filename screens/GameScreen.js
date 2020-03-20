@@ -86,11 +86,11 @@ export default class GameScreen extends React.Component {
     ];
   }
 
-  componentDidMount = () => {
-    this.createSocketConnections();
-    this.selectStartTeam();
-    this.createBoardFromWordList();
-    this.randomizeColorOfCards();
+  componentDidMount = async () => {
+    await this.createSocketConnections();
+    await this.selectStartTeam();
+    await this.createBoardFromWordList();
+    await this.randomizeColorOfCards();
   };
 
   createSocketConnections = () => {
@@ -132,12 +132,44 @@ export default class GameScreen extends React.Component {
     });
   };
 
-  //Randomizing the color of the cards
   randomizeColorOfCards = () => {
-    //let boardCopy = this.state.board;
-    //boardCopy[1][1].status = CHECKED;
-    console.log(this.state.board);
-    //this.emitBoard(boardCopy);
+    let boardCopy = this.state.board;
+    let numRedCards = this.state.team === RED ? 9 : 8;
+    let numBlueCards = this.state.team === RED ? 8 : 9;
+    let numBlackCards = 1;
+    var row, col;
+
+    //RED CARDS
+    while (numRedCards > 0){
+      row = Math.floor(Math.random()* 5);
+      col = Math.floor(Math.random()* 5);
+      if (boardCopy[row][col].color === GRAY){
+        boardCopy[row][col].color = RED;
+        numRedCards--;
+      }
+    }
+
+    //BLUE CARDS
+    while (numBlueCards > 0){
+      row = Math.floor(Math.random()* 5);
+      col = Math.floor(Math.random()* 5);
+      if (boardCopy[row][col].color === GRAY){
+        boardCopy[row][col].color = BLUE;
+        numBlueCards--;
+      }
+    }
+
+    //BLACK CARD
+    while (numBlackCards > 0){
+      row = Math.floor(Math.random()* 5);
+      col = Math.floor(Math.random()* 5);
+      if (boardCopy[row][col].color === GRAY){
+        boardCopy[row][col].color = BLACK;
+        numBlackCards--;
+      }
+    }
+
+    this.emitBoard(boardCopy);
   }
 
   markCellChecked = (row, col) => {
