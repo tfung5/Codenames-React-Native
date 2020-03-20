@@ -48,7 +48,7 @@ GameStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === "ios" ? "ios-game-controller-a" : "md-game-controller-a"}
+      name={"logo-game-controller-a"}
     />
   )
 };

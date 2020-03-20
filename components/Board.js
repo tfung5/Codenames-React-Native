@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     margin: 2,
     fontFamily: "Courier New",
     fontSize: 12,
-    fontWeight: 600,
+    fontWeight: "bold",
     width: 80,
     height: 30,
     display: "flex",

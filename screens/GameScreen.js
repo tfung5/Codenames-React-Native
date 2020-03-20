@@ -67,7 +67,7 @@ export default class GameScreen extends React.Component {
           onPress={this.randomizeBoard}
           style={styles.randomizeButton}
         >
-          <Text>Randomize Board</Text>
+          <Text style={styles.randomizeButtonText}>Randomize Board</Text>
         </TouchableOpacity>
       </View>
     );
@@ -86,7 +86,9 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderRadius: 25,
     width: 150,
-    padding: 10,
+    padding: 10
+  },
+  randomizeButtonText: {
     textAlign: "center"
   }
 });

@@ -36,7 +36,7 @@ function HomeScreen({ navigation }) {
       <View style={{ flex: 29, flexDirection: 'column', justifyContent: 'center', backgroundColor: '#EAE7F2' }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', padding: 25 }}>
           <Text style={{ fontSize: 25 }}>Name:</Text>
-          <TextInput style={{ fontSize: 18, backgroundColor: 'white', borderWidth: 2, borderRadius: 10, borderColor: 'lightskyblue', padding: 5, width: 220 }} textAlign={'center'} onChangeText={text => { setName(text) }} value={name} />
+          <TextInput style={{ fontSize: 18, backgroundColor: 'white', borderWidth: 2, borderRadius: 10, borderColor: 'lightskyblue', padding: 5, width: 220, textAlign: 'center' }}  onChangeText={text => { setName(text) }} value={name} />
         </View>
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
           <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'white', borderWidth: 2, borderRadius: 10, width: 250 }} onPress={() => navigation.navigate('LobbyView')}>
@@ -67,7 +67,7 @@ function LobbyView({ navigation }) {
       slotColor = '#EDB0A8'
       slotName = name
     }
-    return (<TouchableOpacity style={{ backgroundColor: slotColor, borderColor: slotBorderColor, borderRadius: 10, borderWidth: 2, alignItems: 'center', justifyContent: 'center', marginHorizontal: '9%', marginVertical: 3 }}
+    return (<TouchableOpacity key={index} style={{ backgroundColor: slotColor, borderColor: slotBorderColor, borderRadius: 10, borderWidth: 2, alignItems: 'center', justifyContent: 'center', marginHorizontal: '9%', marginVertical: 3 }}
       onPress={() => {
         const redTeamCopy = [...redTeam]
         const blueTeamCopy = [...blueTeam]
@@ -105,7 +105,7 @@ function LobbyView({ navigation }) {
       slotColor = '#A8A8ED'
       slotName = name
     }
-    return (<TouchableOpacity style={{ backgroundColor: slotColor, borderColor: slotBorderColor, borderRadius: 10, borderWidth: 2, alignItems: 'center', justifyContent: 'center', marginHorizontal: '9%', marginVertical: 3 }}
+    return (<TouchableOpacity key={index} style={{ backgroundColor: slotColor, borderColor: slotBorderColor, borderRadius: 10, borderWidth: 2, alignItems: 'center', justifyContent: 'center', marginHorizontal: '9%', marginVertical: 3 }}
       onPress={() => {
         const blueTeamCopy = [...blueTeam]
         const redTeamCopy = [...redTeam]
@@ -133,7 +133,7 @@ function LobbyView({ navigation }) {
         <Text style={{ fontSize: 25 }}>Join a Team</Text>
       </View>
 
-      <View style={{ flex: 29, flexDirection: 'column', alignItem: 'center', justifyContent: 'center', backgroundColor: '#EAE7F2' }}>
+      <View style={{ flex: 29, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: '#EAE7F2' }}>
         <View style={{ backgroundColor: 'white', borderColor: 'firebrick', borderWidth: 2, borderRadius: 10, marginHorizontal: '9%', padding: 10, marginBottom: 4 }}>
           {listRedItems}
         </View>
