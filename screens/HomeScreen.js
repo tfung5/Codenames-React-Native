@@ -67,7 +67,7 @@ function LobbyView({ navigation }) {
       slotColor = '#EDB0A8'
       slotName = name
     }
-    return (<TouchableOpacity style={{ backgroundColor: slotColor, borderColor: slotBorderColor, borderRadius: 10, borderWidth: 2, alignItems: 'center', justifyContent: 'center', marginHorizontal: '9%', marginVertical: 3 }}
+    return (<TouchableOpacity key={index} style={{ backgroundColor: slotColor, borderColor: slotBorderColor, borderRadius: 10, borderWidth: 2, alignItems: 'center', justifyContent: 'center', marginHorizontal: '9%', marginVertical: 3 }}
       onPress={() => {
         const redTeamCopy = [...redTeam]
         const blueTeamCopy = [...blueTeam]
@@ -105,7 +105,7 @@ function LobbyView({ navigation }) {
       slotColor = '#A8A8ED'
       slotName = name
     }
-    return (<TouchableOpacity style={{ backgroundColor: slotColor, borderColor: slotBorderColor, borderRadius: 10, borderWidth: 2, alignItems: 'center', justifyContent: 'center', marginHorizontal: '9%', marginVertical: 3 }}
+    return (<TouchableOpacity key={index} style={{ backgroundColor: slotColor, borderColor: slotBorderColor, borderRadius: 10, borderWidth: 2, alignItems: 'center', justifyContent: 'center', marginHorizontal: '9%', marginVertical: 3 }}
       onPress={() => {
         const blueTeamCopy = [...blueTeam]
         const redTeamCopy = [...redTeam]
