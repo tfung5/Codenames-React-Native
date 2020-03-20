@@ -36,7 +36,7 @@ function HomeScreen({ navigation }) {
       <View style={{ flex: 29, flexDirection: 'column', justifyContent: 'center', backgroundColor: '#EAE7F2' }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', padding: 25 }}>
           <Text style={{ fontSize: 25 }}>Name:</Text>
-          <TextInput style={{ fontSize: 18, backgroundColor: 'white', borderWidth: 2, borderRadius: 10, borderColor: 'lightskyblue', padding: 5, width: 220 }} textAlign={'center'} onChangeText={text => { setName(text) }} value={name} />
+          <TextInput style={{ fontSize: 18, backgroundColor: 'white', borderWidth: 2, borderRadius: 10, borderColor: 'lightskyblue', padding: 5, width: 220, textAlign: 'center' }}  onChangeText={text => { setName(text) }} value={name} />
         </View>
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
           <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'white', borderWidth: 2, borderRadius: 10, width: 250 }} onPress={() => navigation.navigate('LobbyView')}>
