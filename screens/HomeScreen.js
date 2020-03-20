@@ -133,7 +133,7 @@ function LobbyView({ navigation }) {
         <Text style={{ fontSize: 25 }}>Join a Team</Text>
       </View>
 
-      <View style={{ flex: 29, flexDirection: 'column', alignItem: 'center', justifyContent: 'center', backgroundColor: '#EAE7F2' }}>
+      <View style={{ flex: 29, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: '#EAE7F2' }}>
         <View style={{ backgroundColor: 'white', borderColor: 'firebrick', borderWidth: 2, borderRadius: 10, marginHorizontal: '9%', padding: 10, marginBottom: 4 }}>
           {listRedItems}
         </View>
