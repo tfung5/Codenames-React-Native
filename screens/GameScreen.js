@@ -1,6 +1,6 @@
 import React from "react";
 import io from "socket.io-client";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import Board from "../components/Board";
 
@@ -12,6 +12,7 @@ export const CHECKED = "CHECKED";
 export const UNCHECKED = "UNCHECKED";
 const UPDATE_BOARD = "UPDATE_BOARD";
 const FETCH_BOARD = "FETCH_BOARD";
+const GENERATE_BOARD = "GENERATE_BOARD";
 
 export default class GameScreen extends React.Component {
   constructor(props) {
@@ -39,6 +40,10 @@ export default class GameScreen extends React.Component {
     this.socket.emit(FETCH_BOARD);
   };
 
+  randomizeBoard = () => {
+    this.socket.emit(GENERATE_BOARD);
+  };
+
   emitBoard = board => {
     this.socket.emit(UPDATE_BOARD, board);
   };
@@ -58,6 +63,12 @@ export default class GameScreen extends React.Component {
           {team === RED ? "Red Team" : "Blue Team"}
         </Text>
         <Board board={board} markCellChecked={this.markCellChecked} />
+        <TouchableOpacity
+          onPress={this.randomizeBoard}
+          style={styles.randomizeButton}
+        >
+          <Text>Randomize Board</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -69,5 +80,13 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginTop: 9,
     marginBottom: 12
+  },
+  randomizeButton: {
+    borderWidth: 1,
+    borderColor: "black",
+    borderRadius: 25,
+    width: 150,
+    padding: 10,
+    textAlign: "center"
   }
 });
