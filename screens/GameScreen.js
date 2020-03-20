@@ -87,8 +87,10 @@ export default class GameScreen extends React.Component {
   }
 
   componentDidMount = () => {
-    this.createBoardFromWordList();
     this.createSocketConnections();
+    this.selectStartTeam();
+    this.createBoardFromWordList();
+    this.randomizeColorOfCards();
   };
 
   createSocketConnections = () => {
@@ -102,6 +104,11 @@ export default class GameScreen extends React.Component {
     this.socket.emit(UPDATE_BOARD, board);
   };
 
+  selectStartTeam = () => {
+    let startTeam = Math.floor(Math.random()* 2) + 1;
+    this.state.team = startTeam === 1 ? RED : BLUE;
+  }
+
   createBoardFromWordList = () => {
     let board = [];
     let count = 0;
@@ -111,7 +118,7 @@ export default class GameScreen extends React.Component {
       for (let col = 0; col < 5; ++col) {
         currRow.push({
           word: this.wordList[count++],
-          color: BLUE,
+          color: GRAY,
           status: UNCHECKED,
           row,
           col
@@ -124,6 +131,14 @@ export default class GameScreen extends React.Component {
       board
     });
   };
+
+  //Randomizing the color of the cards
+  randomizeColorOfCards = () => {
+    //let boardCopy = this.state.board;
+    //boardCopy[1][1].status = CHECKED;
+    console.log(this.state.board);
+    //this.emitBoard(boardCopy);
+  }
 
   markCellChecked = (row, col) => {
     let boardCopy = this.state.board;
