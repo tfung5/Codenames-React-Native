@@ -1,6 +1,6 @@
 import React from "react";
 import io from "socket.io-client";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import Board from "../components/Board";
 
@@ -11,6 +11,8 @@ export const GRAY = "GRAY";
 export const CHECKED = "CHECKED";
 export const UNCHECKED = "UNCHECKED";
 const UPDATE_BOARD = "UPDATE_BOARD";
+const FETCH_BOARD = "FETCH_BOARD";
+const GENERATE_BOARD = "GENERATE_BOARD";
 
 export default class GameScreen extends React.Component {
   constructor(props) {
@@ -20,77 +22,11 @@ export default class GameScreen extends React.Component {
       board: [],
       team: RED
     };
-
-    this.wordList = [
-      "Hollywood",
-      "Well",
-      "Screen",
-      "Fair",
-      "Play",
-      "Tooth",
-      "Marble",
-      "Staff",
-      "Dinosaur",
-      "Bill",
-      "Cat",
-      "Shot",
-      "Pitch",
-      "King",
-      "Bond",
-      "Pan",
-      "Greece",
-      "Square",
-      "Deck",
-      "Buffalo",
-      "Spike",
-      "Scientist",
-      "Center",
-      "Chick",
-      "Vacuum",
-      "Atlantis",
-      "Unicorn",
-      "Spy",
-      "Undertaker",
-      "Mail",
-      "Sock",
-      "Nut",
-      "Loch",
-      "Ness",
-      "Log",
-      "Horse",
-      "Pirate",
-      "Berlin",
-      "Face",
-      "Platypus",
-      "Stick",
-      "Port",
-      "Disease",
-      "Chest",
-      "Yard",
-      "Box",
-      "Mount",
-      "Compound",
-      "Slug",
-      "Ship",
-      "Dice",
-      "Watch",
-      "Lead",
-      "Space",
-      "Hook",
-      "Flute",
-      "Carrot",
-      "Tower",
-      "Poison",
-      "Death",
-      "Stock"
-    ];
   }
 
   componentDidMount = async () => {
     await this.createSocketConnections();
-    await this.selectStartTeam();
-    await this.createBoardFromWordList();
-    await this.randomizeColorOfCards();
+    await this.fetchBoard();
   };
 
   createSocketConnections = () => {
@@ -100,77 +36,17 @@ export default class GameScreen extends React.Component {
     });
   };
 
+  fetchBoard = () => {
+    this.socket.emit(FETCH_BOARD);
+  };
+
+  randomizeBoard = () => {
+    this.socket.emit(GENERATE_BOARD);
+  };
+
   emitBoard = board => {
     this.socket.emit(UPDATE_BOARD, board);
   };
-
-  selectStartTeam = () => {
-    let startTeam = Math.floor(Math.random()* 2) + 1;
-    this.state.team = startTeam === 1 ? RED : BLUE;
-  }
-
-  createBoardFromWordList = () => {
-    let board = [];
-    let count = 0;
-
-    for (let row = 0; row < 5; ++row) {
-      let currRow = [];
-      for (let col = 0; col < 5; ++col) {
-        currRow.push({
-          word: this.wordList[count++],
-          color: GRAY,
-          status: UNCHECKED,
-          row,
-          col
-        });
-      }
-      board.push(currRow);
-    }
-
-    this.setState({
-      board
-    });
-  };
-
-  randomizeColorOfCards = () => {
-    let boardCopy = this.state.board;
-    let numRedCards = this.state.team === RED ? 9 : 8;
-    let numBlueCards = this.state.team === RED ? 8 : 9;
-    let numBlackCards = 1;
-    var row, col;
-
-    //RED CARDS
-    while (numRedCards > 0){
-      row = Math.floor(Math.random()* 5);
-      col = Math.floor(Math.random()* 5);
-      if (boardCopy[row][col].color === GRAY){
-        boardCopy[row][col].color = RED;
-        numRedCards--;
-      }
-    }
-
-    //BLUE CARDS
-    while (numBlueCards > 0){
-      row = Math.floor(Math.random()* 5);
-      col = Math.floor(Math.random()* 5);
-      if (boardCopy[row][col].color === GRAY){
-        boardCopy[row][col].color = BLUE;
-        numBlueCards--;
-      }
-    }
-
-    //BLACK CARD
-    while (numBlackCards > 0){
-      row = Math.floor(Math.random()* 5);
-      col = Math.floor(Math.random()* 5);
-      if (boardCopy[row][col].color === GRAY){
-        boardCopy[row][col].color = BLACK;
-        numBlackCards--;
-      }
-    }
-
-    this.emitBoard(boardCopy);
-  }
 
   markCellChecked = (row, col) => {
     let boardCopy = this.state.board;
@@ -187,6 +63,12 @@ export default class GameScreen extends React.Component {
           {team === RED ? "Red Team" : "Blue Team"}
         </Text>
         <Board board={board} markCellChecked={this.markCellChecked} />
+        <TouchableOpacity
+          onPress={this.randomizeBoard}
+          style={styles.randomizeButton}
+        >
+          <Text>Randomize Board</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -198,5 +80,13 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginTop: 9,
     marginBottom: 12
+  },
+  randomizeButton: {
+    borderWidth: 1,
+    borderColor: "black",
+    borderRadius: 25,
+    width: 150,
+    padding: 10,
+    textAlign: "center"
   }
 });
