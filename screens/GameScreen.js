@@ -3,17 +3,14 @@ import io from "socket.io-client";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import Board from "../components/Board";
+import { RED, BLUE } from "../constants/Cards";
 
-export const RED = "RED";
-export const BLUE = "BLUE";
-export const BLACK = "BLACK";
-export const GRAY = "GRAY";
-export const CHOSEN = "CHOSEN";
-export const UNCHOSEN = "UNCHOSEN";
-const UPDATE_BOARD = "UPDATE_BOARD";
-const FETCH_BOARD = "FETCH_BOARD";
-const GENERATE_BOARD = "GENERATE_BOARD";
-const CHOOSE_CARD = "CHOOSE_CARD";
+import {
+  UPDATE_BOARD,
+  FETCH_BOARD,
+  GENERATE_BOARD,
+  CHOOSE_CARD
+} from "../constants/Actions";
 
 export default class GameScreen extends React.Component {
   constructor(props) {
