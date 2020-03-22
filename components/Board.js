@@ -6,14 +6,14 @@ import {
   BLUE,
   BLACK,
   GRAY,
-  CHECKED,
-  UNCHECKED
+  CHOSEN,
+  UNCHOSEN
 } from "../screens/GameScreen";
 
 const determineCardStyle = card => {
   let style = [styles.boardCard];
 
-  if (card.status === CHECKED) {
+  if (card.status === CHOSEN) {
     style.push(styles.boardCardChosen);
 
     switch (card.color) {
