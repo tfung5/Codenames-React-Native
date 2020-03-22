@@ -1,14 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import uuid from "uuid/v4";
-import {
-  RED,
-  BLUE,
-  BLACK,
-  GRAY,
-  CHOSEN,
-  UNCHOSEN
-} from "../screens/GameScreen";
+import { RED, BLUE, BLACK, GRAY, CHOSEN, UNCHOSEN } from "../constants/Cards";
 
 const determineCardStyle = card => {
   let style = [styles.boardCard];
