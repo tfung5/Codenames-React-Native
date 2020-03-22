@@ -2,6 +2,7 @@ import React from "react";
 import io from "socket.io-client";
 import { StyleSheet, Image, Text, TextInput, View, AsyncStorage } from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
+import {CHAT_MESSAGE} from "../constants/Actions";
 
 export default class ChatView extends React.Component {
   constructor(props) {
@@ -30,7 +31,7 @@ export default class ChatView extends React.Component {
 
   componentDidMount = () => {
     this.socket = io("http://127.0.0.1:3000");
-    this.socket.on("chat message", this.onReceivedMessage);
+    this.socket.on(CHAT_MESSAGE, this.onReceivedMessage);
   };
 
   /**
@@ -49,7 +50,7 @@ export default class ChatView extends React.Component {
  * When a message is sent, send the message to the server.
  */
   onSend(messages=[]) {
-  this.socket.emit('chat message', messages[0]);
+  this.socket.emit(CHAT_MESSAGE, messages[0]);
 }
 
   render() {
