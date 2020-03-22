@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   boardCard: {
+    borderRadius: 5,
     borderWidth: 1,
     borderColor: "black",
     color: "black",
