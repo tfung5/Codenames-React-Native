@@ -6,28 +6,36 @@ import {
   BLUE,
   BLACK,
   GRAY,
-  CHECKED,
-  UNCHECKED
+  CHOSEN,
+  UNCHOSEN
 } from "../screens/GameScreen";
 
-const determineCellStyle = cell => {
-  if (cell.status === CHECKED) {
-    switch (cell.color) {
+const determineCardStyle = card => {
+  let style = [styles.boardCard];
+
+  if (card.status === CHOSEN) {
+    style.push(styles.boardCardChosen);
+
+    switch (card.color) {
       case RED:
-        return [styles.boardCell, styles.boardCellRed];
+        style.push(styles.boardCardRed);
+        break;
       case BLUE:
-        return [styles.boardCell, styles.boardCellBlue];
+        style.push(styles.boardCardBlue);
+        break;
       case BLACK:
-        return [styles.boardCell, styles.boardCellBlack];
+        style.push(styles.boardCardBlack);
+        break;
       default:
-        return [styles.boardCell, styles.boardCellGray];
+        style.push(styles.boardCardGray);
+        break;
     }
-  } else {
-    return styles.boardCell;
   }
+
+  return style;
 };
 
-export default ({ board, markCellChecked }) => {
+export default ({ board, chooseCard }) => {
   return (
     <View>
       {board.length > 0 &&
@@ -35,14 +43,14 @@ export default ({ board, markCellChecked }) => {
           return (
             <View style={styles.boardRow} key={uuid()}>
               {row.length > 0 &&
-                row.map(cell => {
+                row.map(card => {
                   return (
-                    <View key={cell.word}>
+                    <View key={card.word}>
                       <TouchableOpacity
-                        onPress={() => markCellChecked(cell.row, cell.col)}
+                        onPress={() => chooseCard(card.row, card.col)}
                       >
-                        <Text style={determineCellStyle(cell)}>
-                          {cell.word}
+                        <Text style={determineCardStyle(card)}>
+                          {card.word}
                         </Text>
                       </TouchableOpacity>
                     </View>
@@ -59,9 +67,11 @@ const styles = StyleSheet.create({
   boardRow: {
     flexDirection: "row"
   },
-  boardCell: {
-    borderColor: "black",
+  boardCard: {
+    borderRadius: 5,
     borderWidth: 1,
+    borderColor: "black",
+    color: "black",
     margin: 2,
     fontFamily: "Courier New",
     fontSize: 12,
@@ -72,23 +82,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center"
   },
-  boardCellText: {
-    color: "black"
-  },
-  boardCellBlue: {
+  boardCardBlue: {
     borderColor: "blue",
-    color: "blue"
+    backgroundColor: "blue"
   },
-  boardCellRed: {
+  boardCardRed: {
     borderColor: "red",
-    color: "red"
+    backgroundColor: "red"
   },
-  boardCellGray: {
-    borderColor: "gray",
-    color: "gray"
+  boardCardGray: {
+    borderColor: "dimgray",
+    backgroundColor: "dimgray"
   },
-  boardCellBlack: {
-    borderColor: "black",
-    color: "black"
+  boardCardBlack: {
+    backgroundColor: "black",
+    borderColor: "black"
+  },
+  boardCardChosen: {
+    color: "white"
   }
 });
