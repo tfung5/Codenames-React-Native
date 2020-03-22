@@ -27,7 +27,7 @@ const determineCellStyle = cell => {
   }
 };
 
-export default ({ board, markCellChecked }) => {
+export default ({ board, chooseCard }) => {
   return (
     <View>
       {board.length > 0 &&
@@ -39,7 +39,7 @@ export default ({ board, markCellChecked }) => {
                   return (
                     <View key={cell.word}>
                       <TouchableOpacity
-                        onPress={() => markCellChecked(cell.row, cell.col)}
+                        onPress={() => chooseCard(cell.row, cell.col)}
                       >
                         <Text style={determineCellStyle(cell)}>
                           {cell.word}
