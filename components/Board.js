@@ -6,7 +6,7 @@ import { RED, BLUE, BLACK, GRAY, CHOSEN, UNCHOSEN } from "../constants/Cards";
 const determineCardStyle = card => {
   let style = [styles.boardCard];
 
-  if (card.status === CHOSEN) {
+  if (card.state === CHOSEN) {
     style.push(styles.boardCardChosen);
 
     switch (card.color) {
