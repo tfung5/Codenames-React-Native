@@ -1,0 +1,2 @@
+export const SPYMASTER = "SPYMASTER";
+export const FIELD_OPERATIVE = "FIELD_OPERATIVE";
