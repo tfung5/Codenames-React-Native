@@ -17,6 +17,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Clues from '../components/Clues'
 import CardsLeft from '../components/CardsLeft'
+import SocketContext from "../components/SocketContext";
+import io from "socket.io-client";
 
 const userName = {
   name: '',
@@ -26,6 +28,14 @@ const userContext = React.createContext(userName);
 
 function HomeScreen({ navigation }) {
   const { name, setName } = useContext(userContext);
+  const { socket, setSocket } = useContext(SocketContext);
+
+  const joinLobby = () => {
+    setSocket(io("http://127.0.0.1:3000"));
+
+    navigation.navigate('LobbyView');
+  }
+
   return (
 
     <View style={{ flex: 1, flexDirection: 'column' }}>
@@ -40,7 +50,7 @@ function HomeScreen({ navigation }) {
         </View>
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
           <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'white', borderWidth: 2, borderRadius: 10, width: 250 }} onPress={() => navigation.navigate('LobbyView')}>
-            <Text style={{ fontSize: 25 }} onPress={() => navigation.navigate('LobbyView')}>Join Lobby</Text>
+            <Text style={{ fontSize: 25 }} onPress={joinLobby}>Join Lobby</Text>
           </TouchableOpacity>
         </View>
       </View>
