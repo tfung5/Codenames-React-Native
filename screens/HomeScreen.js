@@ -19,7 +19,7 @@ import { NavigationActions } from "react-navigation";
 import Clues from '../components/Clues'
 import CardsLeft from '../components/CardsLeft'
 import SocketContext from "../components/SocketContext";
-import { JOIN_LOBBY } from "../constants/Actions";
+import { JOIN_LOBBY, JOIN_SLOT } from "../constants/Actions";
 import { RED, BLUE } from '../constants/Cards';
 
 const userName = {
@@ -105,7 +105,7 @@ function LobbyView({ navigation }) {
         }
         setRedTeam(redTeamCopy)
         setBlueTeam(blueTeamCopy)
-        socket.emit("JOIN_SLOT", { team: RED, index });
+        socket.emit(JOIN_SLOT, { team: RED, index });
       }}>
       <Text style={{ fontSize: 20 }}>{slotName}</Text>
     </TouchableOpacity>
@@ -143,7 +143,7 @@ function LobbyView({ navigation }) {
         }
         setRedTeam(redTeamCopy)
         setBlueTeam(blueTeamCopy)
-        socket.emit("JOIN_SLOT", { team: BLUE, index });
+        socket.emit(JOIN_SLOT, { team: BLUE, index });
       }}>
       <Text style={{ fontSize: 20 }}>{slotName}</Text>
     </TouchableOpacity>
