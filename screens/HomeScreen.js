@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationActions } from "react-navigation";
 import Clues from '../components/Clues'
 import CardsLeft from '../components/CardsLeft'
 
@@ -54,6 +55,14 @@ function HomeScreen({ navigation }) {
 }
 
 function LobbyView({ navigation }) {
+  const startGame = () => {
+    navigation.navigate("GameStack", {},
+      NavigationActions.navigate({
+        routeName: "Game"
+      })
+    )
+  }
+
   const { name, setName } = useContext(userContext);
   const [redTeam, setRedTeam] = React.useState(new Array(4).fill(null))
   const [blueTeam, setBlueTeam] = React.useState(new Array(4).fill(null))
@@ -146,6 +155,9 @@ function LobbyView({ navigation }) {
           {listBlueItems}
         </View>
         <Text style={{ fontSize: 25 }} onPress={() => navigation.navigate('TestScreen')}>Touch for Test</Text>
+        <TouchableOpacity onPress={startGame}>
+          <Text>Start Game</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -165,14 +177,14 @@ function TestScreen({ navigation }) {
 
 const Stack = createStackNavigator();
 
-export default function App() {
+export default function App({ navigation }) {
   const [name, setName] = React.useState('')
   return (
     <userContext.Provider value={{ name, setName }}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="HomeScreen">
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
-          <Stack.Screen name="LobbyView" component={LobbyView} />
+          <Stack.Screen name="LobbyView" component={props => <LobbyView {...props} {...{navigation}} />} />
           <Stack.Screen name="TestScreen" component={TestScreen}/>
         </Stack.Navigator>
       </NavigationContainer>
