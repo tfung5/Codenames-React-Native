@@ -10,14 +10,14 @@ import ChatScreen from "../screens/ChatScreen";
 
 const config = Platform.select({
   web: { headerMode: "screen" },
-  default: {},
+  default: {}
 });
 
 const HomeStack = createStackNavigator(
   {
     Home: HomeScreen
   },
-  {headerMode: 'none'}
+  { headerMode: "none" }
 );
 
 HomeStack.navigationOptions = {
@@ -40,16 +40,13 @@ const GameStack = createStackNavigator(
   {
     Game: GameScreen
   },
-  {headerMode: 'none'}
+  { headerMode: "none" }
 );
 
 GameStack.navigationOptions = {
   tabBarLabel: "Game",
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={"logo-game-controller-a"}
-    />
+    <TabBarIcon focused={focused} name={"logo-game-controller-a"} />
   )
 };
 
@@ -59,7 +56,7 @@ const ChatStack = createStackNavigator(
   {
     Chat: ChatScreen
   },
-  {headerMode: 'none'}
+  { headerMode: "none" }
 );
 
 ChatStack.navigationOptions = {
