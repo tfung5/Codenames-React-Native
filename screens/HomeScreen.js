@@ -84,8 +84,6 @@ function LobbyView({ navigation }) {
     const { redTeam, blueTeam } = payload;
     setRedTeam(redTeam);
     setBlueTeam(blueTeam);
-    console.log("redTeam:", redTeam);
-    console.log("blueTeam:", blueTeam);
   })
 
   const listRedItems = redTeam.map((buttonnum, index) => {
@@ -99,10 +97,17 @@ function LobbyView({ navigation }) {
     if (redTeam[index] === null) {
       slotColor = 'white'
     }
-    if (redTeam[index] === name) {
-      slotColor = '#EDB0A8'
-      slotName = name
+    else {
+      // If slot is taken
+      slotColor = 'lightgrey'; // Set color to gray
+      slotName = redTeam[index].name; // Set name to player's name
+
+      // But if slot is the current player
+      if (redTeam[index].id === socket.id) {
+        slotColor = '#8A2BE2' // Set color to purple
+      }
     }
+    
     return (<TouchableOpacity key={index} style={{ backgroundColor: slotColor, borderColor: slotBorderColor, borderRadius: 10, borderWidth: 2, alignItems: 'center', justifyContent: 'center', marginHorizontal: '9%', marginVertical: 3 }}
       onPress={() => {
         const redTeamCopy = [...redTeam]
@@ -134,13 +139,21 @@ function LobbyView({ navigation }) {
       slotName = 'Spymaster Slot'
       slotBorderColor = 'dodgerblue'
     }
+
     if (blueTeam[index] === null) {
       slotColor = 'white'
     }
-    if (blueTeam[index] === name) {
-      slotColor = '#A8A8ED'
-      slotName = name
+    else {
+      // If slot is taken
+      slotColor = 'lightgrey'; // Set color to gray
+      slotName = blueTeam[index].name; // Set name to player's name
+
+      // But if slot is the current player
+      if (blueTeam[index].id === socket.id) {
+        slotColor = '#8A2BE2' // Set color to purple
+      }
     }
+
     return (<TouchableOpacity key={index} style={{ backgroundColor: slotColor, borderColor: slotBorderColor, borderRadius: 10, borderWidth: 2, alignItems: 'center', justifyContent: 'center', marginHorizontal: '9%', marginVertical: 3 }}
       onPress={() => {
         const blueTeamCopy = [...blueTeam]
