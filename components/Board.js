@@ -76,20 +76,16 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   boardCardBlue: {
-    borderColor: "blue",
     backgroundColor: "blue"
   },
   boardCardRed: {
-    borderColor: "red",
     backgroundColor: "red"
   },
   boardCardGray: {
-    borderColor: "dimgray",
     backgroundColor: "dimgray"
   },
   boardCardBlack: {
-    backgroundColor: "black",
-    borderColor: "black"
+    backgroundColor: "black"
   },
   boardCardChosen: {
     color: "white"
