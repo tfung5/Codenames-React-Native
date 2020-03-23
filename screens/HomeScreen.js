@@ -20,6 +20,7 @@ import Clues from '../components/Clues'
 import CardsLeft from '../components/CardsLeft'
 import SocketContext from "../components/SocketContext";
 import { JOIN_LOBBY } from "../constants/Actions";
+import { RED, BLUE } from '../constants/Cards';
 
 const userName = {
   name: '',
@@ -49,8 +50,8 @@ function HomeScreen({ navigation }) {
           <TextInput style={{ fontSize: 18, backgroundColor: 'white', borderWidth: 2, borderRadius: 10, borderColor: 'lightskyblue', padding: 5, width: 220, textAlign: 'center' }}  onChangeText={text => { setName(text) }} value={name} />
         </View>
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-          <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'white', borderWidth: 2, borderRadius: 10, width: 250 }} onPress={() => navigation.navigate('LobbyView')}>
-            <Text style={{ fontSize: 25 }} onPress={joinLobby}>Join Lobby</Text>
+          <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'white', borderWidth: 2, borderRadius: 10, width: 250 }} onPress={joinLobby}>
+            <Text style={{ fontSize: 25 }}>Join Lobby</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -59,6 +60,8 @@ function HomeScreen({ navigation }) {
 }
 
 function LobbyView({ navigation }) {
+  const { socket } = useContext(SocketContext);
+
   const startGame = () => {
     navigation.navigate("GameStack", {},
       NavigationActions.navigate({
@@ -102,6 +105,7 @@ function LobbyView({ navigation }) {
         }
         setRedTeam(redTeamCopy)
         setBlueTeam(blueTeamCopy)
+        socket.emit("JOIN_SLOT", { team: RED, index });
       }}>
       <Text style={{ fontSize: 20 }}>{slotName}</Text>
     </TouchableOpacity>
@@ -139,6 +143,7 @@ function LobbyView({ navigation }) {
         }
         setRedTeam(redTeamCopy)
         setBlueTeam(blueTeamCopy)
+        socket.emit("JOIN_SLOT", { team: BLUE, index });
       }}>
       <Text style={{ fontSize: 20 }}>{slotName}</Text>
     </TouchableOpacity>
