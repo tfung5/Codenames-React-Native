@@ -18,6 +18,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationActions } from "react-navigation";
 import Clues from '../components/Clues'
 import CardsLeft from '../components/CardsLeft'
+import SocketContext from "../components/SocketContext";
+import { JOIN_LOBBY } from "../constants/Actions";
 
 const userName = {
   name: '',
@@ -27,8 +29,10 @@ const userContext = React.createContext(userName);
 
 function HomeScreen({ navigation }) {
   const { name, setName } = useContext(userContext);
+  const { socket } = useContext(SocketContext);
 
   const joinLobby = () => {
+    socket.emit(JOIN_LOBBY, name);
     navigation.navigate('LobbyView');
   }
 
@@ -98,7 +102,6 @@ function LobbyView({ navigation }) {
         }
         setRedTeam(redTeamCopy)
         setBlueTeam(blueTeamCopy)
-
       }}>
       <Text style={{ fontSize: 20 }}>{slotName}</Text>
     </TouchableOpacity>
