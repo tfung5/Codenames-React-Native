@@ -1,5 +1,11 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native";
 import uuid from "uuid/v4";
 import { RED, BLUE, BLACK, GRAY, CHOSEN, UNCHOSEN } from "../constants/Cards";
 
@@ -7,8 +13,6 @@ const determineCardStyle = card => {
   let style = [styles.boardCard];
 
   if (card.state === CHOSEN) {
-    style.push(styles.boardCardChosen);
-
     switch (card.color) {
       case RED:
         style.push(styles.boardCardRed);
@@ -28,6 +32,16 @@ const determineCardStyle = card => {
   return style;
 };
 
+const determineCardTextStyle = card => {
+  let style = [styles.boardCardText];
+
+  if (card.state === CHOSEN) {
+    style.push(styles.boardCardTextChosen);
+  }
+
+  return style;
+};
+
 export default ({ board, chooseCard }) => {
   return (
     <View>
@@ -41,8 +55,9 @@ export default ({ board, chooseCard }) => {
                     <View key={card.word}>
                       <TouchableOpacity
                         onPress={() => chooseCard(card.row, card.col)}
+                        style={determineCardStyle(card)}
                       >
-                        <Text style={determineCardStyle(card)}>
+                        <Text style={determineCardTextStyle(card)}>
                           {card.word}
                         </Text>
                       </TouchableOpacity>
@@ -64,10 +79,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "black",
-    color: "black",
     margin: 2,
-    fontFamily: "Courier New",
-    fontSize: 12,
     fontWeight: "bold",
     width: 80,
     height: 30,
@@ -87,7 +99,13 @@ const styles = StyleSheet.create({
   boardCardBlack: {
     backgroundColor: "black"
   },
-  boardCardChosen: {
+  boardCardText: {
+    fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
+    fontSize: 12,
+    textAlign: "center",
+    color: "black"
+  },
+  boardCardTextChosen: {
     color: "white"
   }
 });
