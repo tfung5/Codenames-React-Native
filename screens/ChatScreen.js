@@ -3,8 +3,11 @@ import io from "socket.io-client";
 import { StyleSheet, Image, Text, TextInput, View, AsyncStorage } from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
 import {CHAT_MESSAGE} from "../constants/Actions";
+import SocketContext from "../components/SocketContext";
 
 export default class ChatView extends React.Component {
+  static contextType = SocketContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -29,8 +32,16 @@ export default class ChatView extends React.Component {
     this.onReceivedMessage = this.onReceivedMessage.bind(this);
   }
 
-  componentDidMount = () => {
-    this.socket = io("http://127.0.0.1:3000");
+  componentDidMount = async () => {
+    await this.saveSocket();
+    await this.subscribeToChatMessageUpdates();
+  };
+
+  saveSocket = () => {
+    this.socket = this.context.socket;
+  };
+
+  subscribeToChatMessageUpdates = () => {
     this.socket.on(CHAT_MESSAGE, this.onReceivedMessage);
   };
 

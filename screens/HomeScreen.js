@@ -26,6 +26,11 @@ const userContext = React.createContext(userName);
 
 function HomeScreen({ navigation }) {
   const { name, setName } = useContext(userContext);
+
+  const joinLobby = () => {
+    navigation.navigate('LobbyView');
+  }
+
   return (
 
     <View style={{ flex: 1, flexDirection: 'column' }}>
@@ -40,7 +45,7 @@ function HomeScreen({ navigation }) {
         </View>
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
           <TouchableOpacity style={{ alignItems: 'center', backgroundColor: 'white', borderWidth: 2, borderRadius: 10, width: 250 }} onPress={() => navigation.navigate('LobbyView')}>
-            <Text style={{ fontSize: 25 }} onPress={() => navigation.navigate('LobbyView')}>Join Lobby</Text>
+            <Text style={{ fontSize: 25 }} onPress={joinLobby}>Join Lobby</Text>
           </TouchableOpacity>
         </View>
       </View>
