@@ -30,7 +30,6 @@ export default class GameScreen extends React.Component {
     await this.saveSocket();
     await this.subscribeToBoardUpdates();
     await this.fetchBoard();
-    await this.sendPlayerInfo("John", RED, FIELD_OPERATIVE);
   };
 
   saveSocket = () => {
@@ -41,11 +40,6 @@ export default class GameScreen extends React.Component {
     this.socket.on(UPDATE_BOARD, board => {
       this.setState({ board });
     });
-  };
-
-  sendPlayerInfo = (name, team, role) => {
-    const playerInfo = { name, team, role };
-    this.socket.emit(SEND_PLAYER_INFO, playerInfo);
   };
 
   fetchBoard = () => {
