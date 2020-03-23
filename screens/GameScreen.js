@@ -4,6 +4,9 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import Board from "../components/Board";
 import { RED, BLUE } from "../constants/Cards";
+import { SEND_PLAYER_INFO } from "../constants/Actions";
+import { FIELD_OPERATIVE, SPYMASTER } from "../constants/Roles";
+
 import {
   UPDATE_BOARD,
   FETCH_BOARD,
@@ -27,6 +30,7 @@ export default class GameScreen extends React.Component {
     await this.saveSocket();
     await this.subscribeToBoardUpdates();
     await this.fetchBoard();
+    await this.sendPlayerInfo("John", RED, FIELD_OPERATIVE);
   };
 
   saveSocket = () => {
@@ -37,6 +41,11 @@ export default class GameScreen extends React.Component {
     this.socket.on(UPDATE_BOARD, board => {
       this.setState({ board });
     });
+  };
+
+  sendPlayerInfo = (name, team, role) => {
+    const playerInfo = { name, team, role };
+    this.socket.emit(SEND_PLAYER_INFO, playerInfo);
   };
 
   fetchBoard = () => {
