@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import * as WebBrowser from 'expo-web-browser';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   Image,
   Platform,
@@ -19,7 +19,7 @@ import { NavigationActions } from "react-navigation";
 import Clues from '../components/Clues'
 import CardsLeft from '../components/CardsLeft'
 import SocketContext from "../components/SocketContext";
-import { JOIN_LOBBY, JOIN_SLOT } from "../constants/Actions";
+import { FETCH_TEAMS, JOIN_LOBBY, JOIN_SLOT, UPDATE_TEAMS } from "../constants/Actions";
 import { RED, BLUE } from '../constants/Cards';
 
 const userName = {
@@ -73,6 +73,21 @@ function LobbyView({ navigation }) {
   const { name, setName } = useContext(userContext);
   const [redTeam, setRedTeam] = React.useState(new Array(4).fill(null))
   const [blueTeam, setBlueTeam] = React.useState(new Array(4).fill(null))
+
+  // componentDidMount
+  useEffect(() => {
+    socket.emit(FETCH_TEAMS);
+  }, []);
+
+  // Handle UPDATE_TEAMS
+  socket.on(UPDATE_TEAMS, payload => {
+    const { redTeam, blueTeam } = payload;
+    setRedTeam(redTeam);
+    setBlueTeam(blueTeam);
+    console.log("redTeam:", redTeam);
+    console.log("blueTeam:", blueTeam);
+  })
+
   const listRedItems = redTeam.map((buttonnum, index) => {
     let slotColor = 'lightgrey'
     let slotName = 'Player Slot'
