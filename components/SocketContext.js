@@ -2,7 +2,7 @@ import React from "react";
 
 const SocketContext = React.createContext({
   socket: null,
-  setContext: () => {}
+  setSocket: () => {}
 });
 
 export default SocketContext;

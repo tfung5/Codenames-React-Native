@@ -17,8 +17,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Clues from '../components/Clues'
 import CardsLeft from '../components/CardsLeft'
-import SocketContext from "../components/SocketContext";
-import io from "socket.io-client";
 
 const userName = {
   name: '',
@@ -28,11 +26,8 @@ const userContext = React.createContext(userName);
 
 function HomeScreen({ navigation }) {
   const { name, setName } = useContext(userContext);
-  const { socket, setSocket } = useContext(SocketContext);
 
   const joinLobby = () => {
-    setSocket(io("http://127.0.0.1:3000"));
-
     navigation.navigate('LobbyView');
   }
 
