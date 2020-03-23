@@ -4,6 +4,9 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import Board from "../components/Board";
 import { RED, BLUE } from "../constants/Cards";
+import { SEND_PLAYER_INFO } from "../constants/Actions";
+import { FIELD_OPERATIVE, SPYMASTER } from "../constants/Roles";
+
 import {
   UPDATE_BOARD,
   FETCH_BOARD,
