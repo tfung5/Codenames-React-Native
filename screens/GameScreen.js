@@ -1,10 +1,9 @@
-import React from "react";
-import io from "socket.io-client";
+import React, { useContext } from "react";
+import SocketContext from "../components/SocketContext";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import Board from "../components/Board";
 import { RED, BLUE } from "../constants/Cards";
-
 import {
   UPDATE_BOARD,
   FETCH_BOARD,
@@ -13,6 +12,8 @@ import {
 } from "../constants/Actions";
 
 export default class GameScreen extends React.Component {
+  static contextType = SocketContext;
+
   constructor(props) {
     super(props);
 
@@ -23,12 +24,16 @@ export default class GameScreen extends React.Component {
   }
 
   componentDidMount = async () => {
-    await this.createSocketConnections();
+    await this.saveSocket();
+    await this.subscribeToBoardUpdates();
     await this.fetchBoard();
   };
 
-  createSocketConnections = () => {
-    this.socket = io("http://127.0.0.1:3000");
+  saveSocket = () => {
+    this.socket = this.context.socket;
+  };
+
+  subscribeToBoardUpdates = () => {
     this.socket.on(UPDATE_BOARD, board => {
       this.setState({ board });
     });
