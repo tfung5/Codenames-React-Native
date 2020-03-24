@@ -21,8 +21,11 @@ import CardsLeft from "../components/CardsLeft";
 import SocketContext from "../components/SocketContext";
 import {
   FETCH_TEAMS,
+  INDVIDUAL_START_GAME,
   JOIN_LOBBY,
   JOIN_SLOT,
+  REQUEST_INDVIDUAL_START_GAME,
+  START_GAME,
   UPDATE_TEAMS
 } from "../constants/Actions";
 import { RED, BLUE } from "../constants/Cards";
@@ -112,6 +115,11 @@ function LobbyView({ navigation }) {
   const { socket } = useContext(SocketContext);
 
   const startGame = () => {
+    socket.emit(START_GAME);
+    navigateToGameScreen();
+  };
+
+  const navigateToGameScreen = () => {
     navigation.navigate(
       "GameStack",
       {},
@@ -128,6 +136,7 @@ function LobbyView({ navigation }) {
   // componentDidMount
   useEffect(() => {
     socket.emit(FETCH_TEAMS);
+    subscribeToGameStart();
   }, []);
 
   // Handle UPDATE_TEAMS
@@ -136,6 +145,13 @@ function LobbyView({ navigation }) {
     setRedTeam(redTeam);
     setBlueTeam(blueTeam);
   });
+
+  const subscribeToGameStart = () => {
+    socket.on(REQUEST_INDVIDUAL_START_GAME, () => {
+      socket.emit(INDVIDUAL_START_GAME);
+      navigateToGameScreen();
+    });
+  };
 
   const listRedItems = redTeam.map((buttonnum, index) => {
     let slotColor = "lightgrey";
