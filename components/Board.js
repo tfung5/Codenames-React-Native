@@ -12,7 +12,7 @@ import { RED, BLUE, BLACK, GRAY, CHOSEN, UNCHOSEN } from "../constants/Cards";
 const determineCardStyle = card => {
   let style = [styles.boardCard];
 
-  if (card.state === CHOSEN) {
+  if (card.color) {
     switch (card.color) {
       case RED:
         style.push(styles.boardCardRed);
@@ -35,7 +35,7 @@ const determineCardStyle = card => {
 const determineCardTextStyle = card => {
   let style = [styles.boardCardText];
 
-  if (card.state === CHOSEN) {
+  if (card.color) {
     style.push(styles.boardCardTextChosen);
   }
 
