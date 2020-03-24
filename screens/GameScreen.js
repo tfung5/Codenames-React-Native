@@ -8,9 +8,9 @@ import { SEND_PLAYER_INFO } from "../constants/Actions";
 import { FIELD_OPERATIVE, SPYMASTER } from "../constants/Roles";
 
 import {
-  UPDATE_BOARD,
-  FETCH_BOARD,
-  GENERATE_BOARD,
+  UPDATE_GAME,
+  GET_GAME,
+  RESTART_GAME,
   CHOOSE_CARD
 } from "../constants/Actions";
 
@@ -28,26 +28,27 @@ export default class GameScreen extends React.Component {
 
   componentDidMount = async () => {
     await this.saveSocket();
-    await this.subscribeToBoardUpdates();
-    await this.fetchBoard();
+    await this.subscribeToGameUpdates();
+    await this.getGame();
   };
 
   saveSocket = () => {
     this.socket = this.context.socket;
   };
 
-  subscribeToBoardUpdates = () => {
-    this.socket.on(UPDATE_BOARD, board => {
+  subscribeToGameUpdates = () => {
+    this.socket.on(UPDATE_GAME, payload => {
+      const { board } = payload;
       this.setState({ board });
     });
   };
 
-  fetchBoard = () => {
-    this.socket.emit(FETCH_BOARD);
+  getGame = () => {
+    this.socket.emit(GET_GAME);
   };
 
-  randomizeBoard = () => {
-    this.socket.emit(GENERATE_BOARD);
+  restartGame = () => {
+    this.socket.emit(RESTART_GAME);
   };
 
   chooseCard = (row, col) => {
@@ -64,10 +65,10 @@ export default class GameScreen extends React.Component {
         </Text>
         <Board board={board} chooseCard={this.chooseCard} />
         <TouchableOpacity
-          onPress={this.randomizeBoard}
-          style={styles.randomizeButton}
+          onPress={this.restartGame}
+          style={styles.restartGameButton}
         >
-          <Text style={styles.randomizeButtonText}>Randomize Board</Text>
+          <Text style={styles.restartGameButtonText}>Restart Game</Text>
         </TouchableOpacity>
       </View>
     );
@@ -81,14 +82,14 @@ const styles = StyleSheet.create({
     marginTop: 9,
     marginBottom: 12
   },
-  randomizeButton: {
+  restartGameButton: {
     borderWidth: 1,
     borderColor: "black",
     borderRadius: 25,
     width: 150,
     padding: 10
   },
-  randomizeButtonText: {
+  restartGameButtonText: {
     textAlign: "center"
   }
 });
