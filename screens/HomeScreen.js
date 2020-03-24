@@ -21,10 +21,10 @@ import CardsLeft from "../components/CardsLeft";
 import SocketContext from "../components/SocketContext";
 import {
   FETCH_TEAMS,
-  INDVIDUAL_START_GAME,
+  INDIVIDUAL_START_GAME,
   JOIN_LOBBY,
   JOIN_SLOT,
-  REQUEST_INDVIDUAL_START_GAME,
+  REQUEST_INDIVIDUAL_START_GAME,
   START_GAME,
   UPDATE_TEAMS
 } from "../constants/Actions";
@@ -147,8 +147,8 @@ function LobbyView({ navigation }) {
   });
 
   const subscribeToGameStart = () => {
-    socket.on(REQUEST_INDVIDUAL_START_GAME, () => {
-      socket.emit(INDVIDUAL_START_GAME);
+    socket.on(REQUEST_INDIVIDUAL_START_GAME, () => {
+      socket.emit(INDIVIDUAL_START_GAME);
       navigateToGameScreen();
     });
   };
