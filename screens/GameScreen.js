@@ -9,7 +9,7 @@ import { FIELD_OPERATIVE, SPYMASTER } from "../constants/Roles";
 
 import {
   UPDATE_GAME,
-  FETCH_GAME,
+  GET_GAME,
   RESTART_GAME,
   CHOOSE_CARD
 } from "../constants/Actions";
@@ -29,7 +29,7 @@ export default class GameScreen extends React.Component {
   componentDidMount = async () => {
     await this.saveSocket();
     await this.subscribeToGameUpdates();
-    await this.fetchGame();
+    await this.getGame();
   };
 
   saveSocket = () => {
@@ -37,13 +37,14 @@ export default class GameScreen extends React.Component {
   };
 
   subscribeToGameUpdates = () => {
-    this.socket.on(UPDATE_GAME, board => {
+    this.socket.on(UPDATE_GAME, payload => {
+      const { board } = payload;
       this.setState({ board });
     });
   };
 
-  fetchGame = () => {
-    this.socket.emit(FETCH_GAME);
+  getGame = () => {
+    this.socket.emit(GET_GAME);
   };
 
   restartGame = () => {

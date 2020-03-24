@@ -1,6 +1,6 @@
 export const CHAT_MESSAGE = "CHAT_MESSAGE";
 export const CHOOSE_CARD = "CHOOSE_CARD";
-export const FETCH_GAME = "FETCH_GAME";
+export const GET_GAME = "GET_GAME";
 export const FETCH_TEAMS = "FETCH_TEAMS";
 export const JOIN_LOBBY = "JOIN_LOBBY";
 export const JOIN_SLOT = "JOIN_SLOT";
