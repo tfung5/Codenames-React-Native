@@ -29,6 +29,7 @@ import {
   UPDATE_TEAMS
 } from "../constants/Actions";
 import { RED, BLUE } from "../constants/Cards";
+import SnackBars from '../components/SnackBars'
 
 const userName = {
   name: "",
@@ -338,6 +339,7 @@ function LobbyView({ navigation }) {
   );
 }
 
+<<<<<<< HEAD
 export function TestScreen({ navigation }) {
   return (
     <View style={{ flex: 1 }}>
@@ -346,6 +348,24 @@ export function TestScreen({ navigation }) {
       <Text>{"\n"}</Text>
       <CardsLeft redLeft={6} blueLeft={3} canEnd={true} />
       <CardsLeft redLeft={3} blueLeft={4} canEnd={false} />
+=======
+function TestScreen({ navigation }) {
+  const [buttonPressed, setButtonPressed] = React.useState(false)
+  const pressButton = ((buttonPressed)=>{
+    setButtonPressed(true)
+  });
+  return(
+    <View style={{flex: 1}}>
+      <Clues canEdit={false}/>
+      <Clues canEdit={true}/>
+      <Text>{'\n'}</Text>
+      <CardsLeft redLeft={6} blueLeft={3} canEnd={true}/>
+      <CardsLeft redLeft={3} blueLeft={4} canEnd={false}/>
+      <TouchableOpacity style={{backgroundColor: 'green'}} onPress={(buttonPressed)=>{pressButton(buttonPressed)}}>
+        <Text>Touch for Snack</Text>
+      </TouchableOpacity>
+      <SnackBars visible={buttonPressed} setVisible={setButtonPressed} correct={true} number={1}/>
+>>>>>>> Added snackbar component with test usage in homescreen
     </View>
   );
 }
