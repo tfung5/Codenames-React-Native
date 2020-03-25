@@ -4,7 +4,7 @@ import { createStackNavigator } from "react-navigation-stack";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 
 import TabBarIcon from "../components/TabBarIcon";
-import HomeScreen from "../screens/HomeScreen";
+import HomeScreen, { TestScreen } from "../screens/HomeScreen";
 import GameScreen from "../screens/GameScreen";
 import ChatScreen from "../screens/ChatScreen";
 
@@ -15,7 +15,8 @@ const config = Platform.select({
 
 const HomeStack = createStackNavigator(
   {
-    Home: HomeScreen
+    Home: HomeScreen,
+    Test: TestScreen
   },
   { headerMode: "none" }
 );

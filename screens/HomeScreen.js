@@ -326,7 +326,7 @@ function LobbyView({ navigation }) {
         </View>
         <Text
           style={{ fontSize: 25 }}
-          onPress={() => navigation.navigate("TestScreen")}
+          onPress={() => navigation.navigate("Test")}
         >
           Touch for Test
         </Text>
@@ -338,7 +338,7 @@ function LobbyView({ navigation }) {
   );
 }
 
-function TestScreen({ navigation }) {
+export function TestScreen({ navigation }) {
   return (
     <View style={{ flex: 1 }}>
       <Clues canEdit={false} />
