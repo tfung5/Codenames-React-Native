@@ -1,4 +1,5 @@
 export const CHAT_MESSAGE = "CHAT_MESSAGE";
+export const USER_NAME = "USER_NAME";
 export const CHOOSE_CARD = "CHOOSE_CARD";
 export const GET_GAME = "GET_GAME";
 export const FETCH_TEAMS = "FETCH_TEAMS";
