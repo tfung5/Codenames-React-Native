@@ -1,7 +1,9 @@
 export const CHAT_MESSAGE = "CHAT_MESSAGE";
 export const USER_NAME = "USER_NAME";
 export const CHOOSE_CARD = "CHOOSE_CARD";
+export const END_TURN = "END_TURN";
 export const GET_GAME = "GET_GAME";
+export const GET_PLAYER_INFO = "GET_PLAYER_INFO";
 export const FETCH_TEAMS = "FETCH_TEAMS";
 export const INDIVIDUAL_START_GAME = "INDIVIDUAL_START_GAME";
 export const JOIN_LOBBY = "JOIN_LOBBY";
@@ -10,4 +12,5 @@ export const REQUEST_INDIVIDUAL_START_GAME = "REQUEST_INDIVIDUAL_START_GAME";
 export const RESTART_GAME = "RESTART_GAME";
 export const START_GAME = "START_GAME";
 export const UPDATE_GAME = "UPDATE_GAME";
+export const UPDATE_PLAYER_INFO = "UPDATE_PLAYER_INFO";
 export const UPDATE_TEAMS = "UPDATE_TEAMS";
