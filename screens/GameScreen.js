@@ -86,7 +86,7 @@ export default class GameScreen extends React.Component {
     return (
       <View>
         <Text style={styles.optionsTitleText}>
-          You are {team === RED ? "Red Team" : "Blue Team"}
+          You are on {team === RED ? "Red Team" : "Blue Team"}
         </Text>
         <Text style={styles.optionsTitleText}>
           {currentTeam === RED ? "Red Team" : "Blue Team"}'s Turn
