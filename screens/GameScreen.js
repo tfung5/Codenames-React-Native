@@ -46,7 +46,6 @@ export default class GameScreen extends React.Component {
 
   subscribeToGameUpdates = () => {
     this.socket.on(UPDATE_GAME, payload => {
-      console.log("UPDATE_GAME CALLED");
       const { currentTeam, board, redCardCounter, blueCardCounter } = payload;
       this.setState({
         currentTeam,
@@ -59,7 +58,6 @@ export default class GameScreen extends React.Component {
 
   subscribeToPlayerUpdates = () => {
     this.socket.on(UPDATE_PLAYER_INFO, player => {
-      console.log("UPDATE_PLAYER_INFO CALLED");
       this.setState({
         player
       });
