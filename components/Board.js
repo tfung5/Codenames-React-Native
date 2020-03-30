@@ -10,7 +10,15 @@ import uuid from "uuid/v4";
 import { RED, BLUE, BLACK, GRAY, CHOSEN, UNCHOSEN } from "../constants/Cards";
 import { FIELD_OPERATIVE, SPYMASTER } from "../constants/Roles";
 
-const determineCardStyle = (card, player, currentTeam) => {
+const canChooseCard = (card, player, currentTeam) => {
+  return (
+    player.role === FIELD_OPERATIVE &&
+    player.team === currentTeam &&
+    card.state === UNCHOSEN
+  );
+};
+
+const determineCardStyle = card => {
   let style = [styles.boardCard];
 
   if (card.color) {
@@ -28,14 +36,6 @@ const determineCardStyle = (card, player, currentTeam) => {
         style.push(styles.boardCardGray);
         break;
     }
-  }
-
-  if (
-    player.role === SPYMASTER ||
-    player.team !== currentTeam ||
-    card.state === CHOSEN
-  ) {
-    style.push(styles.disableClicks);
   }
 
   return style;
@@ -61,10 +61,17 @@ export default ({ board, player, currentTeam, chooseCard }) => {
               {row.length > 0 &&
                 row.map(card => {
                   return (
-                    <View key={card.word}>
+                    <View
+                      key={card.word}
+                      pointerEvents={
+                        canChooseCard(card, player, currentTeam)
+                          ? "auto"
+                          : "none"
+                      }
+                    >
                       <TouchableOpacity
                         onPress={() => chooseCard(card.row, card.col)}
-                        style={determineCardStyle(card, player, currentTeam)}
+                        style={determineCardStyle(card)}
                       >
                         <Text style={determineCardTextStyle(card)}>
                           {card.word}
@@ -116,9 +123,5 @@ const styles = StyleSheet.create({
   },
   boardCardTextChosen: {
     color: "white"
-  },
-  disableClicks: {
-    pointerEvents: "none",
-    cursor: "default"
   }
 });
