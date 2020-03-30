@@ -30,7 +30,7 @@ const determineCardStyle = (card, player) => {
     }
   }
 
-  if (player.role === SPYMASTER) {
+  if (player.role === SPYMASTER || card.state === CHOSEN) {
     style.push(styles.disableClicks);
   }
 
