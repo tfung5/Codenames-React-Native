@@ -8,9 +8,11 @@ import { Ionicons } from "@expo/vector-icons";
 import AppNavigator from "./navigation/AppNavigator";
 import SocketContext from "./components/SocketContext";
 import io from "socket.io-client";
-import { server } from "./config";
+import { devServer, prodServer } from "./config";
 
 export default function App(props) {
+  const server = process.env.NODE_ENV === "production" ? prodServer : devServer;
+
   const [isLoadingComplete, setLoadingComplete] = useState(false);
   const [socket, setSocket] = useState(io(server));
   const value = { socket, setSocket };
