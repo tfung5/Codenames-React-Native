@@ -91,7 +91,10 @@ export default class GameScreen extends React.Component {
         <Text style={styles.optionsTitleText}>
           {currentTeam === RED ? "Red Team" : "Blue Team"}'s Turn
         </Text>
-        <Board board={board} player={player} chooseCard={this.chooseCard} />
+        <Board
+          {...{ board, player, currentTeam }}
+          chooseCard={this.chooseCard}
+        />
         <TouchableOpacity
           onPress={this.restartGame}
           style={styles.testingButton}
