@@ -5,6 +5,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Board from "../components/Board";
 import { RED, BLUE } from "../constants/Cards";
 import { FIELD_OPERATIVE, SPYMASTER } from "../constants/Roles";
+import CardsLeft from "../components/CardsLeft";
 
 import {
   CHOOSE_CARD,
@@ -25,7 +26,9 @@ export default class GameScreen extends React.Component {
     this.state = {
       board: [],
       currentTeam: "",
-      player: {}
+      player: {},
+      redCardCounter: 0,
+      blueCardCounter: 0
     };
   }
 
@@ -43,16 +46,20 @@ export default class GameScreen extends React.Component {
 
   subscribeToGameUpdates = () => {
     this.socket.on(UPDATE_GAME, payload => {
-      const { currentTeam, board } = payload;
+      console.log("UPDATE_GAME CALLED");
+      const { currentTeam, board, redCardCounter, blueCardCounter } = payload;
       this.setState({
         currentTeam,
-        board
+        board,
+        redCardCounter,
+        blueCardCounter
       });
     });
   };
 
   subscribeToPlayerUpdates = () => {
     this.socket.on(UPDATE_PLAYER_INFO, player => {
+      console.log("UPDATE_PLAYER_INFO CALLED");
       this.setState({
         player
       });
@@ -80,7 +87,7 @@ export default class GameScreen extends React.Component {
   };
 
   render() {
-    const { board, player, currentTeam } = this.state;
+    const { board, player, currentTeam, redCardCounter, blueCardCounter } = this.state;
     const { name, team, role } = player;
 
     return (
@@ -91,6 +98,7 @@ export default class GameScreen extends React.Component {
         <Text style={styles.optionsTitleText}>
           {currentTeam === RED ? "Red Team" : "Blue Team"}'s Turn
         </Text>
+        <CardsLeft redLeft={redCardCounter} blueLeft={blueCardCounter} canEnd={false} />
         <Board
           {...{ board, player, currentTeam }}
           chooseCard={this.chooseCard}
