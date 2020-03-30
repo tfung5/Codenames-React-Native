@@ -8,8 +8,9 @@ import {
 } from "react-native";
 import uuid from "uuid/v4";
 import { RED, BLUE, BLACK, GRAY, CHOSEN, UNCHOSEN } from "../constants/Cards";
+import { FIELD_OPERATIVE, SPYMASTER } from "../constants/Roles";
 
-const determineCardStyle = card => {
+const determineCardStyle = (card, player, currentTeam) => {
   let style = [styles.boardCard];
 
   if (card.color) {
@@ -29,6 +30,14 @@ const determineCardStyle = card => {
     }
   }
 
+  if (
+    player.role === SPYMASTER ||
+    player.team !== currentTeam ||
+    card.state === CHOSEN
+  ) {
+    style.push(styles.disableClicks);
+  }
+
   return style;
 };
 
@@ -42,7 +51,7 @@ const determineCardTextStyle = card => {
   return style;
 };
 
-export default ({ board, chooseCard }) => {
+export default ({ board, player, currentTeam, chooseCard }) => {
   return (
     <View>
       {board.length > 0 &&
@@ -55,7 +64,7 @@ export default ({ board, chooseCard }) => {
                     <View key={card.word}>
                       <TouchableOpacity
                         onPress={() => chooseCard(card.row, card.col)}
-                        style={determineCardStyle(card)}
+                        style={determineCardStyle(card, player, currentTeam)}
                       >
                         <Text style={determineCardTextStyle(card)}>
                           {card.word}
@@ -107,5 +116,9 @@ const styles = StyleSheet.create({
   },
   boardCardTextChosen: {
     color: "white"
+  },
+  disableClicks: {
+    pointerEvents: "none",
+    cursor: "default"
   }
 });
