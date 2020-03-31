@@ -31,15 +31,19 @@ class ChatScreen extends React.Component {
     this.onReceivedMessage = this.onReceivedMessage.bind(this);
   }
 
-  componentDidMount = async () => {
-    if (this.isRedirectToHomeNeeded) {
+  componentDidMount = () => {
+    if (this.isRedirectToHomeNeeded()) {
       this.navigateToHomeScreen();
     } else {
-      await this.saveSocket();
-      await this.subscribeToChatMessageUpdates();
-      await this.getUserId();
-      await this.getUsername();
+      this.runSetup();
     }
+  };
+
+  runSetup = async () => {
+    await this.saveSocket();
+    await this.subscribeToChatMessageUpdates();
+    await this.getUserId();
+    await this.getUsername();
   };
 
   saveSocket = () => {

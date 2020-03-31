@@ -35,16 +35,20 @@ class GameScreen extends React.Component {
     };
   }
 
-  componentDidMount = async () => {
-    if (this.isRedirectToHomeNeeded) {
+  componentDidMount = () => {
+    if (this.isRedirectToHomeNeeded()) {
       this.navigateToHomeScreen();
     } else {
-      await this.saveSocket();
-      await this.subscribeToGameUpdates();
-      await this.subscribeToPlayerUpdates();
-      await this.getPlayerInfo();
-      await this.getGame();
+      this.runSetup();
     }
+  };
+
+  runSetup = async () => {
+    await this.saveSocket();
+    await this.subscribeToGameUpdates();
+    await this.subscribeToPlayerUpdates();
+    await this.getPlayerInfo();
+    await this.getGame();
   };
 
   saveSocket = () => {
