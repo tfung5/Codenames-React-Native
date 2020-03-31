@@ -136,17 +136,17 @@ function LobbyView({ navigation }) {
     navigation.navigate("Home");
   };
 
-  const setGameInProgress = () => {
+  const setGameInProgress = value => {
     setGame({
       ...game,
-      isGameInProgress: true
+      isGameInProgress: value
     });
   };
 
   const handleDisconnect = () => {
     disconnectFromGame();
+    setGameInProgress(false);
     navigateToHomeScreen();
-    console.log("disconnected");
   };
 
   const disconnectFromGame = () => {
@@ -174,7 +174,7 @@ function LobbyView({ navigation }) {
   const subscribeToGameStart = () => {
     socket.on(REQUEST_INDIVIDUAL_START_GAME, () => {
       socket.emit(INDIVIDUAL_START_GAME);
-      setGameInProgress();
+      setGameInProgress(true);
       navigateToGameScreen();
     });
   };
