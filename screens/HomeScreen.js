@@ -163,11 +163,17 @@ function LobbyView({ navigation }) {
   const renderDisconnectScreen = () => {
     return (
       <View>
-        <TouchableOpacity onPress={disconnectFromGame}>
-          <Text>Disconnect from Game</Text>
+        <TouchableOpacity
+          onPress={disconnectFromGame}
+          style={styles.testingButton}
+        >
+          <Text style={styles.testingButtonText}>Disconnect from Game</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={navigateToGameScreen}>
-          <Text>Back to Game</Text>
+        <TouchableOpacity
+          onPress={navigateToGameScreen}
+          style={styles.testingButton}
+        >
+          <Text style={styles.testingButtonText}>Back to Game</Text>
         </TouchableOpacity>
       </View>
     );
@@ -415,3 +421,16 @@ export default function App({ navigation }) {
     </userContext.Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  testingButton: {
+    borderWidth: 1,
+    borderColor: "black",
+    borderRadius: 25,
+    width: 150,
+    padding: 10
+  },
+  testingButtonText: {
+    textAlign: "center"
+  }
+});
