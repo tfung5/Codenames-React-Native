@@ -41,10 +41,13 @@ const determineCardStyle = card => {
   return style;
 };
 
-const determineCardTextStyle = card => {
+const determineCardTextStyle = (card, player) => {
   let style = [styles.boardCardText];
 
-  if (card.color) {
+  if (card.state === CHOSEN && player.role === SPYMASTER){
+    style.push(styles.boardCardTextChosenSpyView)
+  }
+  else if (card.color) {
     style.push(styles.boardCardTextChosen);
   }
 
@@ -73,7 +76,7 @@ export default ({ board, player, currentTeam, chooseCard }) => {
                         onPress={() => chooseCard(card.row, card.col)}
                         style={determineCardStyle(card)}
                       >
-                        <Text style={determineCardTextStyle(card)}>
+                        <Text style={determineCardTextStyle(card, player)}>
                           {card.word}
                         </Text>
                       </TouchableOpacity>
@@ -123,5 +126,9 @@ const styles = StyleSheet.create({
   },
   boardCardTextChosen: {
     color: "white"
+  },
+  boardCardTextChosenSpyView: {
+    color: "white",
+    textDecorationLine: "line-through"
   }
 });
