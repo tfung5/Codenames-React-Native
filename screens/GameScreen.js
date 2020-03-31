@@ -58,7 +58,7 @@ class GameScreen extends React.Component {
   isRedirectToHomeNeeded = () => {
     /**
      * Returns true if there is no game in progress
-     * If the user did not come from the LobbyView, then there is no game in progress
+     * If the user did not come from the LobbyScreen, then there is no game in progress
      */
     return !this.context.GameContext.game.isGameInProgress;
   };

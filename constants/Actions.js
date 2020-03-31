@@ -1,7 +1,7 @@
 export const CHAT_MESSAGE = "CHAT_MESSAGE";
 export const USER_NAME = "USER_NAME";
 export const CHOOSE_CARD = "CHOOSE_CARD";
-export const DISCONNECT = "DISCONNECT";
+export const LEAVE_GAME = "LEAVE_GAME";
 export const END_TURN = "END_TURN";
 export const GET_GAME = "GET_GAME";
 export const GET_PLAYER_INFO = "GET_PLAYER_INFO";
