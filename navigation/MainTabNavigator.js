@@ -39,7 +39,8 @@ HomeStack.path = "";
 
 const GameStack = createStackNavigator(
   {
-    Game: GameScreen
+    Game: GameScreen,
+    Chat: ChatScreen
   },
   { headerMode: "none" }
 );
@@ -53,29 +54,9 @@ GameStack.navigationOptions = {
 
 GameStack.path = "";
 
-const ChatStack = createStackNavigator(
-  {
-    Chat: ChatScreen
-  },
-  { headerMode: "none" }
-);
-
-ChatStack.navigationOptions = {
-  tabBarLabel: "Chat",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === "ios" ? "ios-chatbubbles" : "md-chatbubbles"}
-    />
-  )
-};
-
-ChatStack.path = "";
-
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
-  GameStack,
-  ChatStack
+  GameStack
 });
 
 tabNavigator.path = "";

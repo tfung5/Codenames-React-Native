@@ -84,6 +84,10 @@ export default class GameScreen extends React.Component {
     this.socket.emit(END_TURN);
   };
 
+  navigateToChat = () => {
+    this.props.navigation.navigate("Chat");
+  }
+
   render() {
     const { board, player, currentTeam, redCardCounter, blueCardCounter } = this.state;
     const { name, team, role } = player;
@@ -112,6 +116,12 @@ export default class GameScreen extends React.Component {
             <Text style={styles.testingButtonText}>End Turn</Text>
           </TouchableOpacity>
         )}
+        <TouchableOpacity
+          onPress={this.navigateToChat}
+          style={styles.testingButton}
+        >
+          <Text style={styles.testingButtonText}>Open Chat</Text>
+        </TouchableOpacity>
       </View>
     );
   }
