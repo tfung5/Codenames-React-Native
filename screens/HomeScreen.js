@@ -21,7 +21,7 @@ import CardsLeft from "../components/CardsLeft";
 import SocketContext from "../components/SocketContext";
 import GameContext from "../components/GameContext";
 import {
-  DISCONNECT,
+  LEAVE_GAME,
   FETCH_TEAMS,
   INDIVIDUAL_START_GAME,
   JOIN_LOBBY,
@@ -138,15 +138,14 @@ export function LobbyScreen({ navigation }) {
     });
   };
 
-  const handleDisconnect = () => {
-    disconnectFromGame();
+  const handleLeaveGame = () => {
+    emitLeaveGame();
     setGameInProgress(false);
     navigateToHomeScreen();
   };
 
-  const disconnectFromGame = () => {
-    socket.emit(DISCONNECT);
-    socket.disconnect();
+  const emitLeaveGame = () => {
+    socket.emit(LEAVE_GAME);
   };
 
   const { name } = navigation.state.params;
@@ -174,14 +173,14 @@ export function LobbyScreen({ navigation }) {
     });
   };
 
-  const renderDisconnectScreen = () => {
+  const renderLeaveGameScreen = () => {
     return (
       <View>
         <TouchableOpacity
-          onPress={handleDisconnect}
+          onPress={handleLeaveGame}
           style={styles.testingButton}
         >
-          <Text style={styles.testingButtonText}>Disconnect from Game</Text>
+          <Text style={styles.testingButtonText}>Leave Game</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={navigateToGameScreen}
@@ -318,7 +317,7 @@ export function LobbyScreen({ navigation }) {
   });
 
   if (game.isGameInProgress) {
-    return renderDisconnectScreen();
+    return renderLeaveGameScreen();
   } else {
     return (
       <View style={{ flex: 1, flexDirection: "column" }}>
