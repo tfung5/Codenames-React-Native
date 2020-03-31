@@ -1,5 +1,4 @@
 import React from "react";
-import io from "socket.io-client";
 import {
   StyleSheet,
   Image,
@@ -8,12 +7,16 @@ import {
   View,
   AsyncStorage
 } from "react-native";
+import { NavigationActions } from "react-navigation";
+
+import CombinedContext from "../components/CombinedContext";
+import ProvideCombinedContext from "../components/ProvideCombinedContext";
+
 import { GiftedChat } from "react-native-gifted-chat";
 import { CHAT_MESSAGE, USER_NAME } from "../constants/Actions";
-import SocketContext from "../components/SocketContext";
 
-export default class ChatView extends React.Component {
-  static contextType = SocketContext;
+class ChatScreen extends React.Component {
+  static contextType = CombinedContext;
 
   constructor(props) {
     super(props);
@@ -28,7 +31,15 @@ export default class ChatView extends React.Component {
     this.onReceivedMessage = this.onReceivedMessage.bind(this);
   }
 
-  componentDidMount = async () => {
+  componentDidMount = () => {
+    if (this.isRedirectToHomeNeeded()) {
+      this.navigateToHomeScreen();
+    } else {
+      this.runSetup();
+    }
+  };
+
+  runSetup = async () => {
     await this.saveSocket();
     await this.subscribeToChatMessageUpdates();
     await this.getUserId();
@@ -36,7 +47,25 @@ export default class ChatView extends React.Component {
   };
 
   saveSocket = () => {
-    this.socket = this.context.socket;
+    this.socket = this.context.SocketContext.socket;
+  };
+
+  isRedirectToHomeNeeded = () => {
+    /**
+     * Returns true if there is no game in progress
+     * If the user did not come from the LobbyView, then there is no game in progress
+     */
+    return !this.context.GameContext.game.isGameInProgress;
+  };
+
+  navigateToHomeScreen = () => {
+    this.props.navigation.navigate(
+      "HomeStack",
+      {},
+      NavigationActions.navigate({
+        routeName: "Home"
+      })
+    );
   };
 
   subscribeToChatMessageUpdates = () => {
@@ -47,15 +76,15 @@ export default class ChatView extends React.Component {
     let newID = this.socket.id;
     this.state.user._id = newID;
     this.serverUsername();
-  }
+  };
 
   serverUsername = () => {
     this.socket.emit(USER_NAME);
-  }
+  };
 
   getUsername = () => {
     this.socket.on(USER_NAME, username => {
-      this.state.user.name = username ;
+      this.state.user.name = username;
     });
   };
 
@@ -84,3 +113,13 @@ export default class ChatView extends React.Component {
     );
   }
 }
+
+const WrappedChatScreen = props => {
+  return (
+    <ProvideCombinedContext>
+      <ChatScreen {...props} />
+    </ProvideCombinedContext>
+  );
+};
+
+export default WrappedChatScreen;

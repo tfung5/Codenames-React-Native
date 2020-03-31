@@ -115,11 +115,10 @@ function HomeScreen({ navigation }) {
 
 function LobbyView({ navigation }) {
   const { socket } = useContext(SocketContext);
-  const { game } = useContext(GameContext);
+  const { game, setGame } = useContext(GameContext);
 
   const startGame = () => {
     socket.emit(START_GAME);
-    navigateToGameScreen();
   };
 
   const navigateToGameScreen = () => {
@@ -130,6 +129,13 @@ function LobbyView({ navigation }) {
         routeName: "Game"
       })
     );
+  };
+
+  const setGameInProgress = () => {
+    setGame({
+      ...game,
+      isGameInProgress: true
+    });
   };
 
   const disconnectFromGame = () => {
@@ -156,6 +162,7 @@ function LobbyView({ navigation }) {
   const subscribeToGameStart = () => {
     socket.on(REQUEST_INDIVIDUAL_START_GAME, () => {
       socket.emit(INDIVIDUAL_START_GAME);
+      setGameInProgress();
       navigateToGameScreen();
     });
   };

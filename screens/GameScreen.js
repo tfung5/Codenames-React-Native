@@ -1,7 +1,9 @@
 import React, { useContext } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { NavigationActions } from "react-navigation";
+
 import CombinedContext from "../components/CombinedContext";
 import ProvideCombinedContext from "../components/ProvideCombinedContext";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import Board from "../components/Board";
 import { RED, BLUE } from "../constants/Cards";
@@ -33,9 +35,16 @@ class GameScreen extends React.Component {
     };
   }
 
-  componentDidMount = async () => {
+  componentDidMount = () => {
+    if (this.isRedirectToHomeNeeded()) {
+      this.navigateToHomeScreen();
+    } else {
+      this.runSetup();
+    }
+  };
+
+  runSetup = async () => {
     await this.saveSocket();
-    await this.setGameInProgress();
     await this.subscribeToGameUpdates();
     await this.subscribeToPlayerUpdates();
     await this.getPlayerInfo();
@@ -46,12 +55,22 @@ class GameScreen extends React.Component {
     this.socket = this.context.SocketContext.socket;
   };
 
-  setGameInProgress = () => {
-    const { game, setGame } = this.context.GameContext;
-    setGame({
-      ...game,
-      isGameInProgress: true
-    });
+  isRedirectToHomeNeeded = () => {
+    /**
+     * Returns true if there is no game in progress
+     * If the user did not come from the LobbyView, then there is no game in progress
+     */
+    return !this.context.GameContext.game.isGameInProgress;
+  };
+
+  navigateToHomeScreen = () => {
+    this.props.navigation.navigate(
+      "HomeStack",
+      {},
+      NavigationActions.navigate({
+        routeName: "Home"
+      })
+    );
   };
 
   subscribeToGameUpdates = () => {
