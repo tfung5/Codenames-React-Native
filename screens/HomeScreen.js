@@ -33,19 +33,14 @@ import {
 import { RED, BLUE } from "../constants/Cards";
 import SnackBars from "../components/SnackBars";
 
-const userName = {
-  name: "",
-  setName: () => {}
-};
-const userContext = React.createContext(userName);
-
-function HomeScreen({ navigation }) {
-  const { name, setName } = useContext(userContext);
+export default function HomeScreen({ navigation }) {
   const { socket } = useContext(SocketContext);
+
+  const [name, setName] = React.useState("");
 
   const joinLobby = () => {
     socket.emit(JOIN_LOBBY, name);
-    navigation.navigate("LobbyView");
+    navigation.navigate("Lobby", { name });
   };
 
   return (
@@ -114,7 +109,7 @@ function HomeScreen({ navigation }) {
   );
 }
 
-function LobbyView({ navigation }) {
+export function LobbyScreen({ navigation }) {
   const { socket } = useContext(SocketContext);
   const { game, setGame } = useContext(GameContext);
 
@@ -154,7 +149,7 @@ function LobbyView({ navigation }) {
     socket.disconnect();
   };
 
-  const { name, setName } = useContext(userContext);
+  const { name } = navigation.state.params;
   const [redTeam, setRedTeam] = React.useState(new Array(4).fill(null));
   const [blueTeam, setBlueTeam] = React.useState(new Array(4).fill(null));
 
@@ -415,29 +410,6 @@ export function TestScreen({ navigation }) {
         number={1}
       />
     </View>
-  );
-}
-
-const Stack = createStackNavigator();
-
-export default function App({ navigation }) {
-  const [name, setName] = React.useState("");
-  return (
-    <userContext.Provider value={{ name, setName }}>
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{ headerShown: false }}
-          initialRouteName="HomeScreen"
-        >
-          <Stack.Screen name="HomeScreen" component={HomeScreen} />
-          <Stack.Screen
-            name="LobbyView"
-            component={props => <LobbyView {...props} {...{ navigation }} />}
-          />
-          <Stack.Screen name="TestScreen" component={TestScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </userContext.Provider>
   );
 }
 
