@@ -119,8 +119,6 @@ function LobbyView({ navigation }) {
 
   const startGame = () => {
     socket.emit(START_GAME);
-    setGameInProgress();
-    navigateToGameScreen();
   };
 
   const navigateToGameScreen = () => {
@@ -164,6 +162,7 @@ function LobbyView({ navigation }) {
   const subscribeToGameStart = () => {
     socket.on(REQUEST_INDIVIDUAL_START_GAME, () => {
       socket.emit(INDIVIDUAL_START_GAME);
+      setGameInProgress();
       navigateToGameScreen();
     });
   };
