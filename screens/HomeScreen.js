@@ -21,6 +21,7 @@ import CardsLeft from "../components/CardsLeft";
 import SocketContext from "../components/SocketContext";
 import GameContext from "../components/GameContext";
 import {
+  DISCONNECT,
   FETCH_TEAMS,
   INDIVIDUAL_START_GAME,
   JOIN_LOBBY,
@@ -131,6 +132,10 @@ function LobbyView({ navigation }) {
     );
   };
 
+  const navigateToHomeScreen = () => {
+    navigation.navigate("Home");
+  };
+
   const setGameInProgress = () => {
     setGame({
       ...game,
@@ -138,8 +143,15 @@ function LobbyView({ navigation }) {
     });
   };
 
+  const handleDisconnect = () => {
+    disconnectFromGame();
+    navigateToHomeScreen();
+    console.log("disconnected");
+  };
+
   const disconnectFromGame = () => {
-    console.log("Disconnecting from game");
+    socket.emit(DISCONNECT);
+    socket.disconnect();
   };
 
   const { name, setName } = useContext(userContext);
@@ -171,7 +183,7 @@ function LobbyView({ navigation }) {
     return (
       <View>
         <TouchableOpacity
-          onPress={disconnectFromGame}
+          onPress={handleDisconnect}
           style={styles.testingButton}
         >
           <Text style={styles.testingButtonText}>Disconnect from Game</Text>
