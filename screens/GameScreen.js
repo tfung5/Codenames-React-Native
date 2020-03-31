@@ -35,7 +35,6 @@ class GameScreen extends React.Component {
 
   componentDidMount = async () => {
     await this.saveSocket();
-    await this.setGameInProgress();
     await this.subscribeToGameUpdates();
     await this.subscribeToPlayerUpdates();
     await this.getPlayerInfo();
@@ -44,14 +43,6 @@ class GameScreen extends React.Component {
 
   saveSocket = () => {
     this.socket = this.context.SocketContext.socket;
-  };
-
-  setGameInProgress = () => {
-    const { game, setGame } = this.context.GameContext;
-    setGame({
-      ...game,
-      isGameInProgress: true
-    });
   };
 
   subscribeToGameUpdates = () => {

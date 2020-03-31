@@ -115,10 +115,11 @@ function HomeScreen({ navigation }) {
 
 function LobbyView({ navigation }) {
   const { socket } = useContext(SocketContext);
-  const { game } = useContext(GameContext);
+  const { game, setGame } = useContext(GameContext);
 
   const startGame = () => {
     socket.emit(START_GAME);
+    setGameInProgress();
     navigateToGameScreen();
   };
 
@@ -130,6 +131,13 @@ function LobbyView({ navigation }) {
         routeName: "Game"
       })
     );
+  };
+
+  const setGameInProgress = () => {
+    setGame({
+      ...game,
+      isGameInProgress: true
+    });
   };
 
   const disconnectFromGame = () => {
