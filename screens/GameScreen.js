@@ -86,10 +86,16 @@ export default class GameScreen extends React.Component {
 
   navigateToChat = () => {
     this.props.navigation.navigate("Chat");
-  }
+  };
 
   render() {
-    const { board, player, currentTeam, redCardCounter, blueCardCounter } = this.state;
+    const {
+      board,
+      player,
+      currentTeam,
+      redCardCounter,
+      blueCardCounter
+    } = this.state;
     const { name, team, role } = player;
 
     return (
@@ -100,7 +106,11 @@ export default class GameScreen extends React.Component {
         <Text style={styles.optionsTitleText}>
           {currentTeam === RED ? "Red Team" : "Blue Team"}'s Turn
         </Text>
-        <CardsLeft redLeft={redCardCounter} blueLeft={blueCardCounter} canEnd={false} />
+        <CardsLeft
+          redLeft={redCardCounter}
+          blueLeft={blueCardCounter}
+          canEnd={false}
+        />
         <Board
           {...{ board, player, currentTeam }}
           chooseCard={this.chooseCard}
