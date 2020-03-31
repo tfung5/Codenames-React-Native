@@ -19,6 +19,7 @@ import { NavigationActions } from "react-navigation";
 import Clues from "../components/Clues";
 import CardsLeft from "../components/CardsLeft";
 import SocketContext from "../components/SocketContext";
+import GameContext from "../components/GameContext";
 import {
   FETCH_TEAMS,
   INDIVIDUAL_START_GAME,
@@ -114,6 +115,7 @@ function HomeScreen({ navigation }) {
 
 function LobbyView({ navigation }) {
   const { socket } = useContext(SocketContext);
+  const { game } = useContext(GameContext);
 
   const startGame = () => {
     socket.emit(START_GAME);
@@ -128,6 +130,10 @@ function LobbyView({ navigation }) {
         routeName: "Game"
       })
     );
+  };
+
+  const disconnectFromGame = () => {
+    console.log("Disconnecting from game");
   };
 
   const { name, setName } = useContext(userContext);
@@ -152,6 +158,19 @@ function LobbyView({ navigation }) {
       socket.emit(INDIVIDUAL_START_GAME);
       navigateToGameScreen();
     });
+  };
+
+  const renderDisconnectScreen = () => {
+    return (
+      <View>
+        <TouchableOpacity onPress={disconnectFromGame}>
+          <Text>Disconnect from Game</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={navigateToGameScreen}>
+          <Text>Back to Game</Text>
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   const listRedItems = redTeam.map((buttonnum, index) => {
@@ -277,66 +296,71 @@ function LobbyView({ navigation }) {
       </TouchableOpacity>
     );
   });
-  return (
-    <View style={{ flex: 1, flexDirection: "column" }}>
-      <View
-        style={{
-          flex: 2,
-          alignItems: "center",
-          justifyContent: "center",
-          borderBottomWidth: 2
-        }}
-      >
-        <Text style={{ fontSize: 25 }}>Join a Team</Text>
-      </View>
 
-      <View
-        style={{
-          flex: 29,
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: "#EAE7F2"
-        }}
-      >
+  if (game.isGameInProgress) {
+    return renderDisconnectScreen();
+  } else {
+    return (
+      <View style={{ flex: 1, flexDirection: "column" }}>
         <View
           style={{
-            backgroundColor: "white",
-            borderColor: "firebrick",
-            borderWidth: 2,
-            borderRadius: 10,
-            marginHorizontal: "9%",
-            padding: 10,
-            marginBottom: 4
+            flex: 2,
+            alignItems: "center",
+            justifyContent: "center",
+            borderBottomWidth: 2
           }}
         >
-          {listRedItems}
+          <Text style={{ fontSize: 25 }}>Join a Team</Text>
         </View>
+
         <View
           style={{
-            backgroundColor: "white",
-            borderColor: "dodgerblue",
-            borderWidth: 2,
-            borderRadius: 10,
-            marginHorizontal: "9%",
-            padding: 10,
-            marginTop: 4
+            flex: 29,
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "#EAE7F2"
           }}
         >
-          {listBlueItems}
+          <View
+            style={{
+              backgroundColor: "white",
+              borderColor: "firebrick",
+              borderWidth: 2,
+              borderRadius: 10,
+              marginHorizontal: "9%",
+              padding: 10,
+              marginBottom: 4
+            }}
+          >
+            {listRedItems}
+          </View>
+          <View
+            style={{
+              backgroundColor: "white",
+              borderColor: "dodgerblue",
+              borderWidth: 2,
+              borderRadius: 10,
+              marginHorizontal: "9%",
+              padding: 10,
+              marginTop: 4
+            }}
+          >
+            {listBlueItems}
+          </View>
+          <Text
+            style={{ fontSize: 25 }}
+            onPress={() => navigation.navigate("Test")}
+          >
+            Touch for Test
+          </Text>
+          <TouchableOpacity onPress={startGame}>
+            <Text>Start Game</Text>
+          </TouchableOpacity>
         </View>
-        <Text
-          style={{ fontSize: 25 }}
-          onPress={() => navigation.navigate("Test")}
-        >
-          Touch for Test
-        </Text>
-        <TouchableOpacity onPress={startGame}>
-          <Text>Start Game</Text>
-        </TouchableOpacity>
       </View>
-    </View>
-  );
+    );
+  }
 }
 
 export function TestScreen({ navigation }) {
