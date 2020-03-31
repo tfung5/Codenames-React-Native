@@ -7,6 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import AppNavigator from "./navigation/AppNavigator";
 import SocketContext from "./components/SocketContext";
+import GameContext from "./components/GameContext";
 import io from "socket.io-client";
 import { devServer, prodServer } from "./config";
 
@@ -15,7 +16,9 @@ export default function App(props) {
 
   const [isLoadingComplete, setLoadingComplete] = useState(false);
   const [socket, setSocket] = useState(io(server));
-  const value = { socket, setSocket };
+  const SocketValue = { socket, setSocket };
+  const [game, setGame] = useState({ isGameInProgress: false });
+  const GameValue = { game, setGame };
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return (
@@ -27,11 +30,13 @@ export default function App(props) {
     );
   } else {
     return (
-      <SocketContext.Provider {...{ value }}>
-        <View style={styles.container}>
-          {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-          <AppNavigator />
-        </View>
+      <SocketContext.Provider value={SocketValue}>
+        <GameContext.Provider value={GameValue}>
+          <View style={styles.container}>
+            {Platform.OS === "ios" && <StatusBar barStyle="default" />}
+            <AppNavigator />
+          </View>
+        </GameContext.Provider>
       </SocketContext.Provider>
     );
   }

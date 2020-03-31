@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
-import SocketContext from "../components/SocketContext";
+import CombinedContext from "../components/CombinedContext";
+import ProvideCombinedContext from "../components/ProvideCombinedContext";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import Board from "../components/Board";
@@ -17,8 +18,8 @@ import {
   UPDATE_PLAYER_INFO
 } from "../constants/Actions";
 
-export default class GameScreen extends React.Component {
-  static contextType = SocketContext;
+class GameScreen extends React.Component {
+  static contextType = CombinedContext;
 
   constructor(props) {
     super(props);
@@ -34,6 +35,7 @@ export default class GameScreen extends React.Component {
 
   componentDidMount = async () => {
     await this.saveSocket();
+    await this.setGameInProgress();
     await this.subscribeToGameUpdates();
     await this.subscribeToPlayerUpdates();
     await this.getPlayerInfo();
@@ -41,7 +43,15 @@ export default class GameScreen extends React.Component {
   };
 
   saveSocket = () => {
-    this.socket = this.context.socket;
+    this.socket = this.context.SocketContext.socket;
+  };
+
+  setGameInProgress = () => {
+    const { game, setGame } = this.context.GameContext;
+    setGame({
+      ...game,
+      isGameInProgress: true
+    });
   };
 
   subscribeToGameUpdates = () => {
@@ -86,10 +96,16 @@ export default class GameScreen extends React.Component {
 
   navigateToChat = () => {
     this.props.navigation.navigate("Chat");
-  }
+  };
 
   render() {
-    const { board, player, currentTeam, redCardCounter, blueCardCounter } = this.state;
+    const {
+      board,
+      player,
+      currentTeam,
+      redCardCounter,
+      blueCardCounter
+    } = this.state;
     const { name, team, role } = player;
 
     return (
@@ -100,7 +116,11 @@ export default class GameScreen extends React.Component {
         <Text style={styles.optionsTitleText}>
           {currentTeam === RED ? "Red Team" : "Blue Team"}'s Turn
         </Text>
-        <CardsLeft redLeft={redCardCounter} blueLeft={blueCardCounter} canEnd={false} />
+        <CardsLeft
+          redLeft={redCardCounter}
+          blueLeft={blueCardCounter}
+          canEnd={false}
+        />
         <Board
           {...{ board, player, currentTeam }}
           chooseCard={this.chooseCard}
@@ -126,6 +146,16 @@ export default class GameScreen extends React.Component {
     );
   }
 }
+
+const WrappedGameScreen = props => {
+  return (
+    <ProvideCombinedContext>
+      <GameScreen {...props} />
+    </ProvideCombinedContext>
+  );
+};
+
+export default WrappedGameScreen;
 
 const styles = StyleSheet.create({
   optionsTitleText: {
