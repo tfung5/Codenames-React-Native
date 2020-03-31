@@ -4,7 +4,8 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  Image
 } from "react-native";
 import uuid from "uuid/v4";
 import { RED, BLUE, BLACK, GRAY, CHOSEN, UNCHOSEN } from "../constants/Cards";
@@ -41,7 +42,16 @@ const determineCardStyle = card => {
   return style;
 };
 
-const determineCardTextStyle = card => {
+const determineCheckMarkStyle = (card, player) => {
+  if (card.state === CHOSEN && player.role === SPYMASTER){
+    return styles.checkmarkShown;
+  }
+  else{
+    return styles.checkmarkHidden;
+  }
+};
+
+const determineCardTextStyle = (card) => {
   let style = [styles.boardCardText];
 
   if (card.color) {
@@ -50,6 +60,8 @@ const determineCardTextStyle = card => {
 
   return style;
 };
+
+const images = { checkMark: require("../assets/images/check-mark.png") };
 
 export default ({ board, player, currentTeam, chooseCard }) => {
   return (
@@ -73,6 +85,9 @@ export default ({ board, player, currentTeam, chooseCard }) => {
                         onPress={() => chooseCard(card.row, card.col)}
                         style={determineCardStyle(card)}
                       >
+                        <Image style={determineCheckMarkStyle(card, player)}
+                          source={require("../assets/images/check-mark.png")}
+                        />
                         <Text style={determineCardTextStyle(card)}>
                           {card.word}
                         </Text>
@@ -123,5 +138,14 @@ const styles = StyleSheet.create({
   },
   boardCardTextChosen: {
     color: "white"
+  },
+  checkmarkShown: {
+    width: 15,
+    height: 15,
+  },
+  checkmarkHidden: {
+    width: 0,
+    height: 0,
+    opacity: 0
   }
 });
