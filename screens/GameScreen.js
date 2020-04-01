@@ -9,6 +9,9 @@ import Board from "../components/Board";
 import { RED, BLUE } from "../constants/Cards";
 import { FIELD_OPERATIVE, SPYMASTER } from "../constants/Roles";
 import CardsLeft from "../components/CardsLeft";
+import Clues from "../components/Clues";
+import Winner from "../components/Winner";
+import CurrentTurn from "../components/CurrentTurn";
 
 import {
   CHOOSE_CARD,
@@ -131,9 +134,24 @@ class GameScreen extends React.Component {
       guessCounter
     } = this.state;
     const { name, team, role } = player;
+    const gameOver = (endedGame, blueTurn) => {
+      if (endedGame === true) {
+        return (
+          <>
+            <Winner blueTurn={blueTurn}/>
+          </>
+        )
+      }
+      return (
+        <>
+          <CurrentTurn blueTurn={blueTurn}/>
+        </>
+      )
+    }
 
     return (
       <View>
+        {gameOver(false, currentTeam)}
         <Text style={styles.optionsTitleText}>
           You are on {team === RED ? "Red Team" : "Blue Team"}
         </Text>
@@ -152,6 +170,7 @@ class GameScreen extends React.Component {
           {...{ board, player, currentTeam }}
           chooseCard={this.chooseCard}
         />
+        <Clues canEdit={this.state.player.role === SPYMASTER && currentTeam === team ? true: false}/>
         <TouchableOpacity
           onPress={this.restartGame}
           style={styles.testingButton}
