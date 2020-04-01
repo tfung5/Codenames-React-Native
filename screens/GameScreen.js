@@ -135,10 +135,10 @@ class GameScreen extends React.Component {
     } = this.state;
     const { name, team, role } = player;
     const gameOver = (endedGame, blueTurn) => {
-      if (endedGame === true) {
+      if (endedGame === BLUE || endedGame === RED) {
         return (
           <>
-            <Winner blueTurn={blueTurn}/>
+            <Winner blueTurn={endedGame}/>
           </>
         )
       }
@@ -151,7 +151,7 @@ class GameScreen extends React.Component {
 
     return (
       <View>
-        {gameOver(false, currentTeam)}
+        {gameOver(this.state.winningTeam, currentTeam)}
         <Text style={styles.optionsTitleText}>
           You are on {team === RED ? "Red Team" : "Blue Team"}
         </Text>

@@ -7,13 +7,13 @@ export default ({blueTurn}) => {
         if (blueTurn === BLUE) {
             return (
                 <>
-                    <Text style={{fontSize: 25}}>Blue Team Wins!</Text>
+                    <Text style={{fontSize: 25}}>{"\n"}Blue Team Wins!</Text>
                 </>
             )
         }
         return (
             <>
-                <Text style={{fontSize: 25}}>Red Team Wins!</Text>
+                <Text style={{fontSize: 25}}>{"\n"}Red Team Wins!</Text>
             </>
         )
     }

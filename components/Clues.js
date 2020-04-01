@@ -9,8 +9,8 @@ export default ({ canEdit }) => {
   const {socket} = useContext(SocketContext);
   const [word, setWord] = React.useState("");
   const [num, setNum] = React.useState(0);
-  const submitClues = (clueWord, clueNum) => {
-    socket.emit(SET_CLUE, clueWord, clueNum)
+  const submitClues = (word, number) => {
+    socket.emit(SET_CLUE, {word, number});
   }
   const hidden = canEdit => {
     if (canEdit === false) {
@@ -23,7 +23,6 @@ export default ({ canEdit }) => {
             submitClues(word, num);
           }}
         >
-          <Text>{word}{num}</Text>
           <Image
             style={{ margin: 4, width: 40, height: 40 }}
             source={require("../assets/images/play-icon.png")}
