@@ -32,7 +32,8 @@ class GameScreen extends React.Component {
       player: {},
       redCardCounter: 0,
       blueCardCounter: 0,
-      guessCounter: 0
+      guessCounter: 0,
+      winningTeam: ""
     };
   }
 
@@ -76,13 +77,14 @@ class GameScreen extends React.Component {
 
   subscribeToGameUpdates = () => {
     this.socket.on(UPDATE_GAME, payload => {
-      const { currentTeam, board, redCardCounter, blueCardCounter, guessCounter } = payload;
+      const { currentTeam, board, redCardCounter, blueCardCounter, guessCounter, winningTeam } = payload;
       this.setState({
         currentTeam,
         board,
         redCardCounter,
         blueCardCounter,
-        guessCounter
+        guessCounter,
+        winningTeam
       });
     });
   };
