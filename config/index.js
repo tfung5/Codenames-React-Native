@@ -1,4 +1,6 @@
+const prodServer = "https://codenames-server-capstone.herokuapp.com/";
+const devServer = "http://127.0.0.1:3000";
+
 module.exports = {
-  prodServer: "https://codenames-server-capstone.herokuapp.com/",
-  devServer: "http://127.0.0.1:3000"
+  server: process.env.NODE_ENV === "production" ? prodServer : devServer
 };
