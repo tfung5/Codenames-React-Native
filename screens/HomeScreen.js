@@ -209,7 +209,7 @@ export function LobbyScreen({ navigation }) {
 
       // But if slot is the current player
       if (redTeam[index].id === socket.id) {
-        slotColor = "#8A2BE2"; // Set color to purple
+        slotColor = "#FFC58E"; // Set color to orange
       }
     }
 
@@ -271,7 +271,7 @@ export function LobbyScreen({ navigation }) {
 
       // But if slot is the current player
       if (blueTeam[index].id === socket.id) {
-        slotColor = "#8A2BE2"; // Set color to purple
+        slotColor = "#A89CD0"; // Set color to purple
       }
     }
 
@@ -367,14 +367,24 @@ export function LobbyScreen({ navigation }) {
           >
             {listBlueItems}
           </View>
-          <Text
+          {/* <Text
             style={{ fontSize: 25 }}
             onPress={() => navigation.navigate("Test")}
           >
             Touch for Test
-          </Text>
-          <TouchableOpacity onPress={startGame}>
-            <Text>Start Game</Text>
+          </Text> */}
+          <TouchableOpacity 
+            onPress={startGame}
+            style={{
+              borderRadius: 10,
+              margin: 16,
+              borderWidth: 2,
+              paddingHorizontal: 16,
+              paddingVertical: 4,
+              backgroundColor: "white"
+            }}
+          >
+            <Text style={{fontSize: 20}}>Start Game</Text>
           </TouchableOpacity>
         </View>
       </View>

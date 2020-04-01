@@ -1,14 +1,29 @@
-import React, { Component } from "react";
+import React, {useContext, Component } from "react";
 import { TouchableOpacity, Image, Text, TextInput, View } from "react-native";
+import {
+  SET_CLUE
+} from "../constants/Actions";
+import SocketContext from "../components/SocketContext";
 
 export default ({ canEdit }) => {
+  const {socket} = useContext(SocketContext);
+  const [word, setWord] = React.useState("");
+  const [num, setNum] = React.useState(0);
+  const submitClues = (clueWord, clueNum) => {
+    socket.emit(SET_CLUE, clueWord, clueNum)
+  }
   const hidden = canEdit => {
     if (canEdit === false) {
       return <>{null}</>;
     }
     return (
       <>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={(word, num) => {
+            submitClues(word, num);
+          }}
+        >
+          <Text>{word}{num}</Text>
           <Image
             style={{ margin: 4, width: 40, height: 40 }}
             source={require("../assets/images/play-icon.png")}
@@ -41,6 +56,9 @@ export default ({ canEdit }) => {
             width: 180
           }}
           textAlign={"center"}
+          onChangeText={(text) => {
+            setWord(text)
+          }}
         />
         <TextInput
           editable={canEdit}
@@ -56,6 +74,9 @@ export default ({ canEdit }) => {
           }}
           textAlign={"center"}
           keyboardType={"numeric"}
+          onChangeText={(text) => {
+            setNum(text);
+          }}
         />
         {hidden(canEdit)}
       </View>
