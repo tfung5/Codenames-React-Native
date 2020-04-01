@@ -13,6 +13,8 @@ import {
   Button,
   Keyboard
 } from "react-native";
+import io from "socket.io-client";
+import { server } from "../config";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationActions } from "react-navigation";
@@ -34,7 +36,12 @@ import { RED, BLUE } from "../constants/Cards";
 import SnackBars from "../components/SnackBars";
 
 export default function HomeScreen({ navigation }) {
-  const { socket } = useContext(SocketContext);
+  const { socket, setSocket } = useContext(SocketContext);
+
+  // componentDidMount
+  useEffect(() => {
+    setSocket(io(server));
+  }, []);
 
   const [name, setName] = React.useState("");
 
