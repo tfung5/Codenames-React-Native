@@ -53,7 +53,7 @@ export default function HomeScreen({ navigation }) {
           borderBottomWidth: 2
         }}
       >
-        <Text style={{ fontSize: 25 }}>Join Lobby</Text>
+        <Text style={{ fontSize: 25 }}>{"\n"}Join Lobby</Text>
       </View>
 
       <View
@@ -329,7 +329,7 @@ export function LobbyScreen({ navigation }) {
             borderBottomWidth: 2
           }}
         >
-          <Text style={{ fontSize: 25 }}>Join a Team</Text>
+          <Text style={{ fontSize: 25 }}>{"\n"}Join a Team</Text>
         </View>
 
         <View
