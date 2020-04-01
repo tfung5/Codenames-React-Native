@@ -8,8 +8,8 @@ import SocketContext from "../components/SocketContext";
 export default ({ canEdit }) => {
   const {socket} = useContext(SocketContext);
   const [word, setWord] = React.useState("");
-  const [num, setNum] = React.useState(0);
-  const submitClues = (word, number) => {
+  const [number, setNumber] = React.useState(0);
+  const submitClues = () => {
     socket.emit(SET_CLUE, {word, number});
   }
   const hidden = canEdit => {
@@ -19,9 +19,9 @@ export default ({ canEdit }) => {
     return (
       <>
         <TouchableOpacity
-          onPress={(word, num) => {
-            submitClues(word, num);
-          }}
+          onPress={
+            submitClues
+          }
         >
           <Image
             style={{ margin: 4, width: 40, height: 40 }}
@@ -74,7 +74,7 @@ export default ({ canEdit }) => {
           textAlign={"center"}
           keyboardType={"numeric"}
           onChangeText={(text) => {
-            setNum(text);
+            setNumber(text);
           }}
         />
         {hidden(canEdit)}
