@@ -1,6 +1,6 @@
 export const CHAT_MESSAGE = "CHAT_MESSAGE";
-export const USER_NAME = "USER_NAME";
 export const CHOOSE_CARD = "CHOOSE_CARD";
+export const GET_MESSAGES = "GET_MESSAGES";
 export const LEAVE_GAME = "LEAVE_GAME";
 export const END_TURN = "END_TURN";
 export const GET_GAME = "GET_GAME";
