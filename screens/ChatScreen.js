@@ -54,6 +54,7 @@ class ChatScreen extends React.Component {
     await this.subscribeToPlayerUpdates();
     await this.getPlayerInfo();
     await this.subscribeToChatMessageUpdates();
+    await this.loadEarlierMessages();
     await this.getMessages();
   };
 
@@ -80,15 +81,13 @@ class ChatScreen extends React.Component {
   };
 
   getMessages = () => {
-    console.log("getting previous messages");
     this.socket.emit(GET_MESSAGES);
   };
 
   loadEarlierMessages = () => {
     this.socket.on(GET_MESSAGES, payload => {
-      console.log("going through earlier message array");
       for (let i = 0; i < payload.length; i++){
-        onReceivedMessage(payload[i]);
+        this.onReceivedMessage(payload[i]);
       }
     });
   };
@@ -146,7 +145,6 @@ class ChatScreen extends React.Component {
 //Send messages
   //When a message is sent, send the message to the server.
   onSend(messages = []) {
-    console.log("onSend: " + messages[0]);
     this.socket.emit(CHAT_MESSAGE, messages[0]);
   }
 
