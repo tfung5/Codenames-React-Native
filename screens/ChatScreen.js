@@ -13,7 +13,12 @@ import CombinedContext from "../components/CombinedContext";
 import ProvideCombinedContext from "../components/ProvideCombinedContext";
 
 import { GiftedChat } from "react-native-gifted-chat";
-import { CHAT_MESSAGE, USER_NAME } from "../constants/Actions";
+import {
+  CHAT_MESSAGE,
+  GET_PLAYER_INFO,
+  UPDATE_PLAYER_INFO,
+  GET_MESSAGES
+} from "../constants/Actions";
 
 class ChatScreen extends React.Component {
   static contextType = CombinedContext;
@@ -32,6 +37,7 @@ class ChatScreen extends React.Component {
   }
 
   componentDidMount = () => {
+    this._isMounted = true;
     if (this.isRedirectToHomeNeeded()) {
       this.navigateToHomeScreen();
     } else {
@@ -39,11 +45,17 @@ class ChatScreen extends React.Component {
     }
   };
 
+  componentWillUnmount = () => {
+		this._isMounted = false;
+	}
+
   runSetup = async () => {
     await this.saveSocket();
+    await this.subscribeToPlayerUpdates();
+    await this.getPlayerInfo();
     await this.subscribeToChatMessageUpdates();
-    await this.getUserId();
-    await this.getUsername();
+    await this.loadEarlierMessages();
+    await this.getMessages();
   };
 
   saveSocket = () => {
@@ -68,35 +80,69 @@ class ChatScreen extends React.Component {
     );
   };
 
+  getMessages = () => {
+    this.socket.emit(GET_MESSAGES);
+  };
+
+  loadEarlierMessages = () => {
+    this.socket.on(GET_MESSAGES, payload => {
+      for (let i = 0; i < payload.length; i++){
+        this.onReceivedMessage(payload[i]);
+      }
+    });
+  };
+
+//Get messages
   subscribeToChatMessageUpdates = () => {
     this.socket.on(CHAT_MESSAGE, this.onReceivedMessage);
   };
 
-  getUserId = () => {
-    let newID = this.socket.id;
-    this.state.user._id = newID;
-    this.serverUsername();
+  getPlayerInfo = () => {
+    this.socket.emit(GET_PLAYER_INFO);
   };
 
-  serverUsername = () => {
-    this.socket.emit(USER_NAME);
+  subscribeToPlayerUpdates = () => {
+    this.socket.on(UPDATE_PLAYER_INFO, player => {
+      const { id, name } = player;
+      if (this._isMounted){
+        this.setState({
+          user: {
+          _id: id,
+          name: name
+          }
+        });
+      }
+    });
   };
 
-  getUsername = () => {
-    this.socket.on(USER_NAME, username => {
-      this.state.user.name = username;
+  subscribeToGameUpdates = () => {
+    this.socket.on(UPDATE_GAME, payload => {
+      const { currentTeam, board, redCardCounter, blueCardCounter, guessCounter, winningTeam } = payload;
+      if (this._isMounted){
+        this.setState({
+          currentTeam,
+          board,
+          redCardCounter,
+          blueCardCounter,
+          guessCounter,
+          winningTeam
+        });
+      }
     });
   };
 
   //When the server sends a message to this, store it in this component's state.
   onReceivedMessage(messages) {
-    this.setState(previousState => {
-      return {
-        messages: GiftedChat.append(previousState.messages, messages)
-      };
-    });
+    if (this._isMounted){
+      this.setState(previousState => {
+        return {
+          messages: GiftedChat.append(previousState.messages, messages)
+        };
+    } );
+    }
   }
 
+//Send messages
   //When a message is sent, send the message to the server.
   onSend(messages = []) {
     this.socket.emit(CHAT_MESSAGE, messages[0]);
