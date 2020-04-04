@@ -146,6 +146,7 @@ class GameScreen extends React.Component {
       redCardCounter,
       blueCardCounter,
       guessCounter,
+      winningTeam,
       clue,
     } = this.state;
     const { name, team, role } = player;
@@ -186,7 +187,7 @@ class GameScreen extends React.Component {
           {...{ board, player, currentTeam }}
           chooseCard={this.chooseCard}
         />
-        <Clues {...{ clue, player, currentTeam, board }} />
+        <Clues {...{ clue, player, currentTeam, board, winningTeam }} />
         <TouchableOpacity
           onPress={this.loadPresetBoard}
           style={styles.testingButton}
