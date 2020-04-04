@@ -18,6 +18,7 @@ import {
   END_TURN,
   GET_GAME,
   GET_PLAYER_INFO,
+  LOAD_PRESET_BOARD,
   RESTART_GAME,
   UPDATE_GAME,
   UPDATE_PLAYER_INFO,
@@ -117,6 +118,10 @@ class GameScreen extends React.Component {
     this.socket.emit(GET_PLAYER_INFO);
   };
 
+  loadPresetBoard = () => {
+    this.socket.emit(LOAD_PRESET_BOARD);
+  };
+
   restartGame = () => {
     this.socket.emit(RESTART_GAME);
   };
@@ -182,6 +187,12 @@ class GameScreen extends React.Component {
           chooseCard={this.chooseCard}
         />
         <Clues {...{ clue, player, currentTeam, board }} />
+        <TouchableOpacity
+          onPress={this.loadPresetBoard}
+          style={styles.testingButton}
+        >
+          <Text style={styles.testingButtonText}>Load Preset Board</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           onPress={this.restartGame}
           style={styles.testingButton}
