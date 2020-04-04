@@ -184,7 +184,7 @@ class GameScreen extends React.Component {
           canEnd={false}
         />
         <Board
-          {...{ board, player, currentTeam }}
+          {...{ board, player, currentTeam, winningTeam }}
           chooseCard={this.chooseCard}
         />
         <Clues {...{ clue, player, currentTeam, board, winningTeam }} />
