@@ -4,7 +4,9 @@ import { SET_CLUE } from "../constants/Actions";
 import { SPYMASTER } from "../constants/Roles";
 import SocketContext from "../components/SocketContext";
 
-export default ({ clue, player, currentTeam, board }) => {
+export default (props) => {
+  const { clue, player, currentTeam, board, winningTeam } = props;
+
   const { socket } = useContext(SocketContext);
   const [word, setWord] = React.useState("");
   const [number, setNumber] = React.useState("");
@@ -30,8 +32,15 @@ export default ({ clue, player, currentTeam, board }) => {
 
   const determineIfCanEdit = () => {
     if (player) {
-      // If the player is a spymaster on the current team, and they also have not chosen a clue for this turn yet, give them permission to edit
+      /**
+       * If the player is a spymaster on the current team,
+       * a clue has not been given for this turn yet,
+       * and no team has won yet,
+       * give them permission to edit
+       */
+
       if (
+        !winningTeam &&
         !hasEdited &&
         player.role === SPYMASTER &&
         currentTeam === player.team

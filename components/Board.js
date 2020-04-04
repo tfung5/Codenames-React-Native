@@ -11,8 +11,9 @@ import uuid from "uuid/v4";
 import { RED, BLUE, BLACK, GRAY, CHOSEN, UNCHOSEN } from "../constants/Cards";
 import { FIELD_OPERATIVE, SPYMASTER } from "../constants/Roles";
 
-const canChooseCard = (card, player, currentTeam) => {
+const canChooseCard = (card, player, currentTeam, winningTeam) => {
   return (
+    !winningTeam &&
     player.role === FIELD_OPERATIVE &&
     player.team === currentTeam &&
     card.state === UNCHOSEN
@@ -62,7 +63,7 @@ const determineCardTextStyle = (card) => {
 
 const images = { checkMark: require("../assets/images/check-mark.png") };
 
-export default ({ board, player, currentTeam, chooseCard }) => {
+export default ({ board, player, currentTeam, chooseCard, winningTeam }) => {
   return (
     <View>
       {board.length > 0 &&
@@ -75,7 +76,7 @@ export default ({ board, player, currentTeam, chooseCard }) => {
                     <View
                       key={card.word}
                       pointerEvents={
-                        canChooseCard(card, player, currentTeam)
+                        canChooseCard(card, player, currentTeam, winningTeam)
                           ? "auto"
                           : "none"
                       }
