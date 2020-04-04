@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import { RED, BLUE } from "../constants/Cards";
 
 export default ({ blueTurn }) => {
-  const whosTurn = blueTurn => {
+  const whosTurn = (blueTurn) => {
     if (blueTurn === BLUE) {
       return (
         <>
@@ -23,7 +23,7 @@ export default ({ blueTurn }) => {
         alignItems: "center",
         justifyContent: "center",
         borderBottomWidth: 2,
-        backgroundColor: "white"
+        backgroundColor: "white",
       }}
     >
       <Text>{"\n"}</Text>

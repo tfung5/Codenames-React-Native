@@ -11,7 +11,7 @@ import {
   View,
   TextInput,
   Button,
-  Keyboard
+  Keyboard,
 } from "react-native";
 import io from "socket.io-client";
 import { server } from "../config";
@@ -30,7 +30,7 @@ import {
   JOIN_SLOT,
   REQUEST_INDIVIDUAL_START_GAME,
   START_GAME,
-  UPDATE_TEAMS
+  UPDATE_TEAMS,
 } from "../constants/Actions";
 import { RED, BLUE } from "../constants/Cards";
 import SnackBars from "../components/SnackBars";
@@ -57,7 +57,7 @@ export default function HomeScreen({ navigation }) {
           flex: 2,
           alignItems: "center",
           justifyContent: "center",
-          borderBottomWidth: 2
+          borderBottomWidth: 2,
         }}
       >
         <Text style={{ fontSize: 25 }}>{"\n"}Join Lobby</Text>
@@ -68,7 +68,7 @@ export default function HomeScreen({ navigation }) {
           flex: 29,
           flexDirection: "column",
           justifyContent: "center",
-          backgroundColor: "#EAE7F2"
+          backgroundColor: "#EAE7F2",
         }}
       >
         <View
@@ -76,7 +76,7 @@ export default function HomeScreen({ navigation }) {
             flexDirection: "row",
             justifyContent: "space-around",
             alignItems: "center",
-            padding: 25
+            padding: 25,
           }}
         >
           <Text style={{ fontSize: 25 }}>Name:</Text>
@@ -89,9 +89,9 @@ export default function HomeScreen({ navigation }) {
               borderColor: "lightskyblue",
               padding: 5,
               width: 220,
-              textAlign: "center"
+              textAlign: "center",
             }}
-            onChangeText={text => {
+            onChangeText={(text) => {
               setName(text);
             }}
             value={name}
@@ -104,7 +104,7 @@ export default function HomeScreen({ navigation }) {
               backgroundColor: "white",
               borderWidth: 2,
               borderRadius: 10,
-              width: 250
+              width: 250,
             }}
             onPress={joinLobby}
           >
@@ -129,7 +129,7 @@ export function LobbyScreen({ navigation }) {
       "GameStack",
       {},
       NavigationActions.navigate({
-        routeName: "Game"
+        routeName: "Game",
       })
     );
   };
@@ -138,10 +138,10 @@ export function LobbyScreen({ navigation }) {
     navigation.navigate("Home");
   };
 
-  const setGameInProgress = value => {
+  const setGameInProgress = (value) => {
     setGame({
       ...game,
-      isGameInProgress: value
+      isGameInProgress: value,
     });
   };
 
@@ -166,7 +166,7 @@ export function LobbyScreen({ navigation }) {
   }, []);
 
   // Handle UPDATE_TEAMS
-  socket.on(UPDATE_TEAMS, payload => {
+  socket.on(UPDATE_TEAMS, (payload) => {
     const { redTeam, blueTeam } = payload;
     setRedTeam(redTeam);
     setBlueTeam(blueTeam);
@@ -231,17 +231,17 @@ export function LobbyScreen({ navigation }) {
           alignItems: "center",
           justifyContent: "center",
           marginHorizontal: "9%",
-          marginVertical: 3
+          marginVertical: 3,
         }}
         onPress={() => {
           const redTeamCopy = [...redTeam];
           const blueTeamCopy = [...blueTeam];
           if (redTeam[index] === null) {
             const existingIndexR = redTeam.findIndex(
-              element => element == name
+              (element) => element == name
             );
             const existingIndexB = blueTeam.findIndex(
-              element => element == name
+              (element) => element == name
             );
             if (existingIndexR != -1) {
               redTeamCopy[existingIndexR] = null;
@@ -293,17 +293,17 @@ export function LobbyScreen({ navigation }) {
           alignItems: "center",
           justifyContent: "center",
           marginHorizontal: "9%",
-          marginVertical: 3
+          marginVertical: 3,
         }}
         onPress={() => {
           const blueTeamCopy = [...blueTeam];
           const redTeamCopy = [...redTeam];
           if (blueTeam[index] === null) {
             const existingIndexB = blueTeam.findIndex(
-              element => element == name
+              (element) => element == name
             );
             const existingIndexR = redTeam.findIndex(
-              element => element == name
+              (element) => element == name
             );
             if (existingIndexB != -1) {
               blueTeamCopy[existingIndexB] = null;
@@ -333,7 +333,7 @@ export function LobbyScreen({ navigation }) {
             flex: 2,
             alignItems: "center",
             justifyContent: "center",
-            borderBottomWidth: 2
+            borderBottomWidth: 2,
           }}
         >
           <Text style={{ fontSize: 25 }}>{"\n"}Join a Team</Text>
@@ -345,7 +345,7 @@ export function LobbyScreen({ navigation }) {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "#EAE7F2"
+            backgroundColor: "#EAE7F2",
           }}
         >
           <View
@@ -356,7 +356,7 @@ export function LobbyScreen({ navigation }) {
               borderRadius: 10,
               marginHorizontal: "9%",
               padding: 10,
-              marginBottom: 4
+              marginBottom: 4,
             }}
           >
             {listRedItems}
@@ -369,7 +369,7 @@ export function LobbyScreen({ navigation }) {
               borderRadius: 10,
               marginHorizontal: "9%",
               padding: 10,
-              marginTop: 4
+              marginTop: 4,
             }}
           >
             {listBlueItems}
@@ -388,7 +388,7 @@ export function LobbyScreen({ navigation }) {
               borderWidth: 2,
               paddingHorizontal: 16,
               paddingVertical: 4,
-              backgroundColor: "white"
+              backgroundColor: "white",
             }}
           >
             <Text style={{ fontSize: 20 }}>Start Game</Text>
@@ -401,7 +401,7 @@ export function LobbyScreen({ navigation }) {
 
 export function TestScreen({ navigation }) {
   const [buttonPressed, setButtonPressed] = React.useState(false);
-  const pressButton = buttonPressed => {
+  const pressButton = (buttonPressed) => {
     setButtonPressed(true);
   };
   return (
@@ -413,7 +413,7 @@ export function TestScreen({ navigation }) {
       <CardsLeft redLeft={3} blueLeft={4} canEnd={false} />
       <TouchableOpacity
         style={{ backgroundColor: "green" }}
-        onPress={buttonPressed => {
+        onPress={(buttonPressed) => {
           pressButton(buttonPressed);
         }}
       >
@@ -435,9 +435,9 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderRadius: 25,
     width: 150,
-    padding: 10
+    padding: 10,
   },
   testingButtonText: {
-    textAlign: "center"
-  }
+    textAlign: "center",
+  },
 });

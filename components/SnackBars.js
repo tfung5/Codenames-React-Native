@@ -16,7 +16,7 @@ export default ({ visible, setVisible, correct, number }) => {
     }
   }, [visible]);
 
-  const isCorrect = correct => {
+  const isCorrect = (correct) => {
     if (correct == true) {
       return "Correct";
     }
@@ -34,7 +34,7 @@ export default ({ visible, setVisible, correct, number }) => {
           borderRadius: 10,
           borderWidth: 0.5,
           marginLeft: 15,
-          marginRight: 15
+          marginRight: 15,
         }}
       />
     </>

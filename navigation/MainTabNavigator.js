@@ -10,14 +10,14 @@ import ChatScreen from "../screens/ChatScreen";
 
 const config = Platform.select({
   web: { headerMode: "screen" },
-  default: {}
+  default: {},
 });
 
 const HomeStack = createStackNavigator(
   {
     Home: HomeScreen,
     Lobby: LobbyScreen,
-    Test: TestScreen
+    Test: TestScreen,
   },
   { headerMode: "none" }
 );
@@ -30,7 +30,7 @@ HomeStack.navigationOptions = {
       focused={focused}
       name={Platform.OS === "ios" ? "ios-home" : "md-home"}
     />
-  )
+  ),
 };
 
 HomeStack.path = "";
@@ -38,7 +38,7 @@ HomeStack.path = "";
 const GameStack = createStackNavigator(
   {
     Game: GameScreen,
-    Chat: ChatScreen
+    Chat: ChatScreen,
   },
   { headerMode: "none" }
 );
@@ -47,14 +47,14 @@ GameStack.navigationOptions = {
   tabBarLabel: "Game",
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={"logo-game-controller-a"} />
-  )
+  ),
 };
 
 GameStack.path = "";
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
-  GameStack
+  GameStack,
 });
 
 tabNavigator.path = "";

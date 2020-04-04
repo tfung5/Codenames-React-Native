@@ -20,7 +20,7 @@ import {
   GET_PLAYER_INFO,
   RESTART_GAME,
   UPDATE_GAME,
-  UPDATE_PLAYER_INFO
+  UPDATE_PLAYER_INFO,
 } from "../constants/Actions";
 
 class GameScreen extends React.Component {
@@ -36,7 +36,7 @@ class GameScreen extends React.Component {
       redCardCounter: 0,
       blueCardCounter: 0,
       guessCounter: 0,
-      winningTeam: ""
+      winningTeam: "",
     };
   }
 
@@ -73,20 +73,20 @@ class GameScreen extends React.Component {
       "HomeStack",
       {},
       NavigationActions.navigate({
-        routeName: "Home"
+        routeName: "Home",
       })
     );
   };
 
   subscribeToGameUpdates = () => {
-    this.socket.on(UPDATE_GAME, payload => {
+    this.socket.on(UPDATE_GAME, (payload) => {
       const {
         currentTeam,
         board,
         redCardCounter,
         blueCardCounter,
         guessCounter,
-        winningTeam
+        winningTeam,
       } = payload;
       this.setState({
         currentTeam,
@@ -94,15 +94,15 @@ class GameScreen extends React.Component {
         redCardCounter,
         blueCardCounter,
         guessCounter,
-        winningTeam
+        winningTeam,
       });
     });
   };
 
   subscribeToPlayerUpdates = () => {
-    this.socket.on(UPDATE_PLAYER_INFO, player => {
+    this.socket.on(UPDATE_PLAYER_INFO, (player) => {
       this.setState({
-        player
+        player,
       });
     });
   };
@@ -138,7 +138,7 @@ class GameScreen extends React.Component {
       currentTeam,
       redCardCounter,
       blueCardCounter,
-      guessCounter
+      guessCounter,
     } = this.state;
     const { name, team, role } = player;
     const gameOver = (endedGame, blueTurn) => {
@@ -206,7 +206,7 @@ class GameScreen extends React.Component {
   }
 }
 
-const WrappedGameScreen = props => {
+const WrappedGameScreen = (props) => {
   return (
     <ProvideCombinedContext>
       <GameScreen {...props} />
@@ -221,16 +221,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 15,
     marginTop: 9,
-    marginBottom: 12
+    marginBottom: 12,
   },
   testingButton: {
     borderWidth: 1,
     borderColor: "black",
     borderRadius: 25,
     width: 150,
-    padding: 10
+    padding: 10,
   },
   testingButtonText: {
-    textAlign: "center"
-  }
+    textAlign: "center",
+  },
 });

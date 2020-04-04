@@ -10,7 +10,7 @@ export default ({ canEdit }) => {
   const submitClues = () => {
     socket.emit(SET_CLUE, { word, number });
   };
-  const hidden = canEdit => {
+  const hidden = (canEdit) => {
     if (canEdit === false) {
       return <>{null}</>;
     }
@@ -32,7 +32,7 @@ export default ({ canEdit }) => {
         style={{
           flexDirection: "row",
           alignItems: "center",
-          justifyContent: "center"
+          justifyContent: "center",
         }}
       >
         <Text style={{ margin: 4, fontSize: 25 }}>Clue:</Text>
@@ -46,10 +46,10 @@ export default ({ canEdit }) => {
             padding: 5,
             borderWidth: 2,
             borderRadius: 10,
-            width: 180
+            width: 180,
           }}
           textAlign={"center"}
-          onChangeText={text => {
+          onChangeText={(text) => {
             setWord(text);
           }}
         />
@@ -63,11 +63,11 @@ export default ({ canEdit }) => {
             padding: 5,
             borderWidth: 2,
             borderRadius: 10,
-            width: 50
+            width: 50,
           }}
           textAlign={"center"}
           keyboardType={"numeric"}
-          onChangeText={text => {
+          onChangeText={(text) => {
             setNumber(text);
           }}
         />
