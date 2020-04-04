@@ -181,14 +181,7 @@ class GameScreen extends React.Component {
           {...{ board, player, currentTeam }}
           chooseCard={this.chooseCard}
         />
-        <Clues
-          canEdit={
-            this.state.player.role === SPYMASTER && currentTeam === team
-              ? true
-              : false
-          }
-          clue={clue}
-        />
+        <Clues {...{ clue, player, currentTeam }} />
         <TouchableOpacity
           onPress={this.restartGame}
           style={styles.testingButton}

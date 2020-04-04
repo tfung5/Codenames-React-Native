@@ -1,14 +1,16 @@
 import React, { useEffect, useContext, Component } from "react";
 import { TouchableOpacity, Image, Text, TextInput, View } from "react-native";
 import { SET_CLUE } from "../constants/Actions";
+import { SPYMASTER } from "../constants/Roles";
 import SocketContext from "../components/SocketContext";
 
-export default ({ canEdit, clue }) => {
+export default ({ clue, player, currentTeam }) => {
   const { socket } = useContext(SocketContext);
   const [word, setWord] = React.useState(null);
   const [number, setNumber] = React.useState(null);
+  const [canEdit, setCanEdit] = React.useState(false);
 
-  // Updates whenever clue is changed
+  // Executes whenever clue is updated
   useEffect(() => {
     if (clue) {
       setWord(clue.word);
@@ -16,8 +18,23 @@ export default ({ canEdit, clue }) => {
     }
   }, [clue]);
 
+  // Executes whenever currentTeam is updated
+  useEffect(() => {
+    determineIfCanEdit();
+  }, [currentTeam]);
+
+  const determineIfCanEdit = () => {
+    if (player) {
+      // If the player is a spymaster on the current team, and they also have not chosen a clue for this turn yet, give them permission to edit
+      if (player.role === SPYMASTER && currentTeam === player.team) {
+        setCanEdit(true);
+      }
+    }
+  };
+
   const submitClues = () => {
     socket.emit(SET_CLUE, { word, number });
+    setCanEdit(false); // To prevent the current spymaster from setting the clue more than once
   };
 
   const hidden = (canEdit) => {
