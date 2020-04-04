@@ -1,28 +1,22 @@
-import React, {useContext, Component } from "react";
+import React, { useContext, Component } from "react";
 import { TouchableOpacity, Image, Text, TextInput, View } from "react-native";
-import {
-  SET_CLUE
-} from "../constants/Actions";
+import { SET_CLUE } from "../constants/Actions";
 import SocketContext from "../components/SocketContext";
 
 export default ({ canEdit }) => {
-  const {socket} = useContext(SocketContext);
+  const { socket } = useContext(SocketContext);
   const [word, setWord] = React.useState("");
   const [number, setNumber] = React.useState(0);
   const submitClues = () => {
-    socket.emit(SET_CLUE, {word, number});
-  }
+    socket.emit(SET_CLUE, { word, number });
+  };
   const hidden = canEdit => {
     if (canEdit === false) {
       return <>{null}</>;
     }
     return (
       <>
-        <TouchableOpacity
-          onPress={
-            submitClues
-          }
-        >
+        <TouchableOpacity onPress={submitClues}>
           <Image
             style={{ margin: 4, width: 40, height: 40 }}
             source={require("../assets/images/play-icon.png")}
@@ -55,8 +49,8 @@ export default ({ canEdit }) => {
             width: 180
           }}
           textAlign={"center"}
-          onChangeText={(text) => {
-            setWord(text)
+          onChangeText={text => {
+            setWord(text);
           }}
         />
         <TextInput
@@ -73,7 +67,7 @@ export default ({ canEdit }) => {
           }}
           textAlign={"center"}
           keyboardType={"numeric"}
-          onChangeText={(text) => {
+          onChangeText={text => {
             setNumber(text);
           }}
         />

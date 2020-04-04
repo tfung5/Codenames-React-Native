@@ -80,7 +80,14 @@ class GameScreen extends React.Component {
 
   subscribeToGameUpdates = () => {
     this.socket.on(UPDATE_GAME, payload => {
-      const { currentTeam, board, redCardCounter, blueCardCounter, guessCounter, winningTeam } = payload;
+      const {
+        currentTeam,
+        board,
+        redCardCounter,
+        blueCardCounter,
+        guessCounter,
+        winningTeam
+      } = payload;
       this.setState({
         currentTeam,
         board,
@@ -138,16 +145,16 @@ class GameScreen extends React.Component {
       if (endedGame === BLUE || endedGame === RED) {
         return (
           <>
-            <Winner blueTurn={endedGame}/>
+            <Winner blueTurn={endedGame} />
           </>
-        )
+        );
       }
       return (
         <>
-          <CurrentTurn blueTurn={blueTurn}/>
+          <CurrentTurn blueTurn={blueTurn} />
         </>
-      )
-    }
+      );
+    };
 
     return (
       <View>
@@ -170,7 +177,13 @@ class GameScreen extends React.Component {
           {...{ board, player, currentTeam }}
           chooseCard={this.chooseCard}
         />
-        <Clues canEdit={this.state.player.role === SPYMASTER && currentTeam === team ? true: false}/>
+        <Clues
+          canEdit={
+            this.state.player.role === SPYMASTER && currentTeam === team
+              ? true
+              : false
+          }
+        />
         <TouchableOpacity
           onPress={this.restartGame}
           style={styles.testingButton}

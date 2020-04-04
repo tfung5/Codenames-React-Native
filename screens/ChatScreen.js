@@ -46,8 +46,8 @@ class ChatScreen extends React.Component {
   };
 
   componentWillUnmount = () => {
-		this._isMounted = false;
-	}
+    this._isMounted = false;
+  };
 
   runSetup = async () => {
     await this.saveSocket();
@@ -86,13 +86,13 @@ class ChatScreen extends React.Component {
 
   loadEarlierMessages = () => {
     this.socket.on(GET_MESSAGES, payload => {
-      for (let i = 0; i < payload.length; i++){
+      for (let i = 0; i < payload.length; i++) {
         this.onReceivedMessage(payload[i]);
       }
     });
   };
 
-//Get messages
+  //Get messages
   subscribeToChatMessageUpdates = () => {
     this.socket.on(CHAT_MESSAGE, this.onReceivedMessage);
   };
@@ -104,11 +104,11 @@ class ChatScreen extends React.Component {
   subscribeToPlayerUpdates = () => {
     this.socket.on(UPDATE_PLAYER_INFO, player => {
       const { id, name } = player;
-      if (this._isMounted){
+      if (this._isMounted) {
         this.setState({
           user: {
-          _id: id,
-          name: name
+            _id: id,
+            name: name
           }
         });
       }
@@ -117,8 +117,15 @@ class ChatScreen extends React.Component {
 
   subscribeToGameUpdates = () => {
     this.socket.on(UPDATE_GAME, payload => {
-      const { currentTeam, board, redCardCounter, blueCardCounter, guessCounter, winningTeam } = payload;
-      if (this._isMounted){
+      const {
+        currentTeam,
+        board,
+        redCardCounter,
+        blueCardCounter,
+        guessCounter,
+        winningTeam
+      } = payload;
+      if (this._isMounted) {
         this.setState({
           currentTeam,
           board,
@@ -133,16 +140,16 @@ class ChatScreen extends React.Component {
 
   //When the server sends a message to this, store it in this component's state.
   onReceivedMessage(messages) {
-    if (this._isMounted){
+    if (this._isMounted) {
       this.setState(previousState => {
         return {
           messages: GiftedChat.append(previousState.messages, messages)
         };
-    } );
+      });
     }
   }
 
-//Send messages
+  //Send messages
   //When a message is sent, send the message to the server.
   onSend(messages = []) {
     this.socket.emit(CHAT_MESSAGE, messages[0]);
