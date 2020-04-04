@@ -6,15 +6,18 @@ import SocketContext from "../components/SocketContext";
 
 export default ({ clue, player, currentTeam }) => {
   const { socket } = useContext(SocketContext);
-  const [word, setWord] = React.useState(null);
-  const [number, setNumber] = React.useState(null);
+  const [word, setWord] = React.useState("");
+  const [number, setNumber] = React.useState("");
   const [canEdit, setCanEdit] = React.useState(false);
 
   // Executes whenever clue is updated
   useEffect(() => {
-    if (clue) {
+    if (clue && clue.word && clue.number) {
       setWord(clue.word);
       setNumber(clue.number);
+    } else {
+      setWord("");
+      setNumber("");
     }
   }, [clue]);
 
