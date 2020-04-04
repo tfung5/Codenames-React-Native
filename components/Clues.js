@@ -4,11 +4,12 @@ import { SET_CLUE } from "../constants/Actions";
 import { SPYMASTER } from "../constants/Roles";
 import SocketContext from "../components/SocketContext";
 
-export default ({ clue, player, currentTeam }) => {
+export default ({ clue, player, currentTeam, board }) => {
   const { socket } = useContext(SocketContext);
   const [word, setWord] = React.useState("");
   const [number, setNumber] = React.useState("");
   const [canEdit, setCanEdit] = React.useState(false);
+  const [hasEdited, setHasEdited] = React.useState(false);
 
   // Executes whenever clue is updated
   useEffect(() => {
@@ -21,23 +22,34 @@ export default ({ clue, player, currentTeam }) => {
     }
   }, [clue]);
 
-  // Executes whenever currentTeam is updated
+  // Executes whenever currentTeam or board are updated
+  // Board was included to also execute this when the board is randomized (ie. through pressing "Restart Game" button)
   useEffect(() => {
     determineIfCanEdit();
-  }, [currentTeam]);
+  }, [currentTeam, board]);
 
   const determineIfCanEdit = () => {
     if (player) {
       // If the player is a spymaster on the current team, and they also have not chosen a clue for this turn yet, give them permission to edit
-      if (player.role === SPYMASTER && currentTeam === player.team) {
+      if (
+        !hasEdited &&
+        player.role === SPYMASTER &&
+        currentTeam === player.team
+      ) {
         setCanEdit(true);
+      } else {
+        setCanEdit(false);
+      }
+
+      if (currentTeam !== player.team) {
+        setHasEdited(false); // Clear hasEdited on opposing team's turn
       }
     }
   };
 
   const submitClues = () => {
     socket.emit(SET_CLUE, { word, number });
-    setCanEdit(false); // To prevent the current spymaster from setting the clue more than once
+    setHasEdited(true); // To prevent the current spymaster from setting the clue more than once per turn
   };
 
   const hidden = (canEdit) => {

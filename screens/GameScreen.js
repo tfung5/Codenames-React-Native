@@ -181,7 +181,7 @@ class GameScreen extends React.Component {
           {...{ board, player, currentTeam }}
           chooseCard={this.chooseCard}
         />
-        <Clues {...{ clue, player, currentTeam }} />
+        <Clues {...{ clue, player, currentTeam, board }} />
         <TouchableOpacity
           onPress={this.restartGame}
           style={styles.testingButton}
