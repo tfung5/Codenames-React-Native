@@ -43,15 +43,14 @@ const determineCardStyle = card => {
 };
 
 const determineCheckMarkStyle = (card, player) => {
-  if (card.state === CHOSEN && player.role === SPYMASTER){
+  if (card.state === CHOSEN && player.role === SPYMASTER) {
     return styles.checkmarkShown;
-  }
-  else{
+  } else {
     return styles.checkmarkHidden;
   }
 };
 
-const determineCardTextStyle = (card) => {
+const determineCardTextStyle = card => {
   let style = [styles.boardCardText];
 
   if (card.color) {
@@ -85,7 +84,8 @@ export default ({ board, player, currentTeam, chooseCard }) => {
                         onPress={() => chooseCard(card.row, card.col)}
                         style={determineCardStyle(card)}
                       >
-                        <Image style={determineCheckMarkStyle(card, player)}
+                        <Image
+                          style={determineCheckMarkStyle(card, player)}
                           source={require("../assets/images/check-mark.png")}
                         />
                         <Text style={determineCardTextStyle(card)}>
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   },
   checkmarkShown: {
     width: 15,
-    height: 15,
+    height: 15
   },
   checkmarkHidden: {
     width: 0,

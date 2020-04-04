@@ -380,7 +380,7 @@ export function LobbyScreen({ navigation }) {
           >
             Touch for Test
           </Text> */}
-          <TouchableOpacity 
+          <TouchableOpacity
             onPress={startGame}
             style={{
               borderRadius: 10,
@@ -391,7 +391,7 @@ export function LobbyScreen({ navigation }) {
               backgroundColor: "white"
             }}
           >
-            <Text style={{fontSize: 20}}>Start Game</Text>
+            <Text style={{ fontSize: 20 }}>Start Game</Text>
           </TouchableOpacity>
         </View>
       </View>
