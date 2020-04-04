@@ -1,15 +1,25 @@
-import React, { useContext, Component } from "react";
+import React, { useEffect, useContext, Component } from "react";
 import { TouchableOpacity, Image, Text, TextInput, View } from "react-native";
 import { SET_CLUE } from "../constants/Actions";
 import SocketContext from "../components/SocketContext";
 
-export default ({ canEdit }) => {
+export default ({ canEdit, clue }) => {
   const { socket } = useContext(SocketContext);
-  const [word, setWord] = React.useState("");
-  const [number, setNumber] = React.useState(0);
+  const [word, setWord] = React.useState(null);
+  const [number, setNumber] = React.useState(null);
+
+  // Updates whenever clue is changed
+  useEffect(() => {
+    if (clue) {
+      setWord(clue.word);
+      setNumber(clue.number);
+    }
+  }, [clue]);
+
   const submitClues = () => {
     socket.emit(SET_CLUE, { word, number });
   };
+
   const hidden = (canEdit) => {
     if (canEdit === false) {
       return <>{null}</>;
@@ -25,6 +35,7 @@ export default ({ canEdit }) => {
       </>
     );
   };
+
   return (
     <>
       <Text>{"\n"}</Text>
@@ -47,11 +58,12 @@ export default ({ canEdit }) => {
             borderWidth: 2,
             borderRadius: 10,
             width: 180,
+            textAlign: "center",
           }}
-          textAlign={"center"}
           onChangeText={(text) => {
             setWord(text);
           }}
+          value={word}
         />
         <TextInput
           editable={canEdit}
@@ -64,12 +76,13 @@ export default ({ canEdit }) => {
             borderWidth: 2,
             borderRadius: 10,
             width: 50,
+            textAlign: "center",
           }}
-          textAlign={"center"}
           keyboardType={"numeric"}
           onChangeText={(text) => {
             setNumber(text);
           }}
+          value={number}
         />
         {hidden(canEdit)}
       </View>
