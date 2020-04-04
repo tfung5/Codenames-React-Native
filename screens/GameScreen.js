@@ -86,6 +86,7 @@ class GameScreen extends React.Component {
         redCardCounter,
         blueCardCounter,
         guessCounter,
+        clue,
         winningTeam,
       } = payload;
       this.setState({
@@ -94,6 +95,7 @@ class GameScreen extends React.Component {
         redCardCounter,
         blueCardCounter,
         guessCounter,
+        clue,
         winningTeam,
       });
     });
@@ -139,8 +141,10 @@ class GameScreen extends React.Component {
       redCardCounter,
       blueCardCounter,
       guessCounter,
+      clue,
     } = this.state;
     const { name, team, role } = player;
+
     const gameOver = (endedGame, blueTurn) => {
       if (endedGame === BLUE || endedGame === RED) {
         return (
@@ -177,13 +181,7 @@ class GameScreen extends React.Component {
           {...{ board, player, currentTeam }}
           chooseCard={this.chooseCard}
         />
-        <Clues
-          canEdit={
-            this.state.player.role === SPYMASTER && currentTeam === team
-              ? true
-              : false
-          }
-        />
+        <Clues {...{ clue, player, currentTeam, board }} />
         <TouchableOpacity
           onPress={this.restartGame}
           style={styles.testingButton}
