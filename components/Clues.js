@@ -48,7 +48,7 @@ export default ({ clue, player, currentTeam, board }) => {
   };
 
   const submitClues = () => {
-    socket.emit(SET_CLUE, { word, number });
+    socket.emit(SET_CLUE, { word, number: parseInt(number) });
     setHasEdited(true); // To prevent the current spymaster from setting the clue more than once per turn
   };
 
