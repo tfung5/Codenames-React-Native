@@ -5,7 +5,7 @@ import {
   Text,
   TextInput,
   View,
-  AsyncStorage
+  AsyncStorage,
 } from "react-native";
 import { NavigationActions } from "react-navigation";
 
@@ -17,7 +17,7 @@ import {
   CHAT_MESSAGE,
   GET_PLAYER_INFO,
   UPDATE_PLAYER_INFO,
-  GET_MESSAGES
+  GET_MESSAGES,
 } from "../constants/Actions";
 
 class ChatScreen extends React.Component {
@@ -30,8 +30,8 @@ class ChatScreen extends React.Component {
       user: {
         _id: 1,
         name: "Player",
-        avatar: ""
-      }
+        avatar: "",
+      },
     };
     this.onReceivedMessage = this.onReceivedMessage.bind(this);
   }
@@ -75,7 +75,7 @@ class ChatScreen extends React.Component {
       "HomeStack",
       {},
       NavigationActions.navigate({
-        routeName: "Home"
+        routeName: "Home",
       })
     );
   };
@@ -85,7 +85,7 @@ class ChatScreen extends React.Component {
   };
 
   loadEarlierMessages = () => {
-    this.socket.on(GET_MESSAGES, payload => {
+    this.socket.on(GET_MESSAGES, (payload) => {
       for (let i = 0; i < payload.length; i++) {
         this.onReceivedMessage(payload[i]);
       }
@@ -102,28 +102,28 @@ class ChatScreen extends React.Component {
   };
 
   subscribeToPlayerUpdates = () => {
-    this.socket.on(UPDATE_PLAYER_INFO, player => {
+    this.socket.on(UPDATE_PLAYER_INFO, (player) => {
       const { id, name } = player;
       if (this._isMounted) {
         this.setState({
           user: {
             _id: id,
-            name: name
-          }
+            name: name,
+          },
         });
       }
     });
   };
 
   subscribeToGameUpdates = () => {
-    this.socket.on(UPDATE_GAME, payload => {
+    this.socket.on(UPDATE_GAME, (payload) => {
       const {
         currentTeam,
         board,
         redCardCounter,
         blueCardCounter,
         guessCounter,
-        winningTeam
+        winningTeam,
       } = payload;
       if (this._isMounted) {
         this.setState({
@@ -132,7 +132,7 @@ class ChatScreen extends React.Component {
           redCardCounter,
           blueCardCounter,
           guessCounter,
-          winningTeam
+          winningTeam,
         });
       }
     });
@@ -141,9 +141,9 @@ class ChatScreen extends React.Component {
   //When the server sends a message to this, store it in this component's state.
   onReceivedMessage(messages) {
     if (this._isMounted) {
-      this.setState(previousState => {
+      this.setState((previousState) => {
         return {
-          messages: GiftedChat.append(previousState.messages, messages)
+          messages: GiftedChat.append(previousState.messages, messages),
         };
       });
     }
@@ -159,7 +159,7 @@ class ChatScreen extends React.Component {
     return (
       <GiftedChat
         messages={this.state.messages}
-        onSend={messages => this.onSend(messages)}
+        onSend={(messages) => this.onSend(messages)}
         renderUsernameOnMessage={true}
         user={this.state.user}
       />
@@ -167,7 +167,7 @@ class ChatScreen extends React.Component {
   }
 }
 
-const WrappedChatScreen = props => {
+const WrappedChatScreen = (props) => {
   return (
     <ProvideCombinedContext>
       <ChatScreen {...props} />

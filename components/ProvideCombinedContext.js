@@ -6,12 +6,12 @@ import GameContext from "./GameContext";
 import CombinedContext from "./CombinedContext";
 
 // This is a reusable piece that could be used by any component that requires both contexts.
-const ProvideCombinedContext = props => {
+const ProvideCombinedContext = (props) => {
   return (
     <SocketContext.Consumer>
-      {SocketContext => (
+      {(SocketContext) => (
         <GameContext.Consumer>
-          {GameContext => (
+          {(GameContext) => (
             <CombinedContext.Provider value={{ SocketContext, GameContext }}>
               {props.children}
             </CombinedContext.Provider>

@@ -5,7 +5,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Image
+  Image,
 } from "react-native";
 import uuid from "uuid/v4";
 import { RED, BLUE, BLACK, GRAY, CHOSEN, UNCHOSEN } from "../constants/Cards";
@@ -19,7 +19,7 @@ const canChooseCard = (card, player, currentTeam) => {
   );
 };
 
-const determineCardStyle = card => {
+const determineCardStyle = (card) => {
   let style = [styles.boardCard];
 
   if (card.color) {
@@ -50,7 +50,7 @@ const determineCheckMarkStyle = (card, player) => {
   }
 };
 
-const determineCardTextStyle = card => {
+const determineCardTextStyle = (card) => {
   let style = [styles.boardCardText];
 
   if (card.color) {
@@ -66,11 +66,11 @@ export default ({ board, player, currentTeam, chooseCard }) => {
   return (
     <View>
       {board.length > 0 &&
-        board.map(row => {
+        board.map((row) => {
           return (
             <View style={styles.boardRow} key={uuid()}>
               {row.length > 0 &&
-                row.map(card => {
+                row.map((card) => {
                   return (
                     <View
                       key={card.word}
@@ -104,7 +104,7 @@ export default ({ board, player, currentTeam, chooseCard }) => {
 
 const styles = StyleSheet.create({
   boardRow: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   boardCard: {
     borderRadius: 5,
@@ -115,37 +115,37 @@ const styles = StyleSheet.create({
     height: 30,
     display: "flex",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   boardCardBlue: {
-    backgroundColor: "blue"
+    backgroundColor: "blue",
   },
   boardCardRed: {
-    backgroundColor: "red"
+    backgroundColor: "red",
   },
   boardCardGray: {
-    backgroundColor: "dimgray"
+    backgroundColor: "dimgray",
   },
   boardCardBlack: {
-    backgroundColor: "black"
+    backgroundColor: "black",
   },
   boardCardText: {
     fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
     fontSize: 12,
     fontWeight: "bold",
     textAlign: "center",
-    color: "black"
+    color: "black",
   },
   boardCardTextChosen: {
-    color: "white"
+    color: "white",
   },
   checkmarkShown: {
     width: 15,
-    height: 15
+    height: 15,
   },
   checkmarkHidden: {
     width: 0,
     height: 0,
-    opacity: 0
-  }
+    opacity: 0,
+  },
 });

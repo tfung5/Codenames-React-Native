@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { TouchableOpacity, Image, Text, TextInput, View } from "react-native";
 
 export default ({ redLeft, blueLeft, canEnd }) => {
-  const hidden = canEnd => {
+  const hidden = (canEnd) => {
     if (canEnd === false) {
       return <>{null}</>;
     }
@@ -18,7 +18,7 @@ export default ({ redLeft, blueLeft, canEnd }) => {
             justifyContent: "center",
             margin: 10,
             paddingHorizontal: 10,
-            paddingVertical: 2
+            paddingVertical: 2,
           }}
         >
           <Text style={{ color: "red", fontSize: 18 }}>End Turn</Text>
@@ -31,7 +31,7 @@ export default ({ redLeft, blueLeft, canEnd }) => {
       style={{
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
       }}
     >
       <Text style={{ fontSize: 25 }}>Cards Left: </Text>
