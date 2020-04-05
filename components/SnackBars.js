@@ -16,25 +16,37 @@ export default ({ visible, setVisible, correct, number }) => {
     }
   }, [visible]);
 
-  const isCorrect = (correct) => {
-    if (correct == true) {
-      return "Correct";
+  const determineMessage = (correct, number) => {
+    if (correct) {
+      return "Correct! " + number + " guesses remaining.";
+    } else {
+      return "Incorrect!";
     }
-    return "Wrong";
+  };
+
+  const determineBackgroundColor = (correct) => {
+    if (correct) {
+      return "#d3f5e9"; // Light green
+    } else {
+      return "#F8B2B2"; // Sundown red
+    }
   };
 
   return (
     <>
       <SnackBar
         visible={visible}
-        textMessage={`${isCorrect(correct)}! ${number} guesses remaining.`}
-        backgroundColor={"#d3f5e9"}
+        textMessage={determineMessage(correct, number)}
+        backgroundColor={determineBackgroundColor(correct)}
         messageColor={"black"}
         containerStyle={{
           borderRadius: 10,
           borderWidth: 0.5,
           marginLeft: 15,
           marginRight: 15,
+        }}
+        messageStyle={{
+          textAlign: "center",
         }}
       />
     </>
