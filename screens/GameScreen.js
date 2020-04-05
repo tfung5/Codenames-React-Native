@@ -12,6 +12,7 @@ import CardsLeft from "../components/CardsLeft";
 import Clues from "../components/Clues";
 import Winner from "../components/Winner";
 import CurrentTurn from "../components/CurrentTurn";
+import SnackBars from "../components/SnackBars";
 
 import {
   CHOOSE_CARD,
@@ -38,6 +39,7 @@ class GameScreen extends React.Component {
       blueCardCounter: 0,
       guessCounter: 0,
       winningTeam: "",
+      isSnackbarVisible: true,
     };
   }
 
@@ -138,6 +140,12 @@ class GameScreen extends React.Component {
     this.props.navigation.navigate("Chat");
   };
 
+  setSnackbarVisible = (value) => {
+    this.setState({
+      isSnackbarVisible: value,
+    });
+  };
+
   render() {
     const {
       board,
@@ -148,6 +156,7 @@ class GameScreen extends React.Component {
       guessCounter,
       winningTeam,
       clue,
+      isSnackbarVisible,
     } = this.state;
     const { name, team, role } = player;
 
@@ -211,6 +220,12 @@ class GameScreen extends React.Component {
         >
           <Text style={styles.testingButtonText}>Open Chat</Text>
         </TouchableOpacity>
+        <SnackBars
+          visible={isSnackbarVisible}
+          setVisible={this.setSnackbarVisible}
+          correct={true}
+          number={guessCounter}
+        />
       </View>
     );
   }
