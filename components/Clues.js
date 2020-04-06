@@ -78,55 +78,52 @@ export default (props) => {
   };
 
   return (
-    <>
-      <Text>{"\n"}</Text>
-      <View
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Text style={{ margin: 4, fontSize: 25 }}>Clue:</Text>
+      <TextInput
+        editable={canEdit}
         style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
+          fontSize: 18,
+          margin: 4,
+          backgroundColor: "white",
+          borderColor: "lightskyblue",
+          padding: 5,
+          borderWidth: 2,
+          borderRadius: 10,
+          width: 180,
+          textAlign: "center",
         }}
-      >
-        <Text style={{ margin: 4, fontSize: 25 }}>Clue:</Text>
-        <TextInput
-          editable={canEdit}
-          style={{
-            fontSize: 18,
-            margin: 4,
-            backgroundColor: "white",
-            borderColor: "lightskyblue",
-            padding: 5,
-            borderWidth: 2,
-            borderRadius: 10,
-            width: 180,
-            textAlign: "center",
-          }}
-          onChangeText={(text) => {
-            setWord(text);
-          }}
-          value={word}
-        />
-        <TextInput
-          editable={canEdit}
-          style={{
-            fontSize: 18,
-            margin: 4,
-            backgroundColor: "white",
-            borderColor: "lightskyblue",
-            padding: 5,
-            borderWidth: 2,
-            borderRadius: 10,
-            width: 50,
-            textAlign: "center",
-          }}
-          keyboardType={"numeric"}
-          onChangeText={(text) => {
-            setNumber(text);
-          }}
-          value={number}
-        />
-        {hidden(canEdit)}
-      </View>
-    </>
+        onChangeText={(text) => {
+          setWord(text);
+        }}
+        value={word}
+      />
+      <TextInput
+        editable={canEdit}
+        style={{
+          fontSize: 18,
+          margin: 4,
+          backgroundColor: "white",
+          borderColor: "lightskyblue",
+          padding: 5,
+          borderWidth: 2,
+          borderRadius: 10,
+          width: 50,
+          textAlign: "center",
+        }}
+        keyboardType={"numeric"}
+        onChangeText={(text) => {
+          setNumber(text);
+        }}
+        value={number}
+      />
+      {hidden(canEdit)}
+    </View>
   );
 };

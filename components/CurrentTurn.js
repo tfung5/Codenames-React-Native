@@ -30,7 +30,6 @@ export default ({ blueTurn }) => {
         backgroundColor: "white",
       }}
     >
-      <Text>{"\n"}</Text>
       {whosTurn(blueTurn)}
     </View>
   );
