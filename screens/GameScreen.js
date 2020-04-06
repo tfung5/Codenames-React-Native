@@ -188,7 +188,7 @@ class GameScreen extends React.Component {
     };
 
     return (
-      <View>
+      <View style={styles.centerItems}>
         {gameOver(this.state.winningTeam, currentTeam)}
         <Text style={styles.optionsTitleText}>
           You are on {team === RED ? "Red Team" : "Blue Team"}
@@ -266,5 +266,8 @@ const styles = StyleSheet.create({
   },
   testingButtonText: {
     textAlign: "center",
+  },
+  centerItems: {
+    alignItems: "center",
   },
 });
