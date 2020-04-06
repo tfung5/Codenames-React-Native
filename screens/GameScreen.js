@@ -242,10 +242,12 @@ class GameScreen extends React.Component {
           blueLeft={blueCardCounter}
           canEnd={false}
         />
-        <Board
-          {...{ board, player, currentTeam, winningTeam }}
-          chooseCard={this.chooseCard}
-        />
+        <View style={styles.boardWrapper}>
+          <Board
+            {...{ board, player, currentTeam, winningTeam }}
+            chooseCard={this.chooseCard}
+          />
+        </View>
         <Clues {...{ clue, player, currentTeam, board, winningTeam }} />
         {clue && clue.word && clue.number && (
           <Text style={styles.optionsTitleText}>
@@ -305,10 +307,12 @@ const styles = {
   optionsTitleText: {
     fontSize: 16,
     marginLeft: 15,
-    marginTop: 9,
+    marginTop: 12,
     marginBottom: 12,
   },
-  testingButtons: {},
+  testingButtons: {
+    marginTop: 8,
+  },
   testingButton: {
     borderWidth: 1,
     borderColor: "black",
@@ -324,12 +328,15 @@ const styles = {
     height: "100%",
     flexDirection: "column",
     alignItems: "center",
-    paddingBottom: 45,
+    paddingBottom: 55,
   },
   keyboardInFocus: {
     justifyContent: "center",
   },
   keyboardNotInFocus: {
     justifyContent: "space-evenly",
+  },
+  boardWrapper: {
+    marginVertical: 10,
   },
 };
