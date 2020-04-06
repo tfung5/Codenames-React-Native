@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "black",
     margin: 2,
-    width: 80,
+    width: 78,
     height: 30,
     display: "flex",
     alignItems: "center",
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   },
   boardCardText: {
     fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
-    fontSize: 12,
+    fontSize: 11.5,
     fontWeight: "bold",
     textAlign: "center",
     color: "black",
