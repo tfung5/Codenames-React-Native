@@ -17,7 +17,7 @@ export default (props) => {
   useEffect(() => {
     if (clue && clue.word && clue.number) {
       setWord(clue.word);
-      setNumber(clue.number);
+      setNumber(clue.number.toString());
     } else {
       setWord("");
       setNumber("");
