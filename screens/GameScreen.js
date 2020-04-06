@@ -1,5 +1,11 @@
 import React, { useContext } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  KeyboardAvoidingView,
+} from "react-native";
 import { NavigationActions } from "react-navigation";
 
 import CombinedContext from "../components/CombinedContext";
@@ -188,13 +194,10 @@ class GameScreen extends React.Component {
     };
 
     return (
-      <View style={styles.centerItems}>
+      <KeyboardAvoidingView behavior="height" style={styles.gameScreen}>
         {gameOver(this.state.winningTeam, currentTeam)}
         <Text style={styles.optionsTitleText}>
           You are on {team === RED ? "Red Team" : "Blue Team"}
-        </Text>
-        <Text style={styles.optionsTitleText}>
-          Number of Guesses Remaining: {guessCounter}
         </Text>
         <CardsLeft
           redLeft={redCardCounter}
@@ -206,6 +209,11 @@ class GameScreen extends React.Component {
           chooseCard={this.chooseCard}
         />
         <Clues {...{ clue, player, currentTeam, board, winningTeam }} />
+        {clue && clue.word && clue.number && (
+          <Text style={styles.optionsTitleText}>
+            Number of Guesses Remaining: {guessCounter}
+          </Text>
+        )}
         <View style={styles.testingButtons}>
           <TouchableOpacity
             onPress={this.loadPresetBoard}
@@ -240,7 +248,7 @@ class GameScreen extends React.Component {
           correct={isGuessCorrect}
           number={guessCounter}
         />
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -262,9 +270,7 @@ const styles = StyleSheet.create({
     marginTop: 9,
     marginBottom: 12,
   },
-  testingButtons: {
-    marginTop: 30,
-  },
+  testingButtons: {},
   testingButton: {
     borderWidth: 1,
     borderColor: "black",
@@ -276,7 +282,11 @@ const styles = StyleSheet.create({
   testingButtonText: {
     textAlign: "center",
   },
-  centerItems: {
+  gameScreen: {
+    height: "100%",
+    flexDirection: "column",
     alignItems: "center",
+    justifyContent: "space-evenly",
+    paddingBottom: 20,
   },
 });
