@@ -194,9 +194,6 @@ class GameScreen extends React.Component {
           You are on {team === RED ? "Red Team" : "Blue Team"}
         </Text>
         <Text style={styles.optionsTitleText}>
-          {currentTeam === RED ? "Red Team" : "Blue Team"}'s Turn
-        </Text>
-        <Text style={styles.optionsTitleText}>
           Number of Guesses Remaining: {guessCounter}
         </Text>
         <CardsLeft
