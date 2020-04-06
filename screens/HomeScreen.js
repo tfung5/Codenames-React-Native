@@ -159,6 +159,8 @@ export function LobbyScreen({ navigation }) {
   const [redTeam, setRedTeam] = React.useState(new Array(4).fill(null));
   const [blueTeam, setBlueTeam] = React.useState(new Array(4).fill(null));
 
+  const slotWidth = 175;
+
   // componentDidMount
   useEffect(() => {
     socket.emit(FETCH_TEAMS);
@@ -182,7 +184,7 @@ export function LobbyScreen({ navigation }) {
 
   const renderLeaveGameScreen = () => {
     return (
-      <View>
+      <View style={styles.centerItems}>
         <TouchableOpacity
           onPress={handleLeaveGame}
           style={styles.testingButton}
@@ -230,8 +232,8 @@ export function LobbyScreen({ navigation }) {
           borderWidth: 2,
           alignItems: "center",
           justifyContent: "center",
-          marginHorizontal: "9%",
           marginVertical: 3,
+          width: slotWidth,
         }}
         onPress={() => {
           const redTeamCopy = [...redTeam];
@@ -292,8 +294,8 @@ export function LobbyScreen({ navigation }) {
           borderWidth: 2,
           alignItems: "center",
           justifyContent: "center",
-          marginHorizontal: "9%",
           marginVertical: 3,
+          width: slotWidth,
         }}
         onPress={() => {
           const blueTeamCopy = [...blueTeam];
@@ -354,9 +356,9 @@ export function LobbyScreen({ navigation }) {
               borderColor: "firebrick",
               borderWidth: 2,
               borderRadius: 10,
-              marginHorizontal: "9%",
-              padding: 10,
-              marginBottom: 4,
+              paddingHorizontal: "9%",
+              paddingVertical: 10,
+              marginBottom: 10,
             }}
           >
             {listRedItems}
@@ -367,9 +369,9 @@ export function LobbyScreen({ navigation }) {
               borderColor: "dodgerblue",
               borderWidth: 2,
               borderRadius: 10,
-              marginHorizontal: "9%",
+              paddingHorizontal: "9%",
               padding: 10,
-              marginTop: 4,
+              marginTop: 10,
             }}
           >
             {listBlueItems}
@@ -391,7 +393,11 @@ export function LobbyScreen({ navigation }) {
               backgroundColor: "white",
             }}
           >
-            <Text style={{ fontSize: 20 }}>Start Game</Text>
+            <Text
+              style={{ fontSize: 20, width: slotWidth, textAlign: "center" }}
+            >
+              Start Game
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -436,8 +442,13 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     width: 150,
     padding: 10,
+    marginTop: 5,
   },
   testingButtonText: {
     textAlign: "center",
+  },
+  centerItems: {
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

@@ -188,13 +188,10 @@ class GameScreen extends React.Component {
     };
 
     return (
-      <View>
+      <View style={styles.centerItems}>
         {gameOver(this.state.winningTeam, currentTeam)}
         <Text style={styles.optionsTitleText}>
           You are on {team === RED ? "Red Team" : "Blue Team"}
-        </Text>
-        <Text style={styles.optionsTitleText}>
-          {currentTeam === RED ? "Red Team" : "Blue Team"}'s Turn
         </Text>
         <Text style={styles.optionsTitleText}>
           Number of Guesses Remaining: {guessCounter}
@@ -209,29 +206,34 @@ class GameScreen extends React.Component {
           chooseCard={this.chooseCard}
         />
         <Clues {...{ clue, player, currentTeam, board, winningTeam }} />
-        <TouchableOpacity
-          onPress={this.loadPresetBoard}
-          style={styles.testingButton}
-        >
-          <Text style={styles.testingButtonText}>Load Preset Board</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={this.restartGame}
-          style={styles.testingButton}
-        >
-          <Text style={styles.testingButtonText}>Restart Game</Text>
-        </TouchableOpacity>
-        {currentTeam === team && role === FIELD_OPERATIVE && (
-          <TouchableOpacity onPress={this.endTurn} style={styles.testingButton}>
-            <Text style={styles.testingButtonText}>End Turn</Text>
+        <View style={styles.testingButtons}>
+          <TouchableOpacity
+            onPress={this.loadPresetBoard}
+            style={styles.testingButton}
+          >
+            <Text style={styles.testingButtonText}>Load Preset Board</Text>
           </TouchableOpacity>
-        )}
-        <TouchableOpacity
-          onPress={this.navigateToChat}
-          style={styles.testingButton}
-        >
-          <Text style={styles.testingButtonText}>Open Chat</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={this.restartGame}
+            style={styles.testingButton}
+          >
+            <Text style={styles.testingButtonText}>Restart Game</Text>
+          </TouchableOpacity>
+          {currentTeam === team && role === FIELD_OPERATIVE && (
+            <TouchableOpacity
+              onPress={this.endTurn}
+              style={styles.testingButton}
+            >
+              <Text style={styles.testingButtonText}>End Turn</Text>
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity
+            onPress={this.navigateToChat}
+            style={styles.testingButton}
+          >
+            <Text style={styles.testingButtonText}>Open Chat</Text>
+          </TouchableOpacity>
+        </View>
         <SnackBars
           visible={isSnackbarVisible}
           setVisible={this.setSnackbarVisible}
@@ -260,14 +262,21 @@ const styles = StyleSheet.create({
     marginTop: 9,
     marginBottom: 12,
   },
+  testingButtons: {
+    marginTop: 30,
+  },
   testingButton: {
     borderWidth: 1,
     borderColor: "black",
     borderRadius: 25,
     width: 150,
     padding: 10,
+    marginTop: 5,
   },
   testingButtonText: {
     textAlign: "center",
+  },
+  centerItems: {
+    alignItems: "center",
   },
 });
