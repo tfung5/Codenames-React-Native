@@ -52,10 +52,23 @@ GameStack.navigationOptions = {
 
 GameStack.path = "";
 
-const tabNavigator = createBottomTabNavigator({
+// https://reactnavigation.org/docs/2.x/bottom-tab-navigator/
+
+const routeConfigs = {
   HomeStack,
   GameStack,
-});
+};
+
+const bottomTabNavigatorConfig = {
+  tabBarOptions: {
+    keyboardHidesTabBar: false,
+  },
+};
+
+const tabNavigator = createBottomTabNavigator(
+  routeConfigs,
+  bottomTabNavigatorConfig
+);
 
 tabNavigator.path = "";
 
