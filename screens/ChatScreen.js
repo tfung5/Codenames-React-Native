@@ -167,6 +167,7 @@ class ChatScreen extends React.Component {
         onSend={(messages) => this.onSend(messages)}
         renderUsernameOnMessage={true}
         user={this.state.user}
+        minInputToolbarHeight={-38}
       />
     );
   }
