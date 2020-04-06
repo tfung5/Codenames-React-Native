@@ -39,6 +39,7 @@ export default ({ visible, setVisible, correct, number }) => {
         textMessage={determineMessage(correct, number)}
         backgroundColor={determineBackgroundColor(correct)}
         messageColor={"black"}
+        bottom={15}
         containerStyle={{
           borderRadius: 10,
           borderWidth: 0.5,

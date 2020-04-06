@@ -12,6 +12,7 @@ import {
   TextInput,
   Button,
   Keyboard,
+  KeyboardAvoidingView,
 } from "react-native";
 import io from "socket.io-client";
 import { server } from "../config";
@@ -51,7 +52,10 @@ export default function HomeScreen({ navigation }) {
   };
 
   return (
-    <View style={{ flex: 1, flexDirection: "column" }}>
+    <KeyboardAvoidingView
+      behavior="padding"
+      style={{ flex: 1, flexDirection: "column" }}
+    >
       <View
         style={{
           flex: 2,
@@ -112,7 +116,7 @@ export default function HomeScreen({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

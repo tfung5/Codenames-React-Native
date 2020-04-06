@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Keyboard, Text, TouchableOpacity, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { NavigationActions } from "react-navigation";
 
 import CombinedContext from "../components/CombinedContext";
@@ -41,6 +42,7 @@ class GameScreen extends React.Component {
       winningTeam: "",
       isSnackbarVisible: false,
       isGuessCorrect: false,
+      keyboardOffset: 0,
     };
   }
 
@@ -50,6 +52,31 @@ class GameScreen extends React.Component {
     } else {
       this.runSetup();
     }
+    this.keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      this._keyboardDidShow
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      this._keyboardDidHide
+    );
+  };
+
+  componentWillUnmount = () => {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  };
+
+  _keyboardDidShow = (event) => {
+    this.setState({
+      keyboardOffset: event.endCoordinates.height,
+    });
+  };
+
+  _keyboardDidHide = () => {
+    this.setState({
+      keyboardOffset: 0,
+    });
   };
 
   runSetup = async () => {
@@ -157,6 +184,20 @@ class GameScreen extends React.Component {
     });
   };
 
+  determineContentContainerStyle = () => {
+    const { keyboardOffset } = this.state;
+
+    let res = [styles.gameScreen];
+
+    if (keyboardOffset > 0) {
+      res.push(styles.keyboardInFocus);
+    } else {
+      res.push(styles.keyboardNotInFocus);
+    }
+
+    return res;
+  };
+
   render() {
     const {
       board,
@@ -188,13 +229,13 @@ class GameScreen extends React.Component {
     };
 
     return (
-      <View style={styles.centerItems}>
+      <KeyboardAwareScrollView
+        resetScrollToCoords={{ x: 0, y: 0 }}
+        contentContainerStyle={this.determineContentContainerStyle()}
+      >
         {gameOver(this.state.winningTeam, currentTeam)}
         <Text style={styles.optionsTitleText}>
           You are on {team === RED ? "Red Team" : "Blue Team"}
-        </Text>
-        <Text style={styles.optionsTitleText}>
-          Number of Guesses Remaining: {guessCounter}
         </Text>
         <CardsLeft
           redLeft={redCardCounter}
@@ -206,6 +247,11 @@ class GameScreen extends React.Component {
           chooseCard={this.chooseCard}
         />
         <Clues {...{ clue, player, currentTeam, board, winningTeam }} />
+        {clue && clue.word && clue.number && (
+          <Text style={styles.optionsTitleText}>
+            Number of Guesses Remaining: {guessCounter}
+          </Text>
+        )}
         <View style={styles.testingButtons}>
           <TouchableOpacity
             onPress={this.loadPresetBoard}
@@ -240,7 +286,7 @@ class GameScreen extends React.Component {
           correct={isGuessCorrect}
           number={guessCounter}
         />
-      </View>
+      </KeyboardAwareScrollView>
     );
   }
 }
@@ -255,16 +301,14 @@ const WrappedGameScreen = (props) => {
 
 export default WrappedGameScreen;
 
-const styles = StyleSheet.create({
+const styles = {
   optionsTitleText: {
     fontSize: 16,
     marginLeft: 15,
     marginTop: 9,
     marginBottom: 12,
   },
-  testingButtons: {
-    marginTop: 30,
-  },
+  testingButtons: {},
   testingButton: {
     borderWidth: 1,
     borderColor: "black",
@@ -276,7 +320,16 @@ const styles = StyleSheet.create({
   testingButtonText: {
     textAlign: "center",
   },
-  centerItems: {
+  gameScreen: {
+    height: "100%",
+    flexDirection: "column",
     alignItems: "center",
+    paddingBottom: 45,
   },
-});
+  keyboardInFocus: {
+    justifyContent: "center",
+  },
+  keyboardNotInFocus: {
+    justifyContent: "space-evenly",
+  },
+};
