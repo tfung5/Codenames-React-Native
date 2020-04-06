@@ -324,7 +324,7 @@ const styles = {
     height: "100%",
     flexDirection: "column",
     alignItems: "center",
-    paddingBottom: 20,
+    paddingBottom: 45,
   },
   keyboardInFocus: {
     justifyContent: "center",
