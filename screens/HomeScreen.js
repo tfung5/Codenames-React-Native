@@ -442,6 +442,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     width: 150,
     padding: 10,
+    marginTop: 5,
   },
   testingButtonText: {
     textAlign: "center",
