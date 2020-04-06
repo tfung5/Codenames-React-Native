@@ -182,7 +182,7 @@ export function LobbyScreen({ navigation }) {
 
   const renderLeaveGameScreen = () => {
     return (
-      <View>
+      <View style={styles.centerItems}>
         <TouchableOpacity
           onPress={handleLeaveGame}
           style={styles.testingButton}
@@ -439,5 +439,9 @@ const styles = StyleSheet.create({
   },
   testingButtonText: {
     textAlign: "center",
+  },
+  centerItems: {
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
