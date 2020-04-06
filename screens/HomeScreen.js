@@ -58,17 +58,6 @@ export default function HomeScreen({ navigation }) {
     >
       <View
         style={{
-          flex: 2,
-          alignItems: "center",
-          justifyContent: "center",
-          borderBottomWidth: 2,
-        }}
-      >
-        <Text style={{ fontSize: 25 }}>{"\n"}Join Lobby</Text>
-      </View>
-
-      <View
-        style={{
           flex: 29,
           flexDirection: "column",
           justifyContent: "center",
@@ -337,17 +326,6 @@ export function LobbyScreen({ navigation }) {
   } else {
     return (
       <View style={{ flex: 1, flexDirection: "column" }}>
-        <View
-          style={{
-            flex: 2,
-            alignItems: "center",
-            justifyContent: "center",
-            borderBottomWidth: 2,
-          }}
-        >
-          <Text style={{ fontSize: 25 }}>{"\n"}Join a Team</Text>
-        </View>
-
         <View
           style={{
             flex: 29,
