@@ -10,10 +10,10 @@
 # The following runs 4 simulators of different devices
 ########################################################
 
-declare -a simulators=("4F02ADA3-365E-4546-8130-25F671BCEA0F" "B5D714E3-5EBB-4392-94B9-EFAAA20CCF0D" "A68E897A-2F43-4D90-BEAA-E63618CA3DB5" "6166093F-ABCC-4929-9521-2F4827A8EE33")
-# iPhone X
+declare -a simulators=("B5D714E3-5EBB-4392-94B9-EFAAA20CCF0D" "A68E897A-2F43-4D90-BEAA-E63618CA3DB5" "67C6801C-04BA-46CC-8A3F-07BBECCD008B" "6166093F-ABCC-4929-9521-2F4827A8EE33")
 # iPhone XR
 # iPhone 11
+# iPhone 11 Pro
 # iPhone 11 Pro Max
 
 for i in "${simulators[@]}"
