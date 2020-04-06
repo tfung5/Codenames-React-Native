@@ -111,24 +111,17 @@ class GameScreen extends React.Component {
 
   subscribeToGameUpdates = () => {
     this.socket.on(UPDATE_GAME, (payload) => {
-      const {
-        currentTeam,
-        board,
-        redCardCounter,
-        blueCardCounter,
-        guessCounter,
-        clue,
-        winningTeam,
-      } = payload;
       this.setState({
-        currentTeam,
-        board,
-        redCardCounter,
-        blueCardCounter,
-        guessCounter,
-        clue,
-        winningTeam,
+        ...this.state,
+        ...payload,
       });
+
+      /**
+       * Payload includes:
+       * currentTeam, board, redCardCounter,
+       * blueCardCounter, guessCounter, clue,
+       * winningTeam
+       */
     });
   };
 
