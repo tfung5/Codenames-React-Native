@@ -164,6 +164,7 @@ export function LobbyScreen({ navigation }) {
   const [blueTeam, setBlueTeam] = React.useState(new Array(4).fill(null));
 
   const slotWidth = 175;
+  const slotHeight = 35;
 
   // componentDidMount
   useEffect(() => {
@@ -238,6 +239,7 @@ export function LobbyScreen({ navigation }) {
           justifyContent: "center",
           marginVertical: 3,
           width: slotWidth,
+          height: slotHeight,
         }}
         onPress={() => {
           const redTeamCopy = [...redTeam];
@@ -300,6 +302,7 @@ export function LobbyScreen({ navigation }) {
           justifyContent: "center",
           marginVertical: 3,
           width: slotWidth,
+          height: slotHeight,
         }}
         onPress={() => {
           const blueTeamCopy = [...blueTeam];
