@@ -1,11 +1,6 @@
 import React, { useContext } from "react";
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  KeyboardAvoidingView,
-} from "react-native";
+import { Keyboard, Text, TouchableOpacity, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { NavigationActions } from "react-navigation";
 
 import CombinedContext from "../components/CombinedContext";
@@ -47,6 +42,7 @@ class GameScreen extends React.Component {
       winningTeam: "",
       isSnackbarVisible: false,
       isGuessCorrect: false,
+      keyboardOffset: 0,
     };
   }
 
@@ -56,6 +52,31 @@ class GameScreen extends React.Component {
     } else {
       this.runSetup();
     }
+    this.keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      this._keyboardDidShow
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      this._keyboardDidHide
+    );
+  };
+
+  componentWillUnmount = () => {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  };
+
+  _keyboardDidShow = (event) => {
+    this.setState({
+      keyboardOffset: event.endCoordinates.height,
+    });
+  };
+
+  _keyboardDidHide = () => {
+    this.setState({
+      keyboardOffset: 0,
+    });
   };
 
   runSetup = async () => {
@@ -163,6 +184,20 @@ class GameScreen extends React.Component {
     });
   };
 
+  determineContentContainerStyle = () => {
+    const { keyboardOffset } = this.state;
+
+    let res = [styles.gameScreen];
+
+    if (keyboardOffset > 0) {
+      res.push(styles.keyboardInFocus);
+    } else {
+      res.push(styles.keyboardNotInFocus);
+    }
+
+    return res;
+  };
+
   render() {
     const {
       board,
@@ -194,7 +229,10 @@ class GameScreen extends React.Component {
     };
 
     return (
-      <KeyboardAvoidingView behavior="height" style={styles.gameScreen}>
+      <KeyboardAwareScrollView
+        resetScrollToCoords={{ x: 0, y: 0 }}
+        contentContainerStyle={this.determineContentContainerStyle()}
+      >
         {gameOver(this.state.winningTeam, currentTeam)}
         <Text style={styles.optionsTitleText}>
           You are on {team === RED ? "Red Team" : "Blue Team"}
@@ -248,7 +286,7 @@ class GameScreen extends React.Component {
           correct={isGuessCorrect}
           number={guessCounter}
         />
-      </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
     );
   }
 }
@@ -263,7 +301,7 @@ const WrappedGameScreen = (props) => {
 
 export default WrappedGameScreen;
 
-const styles = StyleSheet.create({
+const styles = {
   optionsTitleText: {
     fontSize: 16,
     marginLeft: 15,
@@ -286,7 +324,12 @@ const styles = StyleSheet.create({
     height: "100%",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "space-evenly",
     paddingBottom: 20,
   },
-});
+  keyboardInFocus: {
+    justifyContent: "center",
+  },
+  keyboardNotInFocus: {
+    justifyContent: "space-evenly",
+  },
+};
