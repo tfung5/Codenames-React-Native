@@ -44,7 +44,6 @@ class GameScreen extends React.Component {
       isGuessCorrect: false,
       keyboardOffset: 0,
       timeOfLatestMessage: 0,
-      chatNotification: false,
     };
   }
 
@@ -124,18 +123,8 @@ class GameScreen extends React.Component {
        * blueCardCounter, guessCounter, clue,
        * winningTeam, timeOfLatestMessage
        */
-       this.updateChatNotification();
     });
   };
-
-  updateChatNotification = () => {
-    if(this.context.GameContext.game.timeOfLastReadMessage < this.state.timeOfLatestMessage){
-      this.setState({chatNotification: true})
-    }
-    else{
-      this.setState({chatNotification: false})
-    }
-  }
 
   subscribeToPlayerUpdates = () => {
     this.socket.on(UPDATE_PLAYER_INFO, (player) => {
@@ -202,6 +191,17 @@ class GameScreen extends React.Component {
 
     return res;
   };
+
+  renderChatNotificationIfNeeded = () => {
+    if (this.context.GameContext.game.timeOfLastReadMessage < this.state.timeOfLatestMessage) {
+      return (
+        <Image
+          style = {styles.notificationIcon}
+          source={require("../assets/images/bell.png")}
+        />
+      );
+    }
+  }
 
   render() {
     const {
@@ -285,12 +285,7 @@ class GameScreen extends React.Component {
             onPress={this.navigateToChat}
             style={styles.testingButton}
           >
-          {this.state.chatNotification && (
-            <Image
-              style = {styles.notificationIcon}
-              source={require("../assets/images/bell.png")}
-            />
-          )}
+            {this.renderChatNotificationIfNeeded()}
             <Text style={styles.testingButtonText}>Open Chat</Text>
           </TouchableOpacity>
         </View>
