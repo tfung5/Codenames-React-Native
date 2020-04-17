@@ -54,9 +54,13 @@ class ChatScreen extends React.Component {
 
   componentWillUnmount = () => {
     this._isMounted = false;
-    this.context.GameContext.game.timeOfLastReadMessage = Date.now();
+    this.updateTimeOfLastReadMessage();
     this.socket.emit(UPDATE_NOTIFICATION);
   };
+
+  updateTimeOfLastReadMessage = () => {
+    this.context.GameContext.game.timeOfLastReadMessage = Date.now();
+  }
 
   runSetup = async () => {
     await this.saveSocket();
@@ -155,6 +159,7 @@ class ChatScreen extends React.Component {
           messages: GiftedChat.append(previousState.messages, messages),
         };
       });
+      this.updateTimeOfLastReadMessage();
     }
   }
 
