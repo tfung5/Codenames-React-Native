@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Keyboard, Text, TouchableOpacity, View } from "react-native";
+import { Keyboard, Text, TouchableOpacity, View, Image } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { NavigationActions } from "react-navigation";
 
@@ -43,6 +43,8 @@ class GameScreen extends React.Component {
       isSnackbarVisible: false,
       isGuessCorrect: false,
       keyboardOffset: 0,
+      timeOfLatestMessage: 0,
+      chatNotification: false,
     };
   }
 
@@ -120,10 +122,20 @@ class GameScreen extends React.Component {
        * Payload includes:
        * currentTeam, board, redCardCounter,
        * blueCardCounter, guessCounter, clue,
-       * winningTeam
+       * winningTeam, timeOfLatestMessage
        */
+       this.updateChatNotification();
     });
   };
+
+  updateChatNotification = () => {
+    if(this.context.GameContext.game.timeOfLastReadMessage < this.state.timeOfLatestMessage){
+      this.setState({chatNotification: true})
+    }
+    else{
+      this.setState({chatNotification: false})
+    }
+  }
 
   subscribeToPlayerUpdates = () => {
     this.socket.on(UPDATE_PLAYER_INFO, (player) => {
@@ -203,6 +215,7 @@ class GameScreen extends React.Component {
       clue,
       isSnackbarVisible,
       isGuessCorrect,
+      timeOfLatestMessage,
     } = this.state;
     const { name, team, role } = player;
 
@@ -272,6 +285,12 @@ class GameScreen extends React.Component {
             onPress={this.navigateToChat}
             style={styles.testingButton}
           >
+          {this.state.chatNotification && (
+            <Image
+              style = {styles.notificationIcon}
+              source={require("../assets/images/bell.png")}
+            />
+          )}
             <Text style={styles.testingButtonText}>Open Chat</Text>
           </TouchableOpacity>
         </View>
@@ -313,9 +332,15 @@ const styles = {
     width: 150,
     padding: 10,
     marginTop: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   testingButtonText: {
     textAlign: "center",
+  },
+  notificationIcon:{
+     width: 22,
+     height: 22
   },
   gameScreen: {
     height: "100%",

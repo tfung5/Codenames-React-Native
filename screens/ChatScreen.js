@@ -23,6 +23,8 @@ import {
   GET_PLAYER_INFO,
   UPDATE_PLAYER_INFO,
   GET_MESSAGES,
+  SAVE_LATEST_TIME,
+  UPDATE_NOTIFICATION
 } from "../constants/Actions";
 
 class ChatScreen extends React.Component {
@@ -52,6 +54,8 @@ class ChatScreen extends React.Component {
 
   componentWillUnmount = () => {
     this._isMounted = false;
+    this.context.GameContext.game.timeOfLastReadMessage = Date.now();
+    this.socket.emit(UPDATE_NOTIFICATION);
   };
 
   runSetup = async () => {
@@ -157,7 +161,9 @@ class ChatScreen extends React.Component {
   //Send messages
   //When a message is sent, send the message to the server.
   onSend(messages = []) {
+    let dateNow = Date.now();
     this.socket.emit(CHAT_MESSAGE, messages[0]);
+    this.socket.emit(SAVE_LATEST_TIME, dateNow);
   }
 
   render() {

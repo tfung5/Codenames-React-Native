@@ -13,7 +13,9 @@ export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
   const [socket, setSocket] = useState({});
   const SocketValue = { socket, setSocket };
-  const [game, setGame] = useState({ isGameInProgress: false });
+  const [game, setGame] = useState({
+    isGameInProgress: false,
+    timeOfLastReadMessage: Date.now() });
   const GameValue = { game, setGame };
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
