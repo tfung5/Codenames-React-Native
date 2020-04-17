@@ -23,6 +23,8 @@ import {
   GET_PLAYER_INFO,
   UPDATE_PLAYER_INFO,
   GET_MESSAGES,
+  SAVE_LATEST_TIME,
+  UPDATE_NOTIFICATION
 } from "../constants/Actions";
 
 class ChatScreen extends React.Component {
@@ -52,7 +54,13 @@ class ChatScreen extends React.Component {
 
   componentWillUnmount = () => {
     this._isMounted = false;
+    this.updateTimeOfLastReadMessage();
+    this.socket.emit(UPDATE_NOTIFICATION);
   };
+
+  updateTimeOfLastReadMessage = () => {
+    this.context.GameContext.game.timeOfLastReadMessage = Date.now();
+  }
 
   runSetup = async () => {
     await this.saveSocket();
@@ -61,6 +69,7 @@ class ChatScreen extends React.Component {
     await this.subscribeToChatMessageUpdates();
     await this.loadEarlierMessages();
     await this.getMessages();
+    await this.updateTimeOfLastReadMessage();
   };
 
   saveSocket = () => {
@@ -151,13 +160,16 @@ class ChatScreen extends React.Component {
           messages: GiftedChat.append(previousState.messages, messages),
         };
       });
+      this.updateTimeOfLastReadMessage();
     }
   }
 
   //Send messages
   //When a message is sent, send the message to the server.
   onSend(messages = []) {
+    let dateNow = Date.now();
     this.socket.emit(CHAT_MESSAGE, messages[0]);
+    this.socket.emit(SAVE_LATEST_TIME, dateNow);
   }
 
   render() {

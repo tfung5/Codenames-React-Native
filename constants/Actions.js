@@ -1,6 +1,8 @@
 export const CHAT_MESSAGE = "CHAT_MESSAGE";
 export const CHOOSE_CARD = "CHOOSE_CARD";
 export const GET_MESSAGES = "GET_MESSAGES";
+export const SAVE_LATEST_TIME = "SAVE_LATEST_TIME";
+export const UPDATE_NOTIFICATION = "UPDATE_NOTIFICATION";
 export const LEAVE_GAME = "LEAVE_GAME";
 export const END_TURN = "END_TURN";
 export const GET_GAME = "GET_GAME";
