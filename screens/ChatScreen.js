@@ -69,6 +69,7 @@ class ChatScreen extends React.Component {
     await this.subscribeToChatMessageUpdates();
     await this.loadEarlierMessages();
     await this.getMessages();
+    await this.updateTimeOfLastReadMessage();
   };
 
   saveSocket = () => {
