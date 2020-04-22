@@ -14,6 +14,7 @@ export const JOIN_LOBBY = "JOIN_LOBBY";
 export const JOIN_SLOT = "JOIN_SLOT";
 export const LOAD_PRESET_BOARD = "LOAD_PRESET_BOARD";
 export const REQUEST_INDIVIDUAL_START_GAME = "REQUEST_INDIVIDUAL_START_GAME";
+export const RESET_LOBBY = "RESET_LOBBY";
 export const RESTART_GAME = "RESTART_GAME";
 export const SET_CLUE = "SET_CLUE";
 export const START_GAME = "START_GAME";

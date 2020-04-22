@@ -30,6 +30,7 @@ import {
   JOIN_LOBBY,
   JOIN_SLOT,
   REQUEST_INDIVIDUAL_START_GAME,
+  RESET_LOBBY,
   START_GAME,
   UPDATE_LOBBY,
 } from "../constants/Actions";
@@ -188,6 +189,10 @@ export function LobbyScreen({ navigation }) {
     });
   };
 
+  const resetLobby = () => {
+    socket.emit(RESET_LOBBY);
+  };
+
   const renderGameButton = () => {
     if (isGameInProgress) {
       return (
@@ -226,6 +231,25 @@ export function LobbyScreen({ navigation }) {
         </TouchableOpacity>
       );
     }
+  };
+
+  const renderResetLobbyButton = () => {
+    return (
+      <TouchableOpacity
+        onPress={resetLobby}
+        style={{
+          borderRadius: 10,
+          borderWidth: 2,
+          paddingHorizontal: 16,
+          paddingVertical: 4,
+          backgroundColor: "white",
+        }}
+      >
+        <Text style={{ fontSize: 20, width: slotWidth, textAlign: "center" }}>
+          Reset Lobby
+        </Text>
+      </TouchableOpacity>
+    );
   };
 
   const renderLeaveGameScreen = () => {
@@ -420,6 +444,7 @@ export function LobbyScreen({ navigation }) {
             Touch for Test
           </Text> */}
           {renderGameButton()}
+          {renderResetLobbyButton()}
         </View>
       </View>
     );
