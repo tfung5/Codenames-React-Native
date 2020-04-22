@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Keyboard, Text, TouchableOpacity, View, Image } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { NavigationActions } from "react-navigation";
+import { NavigationActions, NavigationEvents } from "react-navigation";
 
 import CombinedContext from "../components/CombinedContext";
 import ProvideCombinedContext from "../components/ProvideCombinedContext";
@@ -49,6 +49,7 @@ class GameScreen extends React.Component {
   }
 
   componentDidMount = () => {
+    console.log("cDM start");
     if (this.isRedirectToHomeNeeded()) {
       this.navigateToHomeScreen();
     } else {
@@ -82,6 +83,7 @@ class GameScreen extends React.Component {
   };
 
   runSetup = async () => {
+    console.log("runSetup start");
     await this.saveSocket();
     await this.subscribeToGameUpdates();
     await this.subscribeToPlayerUpdates();
@@ -130,6 +132,7 @@ class GameScreen extends React.Component {
 
   subscribeToPlayerUpdates = () => {
     this.socket.on(UPDATE_PLAYER_INFO, (player) => {
+      console.log("res:", player);
       this.setState({
         player,
       });
@@ -141,7 +144,7 @@ class GameScreen extends React.Component {
       await this.setGuessCorrect(res);
       await this.setSnackbarVisible(true);
     });
-  }
+  };
 
   getGame = () => {
     this.socket.emit(GET_GAME);
@@ -149,6 +152,7 @@ class GameScreen extends React.Component {
 
   getPlayerInfo = () => {
     this.socket.emit(GET_PLAYER_INFO);
+    console.log("getPlayerInfo req sent");
   };
 
   loadPresetBoard = () => {
@@ -199,15 +203,18 @@ class GameScreen extends React.Component {
   };
 
   renderChatNotificationIfNeeded = () => {
-    if (this.context.GameContext.game.timeOfLastReadMessage < this.state.timeOfLatestMessage) {
+    if (
+      this.context.GameContext.game.timeOfLastReadMessage <
+      this.state.timeOfLatestMessage
+    ) {
       return (
         <Image
-          style = {styles.notificationIcon}
+          style={styles.notificationIcon}
           source={require("../assets/images/bell.png")}
         />
       );
     }
-  }
+  };
 
   render() {
     const {
@@ -245,6 +252,7 @@ class GameScreen extends React.Component {
         resetScrollToCoords={{ x: 0, y: 0 }}
         contentContainerStyle={this.determineContentContainerStyle()}
       >
+        <NavigationEvents onDidFocus={this.componentDidMount} />
         {gameOver(this.state.winningTeam, currentTeam)}
         <Text style={styles.optionsTitleText}>
           You are on {team === RED ? "Red Team" : "Blue Team"}
@@ -333,15 +341,15 @@ const styles = {
     width: 150,
     padding: 10,
     marginTop: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   testingButtonText: {
     textAlign: "center",
   },
-  notificationIcon:{
-     width: 22,
-     height: 22
+  notificationIcon: {
+    width: 22,
+    height: 22,
   },
   gameScreen: {
     height: "100%",

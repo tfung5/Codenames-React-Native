@@ -26,7 +26,7 @@ import GameContext from "../components/GameContext";
 import {
   LEAVE_GAME,
   FETCH_TEAMS,
-  INDIVIDUAL_START_GAME,
+  JOIN_GAME,
   JOIN_LOBBY,
   JOIN_SLOT,
   REQUEST_INDIVIDUAL_START_GAME,
@@ -120,7 +120,7 @@ export function LobbyScreen({ navigation }) {
 
   // Will join game by:
   const joinGame = () => {
-    socket.emit(INDIVIDUAL_START_GAME); // Join the appropriate room depending on player's role
+    socket.emit(JOIN_GAME); // Join the appropriate room depending on player's role
     setGameInProgress(true);
     navigateToGameScreen();
   };
