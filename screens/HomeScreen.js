@@ -31,7 +31,7 @@ import {
   JOIN_SLOT,
   REQUEST_INDIVIDUAL_START_GAME,
   START_GAME,
-  UPDATE_TEAMS,
+  UPDATE_LOBBY,
 } from "../constants/Actions";
 import { RED, BLUE } from "../constants/Cards";
 import SnackBars from "../components/SnackBars";
@@ -172,8 +172,8 @@ export function LobbyScreen({ navigation }) {
   }, []);
 
   const subscribeToLobbyUpdates = () => {
-    // Handle UPDATE_TEAMS
-    socket.on(UPDATE_TEAMS, (payload) => {
+    // Handle UPDATE_LOBBY
+    socket.on(UPDATE_LOBBY, (payload) => {
       const { redTeam, blueTeam, isGameInProgress } = payload;
       setRedTeam(redTeam);
       setBlueTeam(blueTeam);
