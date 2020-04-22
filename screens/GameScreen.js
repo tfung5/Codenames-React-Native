@@ -17,6 +17,7 @@ import SnackBars from "../components/SnackBars";
 
 import {
   CHOOSE_CARD,
+  CHOOSE_CARD_RESPONSE,
   END_TURN,
   GET_GAME,
   GET_PLAYER_INFO,
@@ -84,6 +85,7 @@ class GameScreen extends React.Component {
     await this.saveSocket();
     await this.subscribeToGameUpdates();
     await this.subscribeToPlayerUpdates();
+    await this.subscribeToChooseCardUpdates();
     await this.getPlayerInfo();
     await this.getGame();
   };
@@ -134,6 +136,13 @@ class GameScreen extends React.Component {
     });
   };
 
+  subscribeToChooseCardUpdates = () => {
+    this.socket.on(CHOOSE_CARD_RESPONSE, async (res) => {
+      await this.setGuessCorrect(res);
+      await this.setSnackbarVisible(true);
+    });
+  }
+
   getGame = () => {
     this.socket.emit(GET_GAME);
   };
@@ -151,10 +160,7 @@ class GameScreen extends React.Component {
   };
 
   chooseCard = (row, col) => {
-    this.socket.emit(CHOOSE_CARD, { row, col }, async (res) => {
-      await this.setGuessCorrect(res);
-      await this.setSnackbarVisible(true);
-    });
+    this.socket.emit(CHOOSE_CARD, { row, col });
   };
 
   endTurn = () => {
