@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
 import { Keyboard, Text, TouchableOpacity, View, Image } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
+// https://stackoverflow.com/questions/48018084/componentdidmount-function-is-not-called-after-navigation
 import { NavigationActions, NavigationEvents } from "react-navigation";
 
 import CombinedContext from "../components/CombinedContext";
