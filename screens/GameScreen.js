@@ -53,7 +53,6 @@ class GameScreen extends React.Component {
   }
 
   componentDidMount = () => {
-    console.log("cDM start");
     if (this.isRedirectToHomeNeeded()) {
       this.navigateToHomeScreen();
     } else {
@@ -95,7 +94,6 @@ class GameScreen extends React.Component {
   };
 
   runSetup = async () => {
-    console.log("runSetup start");
     await this.saveSocket();
     await this.subscribeToGameUpdates();
     await this.subscribeToPlayerUpdates();
@@ -144,7 +142,6 @@ class GameScreen extends React.Component {
 
   subscribeToPlayerUpdates = () => {
     this.socket.on(UPDATE_PLAYER_INFO, (player) => {
-      console.log("res:", player);
       this.setState({
         player,
       });
@@ -164,7 +161,6 @@ class GameScreen extends React.Component {
 
   getPlayerInfo = () => {
     this.socket.emit(GET_PLAYER_INFO);
-    console.log("getPlayerInfo req sent");
   };
 
   loadPresetBoard = () => {
