@@ -113,8 +113,16 @@ export function LobbyScreen({ navigation }) {
   const { socket } = useContext(SocketContext);
   const { game, setGame } = useContext(GameContext);
 
+  // Initiated by the first player to hit Start Game
   const startGame = () => {
     socket.emit(START_GAME);
+  };
+
+  // Will join game by:
+  const joinGame = () => {
+    socket.emit(INDIVIDUAL_START_GAME); // Join the appropriate room depending on player's role
+    setGameInProgress(true);
+    navigateToGameScreen();
   };
 
   const navigateToGameScreen = () => {
@@ -151,6 +159,7 @@ export function LobbyScreen({ navigation }) {
   const { name } = navigation.state.params;
   const [redTeam, setRedTeam] = React.useState(new Array(4).fill(null));
   const [blueTeam, setBlueTeam] = React.useState(new Array(4).fill(null));
+  const [isGameInProgress, setIsGameInProgress] = React.useState(false);
 
   const slotWidth = 175;
   const slotHeight = 35;
@@ -159,21 +168,64 @@ export function LobbyScreen({ navigation }) {
   useEffect(() => {
     socket.emit(FETCH_TEAMS);
     subscribeToGameStart();
+    subscribeToLobbyUpdates();
   }, []);
 
-  // Handle UPDATE_TEAMS
-  socket.on(UPDATE_TEAMS, (payload) => {
-    const { redTeam, blueTeam } = payload;
-    setRedTeam(redTeam);
-    setBlueTeam(blueTeam);
-  });
+  const subscribeToLobbyUpdates = () => {
+    // Handle UPDATE_TEAMS
+    socket.on(UPDATE_TEAMS, (payload) => {
+      const { redTeam, blueTeam, isGameInProgress } = payload;
+      setRedTeam(redTeam);
+      setBlueTeam(blueTeam);
+      setIsGameInProgress(isGameInProgress);
+    });
+  };
 
+  // Upon receiving request from the server to start game, will join game
   const subscribeToGameStart = () => {
     socket.on(REQUEST_INDIVIDUAL_START_GAME, () => {
-      socket.emit(INDIVIDUAL_START_GAME);
-      setGameInProgress(true);
-      navigateToGameScreen();
+      joinGame();
     });
+  };
+
+  const renderGameButton = () => {
+    if (isGameInProgress) {
+      return (
+        <TouchableOpacity
+          onPress={joinGame}
+          style={{
+            borderRadius: 10,
+            margin: 16,
+            borderWidth: 2,
+            paddingHorizontal: 16,
+            paddingVertical: 4,
+            backgroundColor: "white",
+          }}
+        >
+          <Text style={{ fontSize: 20, width: slotWidth, textAlign: "center" }}>
+            Join Game
+          </Text>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity
+          onPress={startGame}
+          style={{
+            borderRadius: 10,
+            margin: 16,
+            borderWidth: 2,
+            paddingHorizontal: 16,
+            paddingVertical: 4,
+            backgroundColor: "white",
+          }}
+        >
+          <Text style={{ fontSize: 20, width: slotWidth, textAlign: "center" }}>
+            Start Game
+          </Text>
+        </TouchableOpacity>
+      );
+    }
   };
 
   const renderLeaveGameScreen = () => {
@@ -367,23 +419,7 @@ export function LobbyScreen({ navigation }) {
           >
             Touch for Test
           </Text> */}
-          <TouchableOpacity
-            onPress={startGame}
-            style={{
-              borderRadius: 10,
-              margin: 16,
-              borderWidth: 2,
-              paddingHorizontal: 16,
-              paddingVertical: 4,
-              backgroundColor: "white",
-            }}
-          >
-            <Text
-              style={{ fontSize: 20, width: slotWidth, textAlign: "center" }}
-            >
-              Start Game
-            </Text>
-          </TouchableOpacity>
+          {renderGameButton()}
         </View>
       </View>
     );
