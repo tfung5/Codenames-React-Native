@@ -261,7 +261,7 @@ class GameScreen extends React.Component {
           />
         </View>
         <Clues {...{ clue, player, currentTeam, board, winningTeam }} />
-        {clue && clue.word && clue.number && (
+        {clue && clue.word && clue.number >= 0 && (
           <Text style={styles.optionsTitleText}>
             Number of Guesses Remaining: {guessCounter}
           </Text>
