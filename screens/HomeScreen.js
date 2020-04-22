@@ -121,7 +121,10 @@ export function LobbyScreen({ navigation }) {
   // Will join game by:
   const joinGame = () => {
     socket.emit(JOIN_GAME); // Join the appropriate room depending on player's role
-    setGameInProgress(true);
+    setGame({
+      ...game,
+      isGameInProgress: true,
+    });
     navigateToGameScreen();
   };
 
@@ -139,16 +142,13 @@ export function LobbyScreen({ navigation }) {
     navigation.navigate("Home");
   };
 
-  const setGameInProgress = (value) => {
-    setGame({
-      ...game,
-      isGameInProgress: value,
-    });
-  };
-
   const handleLeaveGame = () => {
     emitLeaveGame();
-    setGameInProgress(false);
+    setGame({
+      ...game,
+      isGameInProgress: false,
+      hasLeftPreviousGame: true,
+    });
     navigateToHomeScreen();
   };
 

@@ -35,7 +35,7 @@ class GameScreen extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
+    this.initialState = {
       board: [],
       currentTeam: "",
       player: {},
@@ -48,6 +48,8 @@ class GameScreen extends React.Component {
       keyboardOffset: 0,
       timeOfLatestMessage: 0,
     };
+
+    this.state = this.initialState;
   }
 
   componentDidMount = () => {
@@ -55,6 +57,7 @@ class GameScreen extends React.Component {
     if (this.isRedirectToHomeNeeded()) {
       this.navigateToHomeScreen();
     } else {
+      this.clearAllInfo();
       this.runSetup();
     }
     this.keyboardDidShowListener = Keyboard.addListener(
@@ -82,6 +85,13 @@ class GameScreen extends React.Component {
     this.setState({
       keyboardOffset: 0,
     });
+  };
+
+  clearAllInfo = () => {
+    if (this.context.GameContext.game.hasLeftPreviousGame) {
+      this.setState(this.initialState);
+      this.context.GameContext.game.hasLeftPreviousGame = false;
+    }
   };
 
   runSetup = async () => {
