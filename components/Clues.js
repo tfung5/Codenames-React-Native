@@ -15,7 +15,9 @@ export default (props) => {
 
   // Executes whenever clue is updated
   useEffect(() => {
-    if (clue && clue.word && clue.number) {
+    console.log("new clue:", clue);
+
+    if (clue && clue.word && clue.number >= 0) {
       setWord(clue.word);
       setNumber(clue.number.toString());
     } else {
@@ -57,7 +59,9 @@ export default (props) => {
   };
 
   const submitClues = () => {
-    socket.emit(SET_CLUE, { word, number: parseInt(number) });
+    const payload = { word, number: parseInt(number) };
+    console.log("send payload:", payload);
+    socket.emit(SET_CLUE, payload);
     setHasEdited(true); // To prevent the current spymaster from setting the clue more than once per turn
   };
 
