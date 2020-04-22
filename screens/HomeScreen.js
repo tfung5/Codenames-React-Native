@@ -26,12 +26,13 @@ import GameContext from "../components/GameContext";
 import {
   LEAVE_GAME,
   FETCH_TEAMS,
-  INDIVIDUAL_START_GAME,
+  JOIN_GAME,
   JOIN_LOBBY,
   JOIN_SLOT,
   REQUEST_INDIVIDUAL_START_GAME,
+  RESET_LOBBY,
   START_GAME,
-  UPDATE_TEAMS,
+  UPDATE_LOBBY,
 } from "../constants/Actions";
 import { RED, BLUE } from "../constants/Cards";
 import SnackBars from "../components/SnackBars";
@@ -113,8 +114,19 @@ export function LobbyScreen({ navigation }) {
   const { socket } = useContext(SocketContext);
   const { game, setGame } = useContext(GameContext);
 
+  // Initiated by the first player to hit Start Game
   const startGame = () => {
     socket.emit(START_GAME);
+  };
+
+  // Will join game by:
+  const joinGame = () => {
+    socket.emit(JOIN_GAME); // Join the appropriate room depending on player's role
+    setGame({
+      ...game,
+      isGameInProgress: true,
+    });
+    navigateToGameScreen();
   };
 
   const navigateToGameScreen = () => {
@@ -131,16 +143,13 @@ export function LobbyScreen({ navigation }) {
     navigation.navigate("Home");
   };
 
-  const setGameInProgress = (value) => {
-    setGame({
-      ...game,
-      isGameInProgress: value,
-    });
-  };
-
   const handleLeaveGame = () => {
     emitLeaveGame();
-    setGameInProgress(false);
+    setGame({
+      ...game,
+      isGameInProgress: false,
+      hasLeftPreviousGame: true,
+    });
     navigateToHomeScreen();
   };
 
@@ -151,6 +160,7 @@ export function LobbyScreen({ navigation }) {
   const { name } = navigation.state.params;
   const [redTeam, setRedTeam] = React.useState(new Array(4).fill(null));
   const [blueTeam, setBlueTeam] = React.useState(new Array(4).fill(null));
+  const [isGameInProgress, setIsGameInProgress] = React.useState(false);
 
   const slotWidth = 175;
   const slotHeight = 35;
@@ -159,21 +169,87 @@ export function LobbyScreen({ navigation }) {
   useEffect(() => {
     socket.emit(FETCH_TEAMS);
     subscribeToGameStart();
+    subscribeToLobbyUpdates();
   }, []);
 
-  // Handle UPDATE_TEAMS
-  socket.on(UPDATE_TEAMS, (payload) => {
-    const { redTeam, blueTeam } = payload;
-    setRedTeam(redTeam);
-    setBlueTeam(blueTeam);
-  });
+  const subscribeToLobbyUpdates = () => {
+    // Handle UPDATE_LOBBY
+    socket.on(UPDATE_LOBBY, (payload) => {
+      const { redTeam, blueTeam, isGameInProgress } = payload;
+      setRedTeam(redTeam);
+      setBlueTeam(blueTeam);
+      setIsGameInProgress(isGameInProgress);
+    });
+  };
 
+  // Upon receiving request from the server to start game, will join game
   const subscribeToGameStart = () => {
     socket.on(REQUEST_INDIVIDUAL_START_GAME, () => {
-      socket.emit(INDIVIDUAL_START_GAME);
-      setGameInProgress(true);
-      navigateToGameScreen();
+      joinGame();
     });
+  };
+
+  const resetLobby = () => {
+    socket.emit(RESET_LOBBY);
+  };
+
+  const renderGameButton = () => {
+    if (isGameInProgress) {
+      return (
+        <TouchableOpacity
+          onPress={joinGame}
+          style={{
+            borderRadius: 10,
+            margin: 16,
+            borderWidth: 2,
+            paddingHorizontal: 16,
+            paddingVertical: 4,
+            backgroundColor: "white",
+          }}
+        >
+          <Text style={{ fontSize: 20, width: slotWidth, textAlign: "center" }}>
+            Join Game
+          </Text>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity
+          onPress={startGame}
+          style={{
+            borderRadius: 10,
+            margin: 16,
+            borderWidth: 2,
+            paddingHorizontal: 16,
+            paddingVertical: 4,
+            backgroundColor: "white",
+          }}
+        >
+          <Text style={{ fontSize: 20, width: slotWidth, textAlign: "center" }}>
+            Start Game
+          </Text>
+        </TouchableOpacity>
+      );
+    }
+  };
+
+  const renderResetLobbyButton = () => {
+    return (
+      <TouchableOpacity
+        onPress={resetLobby}
+        style={{
+          borderRadius: 10,
+          borderWidth: 2,
+          paddingHorizontal: 16,
+          paddingVertical: 4,
+          backgroundColor: "white",
+        }}
+      >
+        <Text style={{ fontSize: 20, width: slotWidth, textAlign: "center" }}>
+          Reset Lobby
+        </Text>
+      </TouchableOpacity>
+    );
   };
 
   const renderLeaveGameScreen = () => {
@@ -367,23 +443,8 @@ export function LobbyScreen({ navigation }) {
           >
             Touch for Test
           </Text> */}
-          <TouchableOpacity
-            onPress={startGame}
-            style={{
-              borderRadius: 10,
-              margin: 16,
-              borderWidth: 2,
-              paddingHorizontal: 16,
-              paddingVertical: 4,
-              backgroundColor: "white",
-            }}
-          >
-            <Text
-              style={{ fontSize: 20, width: slotWidth, textAlign: "center" }}
-            >
-              Start Game
-            </Text>
-          </TouchableOpacity>
+          {renderGameButton()}
+          {renderResetLobbyButton()}
         </View>
       </View>
     );

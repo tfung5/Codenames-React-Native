@@ -1,7 +1,9 @@
 import React, { useContext } from "react";
 import { Keyboard, Text, TouchableOpacity, View, Image } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { NavigationActions } from "react-navigation";
+
+// https://stackoverflow.com/questions/48018084/componentdidmount-function-is-not-called-after-navigation
+import { NavigationActions, NavigationEvents } from "react-navigation";
 
 import CombinedContext from "../components/CombinedContext";
 import ProvideCombinedContext from "../components/ProvideCombinedContext";
@@ -33,7 +35,7 @@ class GameScreen extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
+    this.initialState = {
       board: [],
       currentTeam: "",
       player: {},
@@ -46,12 +48,15 @@ class GameScreen extends React.Component {
       keyboardOffset: 0,
       timeOfLatestMessage: 0,
     };
+
+    this.state = this.initialState;
   }
 
   componentDidMount = () => {
     if (this.isRedirectToHomeNeeded()) {
       this.navigateToHomeScreen();
     } else {
+      this.clearAllInfo();
       this.runSetup();
     }
     this.keyboardDidShowListener = Keyboard.addListener(
@@ -79,6 +84,13 @@ class GameScreen extends React.Component {
     this.setState({
       keyboardOffset: 0,
     });
+  };
+
+  clearAllInfo = () => {
+    if (this.context.GameContext.game.hasLeftPreviousGame) {
+      this.setState(this.initialState);
+      this.context.GameContext.game.hasLeftPreviousGame = false;
+    }
   };
 
   runSetup = async () => {
@@ -141,7 +153,7 @@ class GameScreen extends React.Component {
       await this.setGuessCorrect(res);
       await this.setSnackbarVisible(true);
     });
-  }
+  };
 
   getGame = () => {
     this.socket.emit(GET_GAME);
@@ -199,15 +211,18 @@ class GameScreen extends React.Component {
   };
 
   renderChatNotificationIfNeeded = () => {
-    if (this.context.GameContext.game.timeOfLastReadMessage < this.state.timeOfLatestMessage) {
+    if (
+      this.context.GameContext.game.timeOfLastReadMessage <
+      this.state.timeOfLatestMessage
+    ) {
       return (
         <Image
-          style = {styles.notificationIcon}
+          style={styles.notificationIcon}
           source={require("../assets/images/bell.png")}
         />
       );
     }
-  }
+  };
 
   render() {
     const {
@@ -245,6 +260,7 @@ class GameScreen extends React.Component {
         resetScrollToCoords={{ x: 0, y: 0 }}
         contentContainerStyle={this.determineContentContainerStyle()}
       >
+        <NavigationEvents onDidFocus={this.componentDidMount} />
         {gameOver(this.state.winningTeam, currentTeam)}
         <Text style={styles.optionsTitleText}>
           You are on {team === RED ? "Red Team" : "Blue Team"}
@@ -333,15 +349,15 @@ const styles = {
     width: 150,
     padding: 10,
     marginTop: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   testingButtonText: {
     textAlign: "center",
   },
-  notificationIcon:{
-     width: 22,
-     height: 22
+  notificationIcon: {
+    width: 22,
+    height: 22,
   },
   gameScreen: {
     height: "100%",

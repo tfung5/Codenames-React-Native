@@ -15,9 +15,11 @@ export default (props) => {
 
   // Executes whenever clue is updated
   useEffect(() => {
+    // If a clue was received
     if (clue && clue.word && clue.number >= 0) {
       setWord(clue.word);
       setNumber(clue.number.toString());
+      setHasEdited(true);
     } else {
       setWord("");
       setNumber("");
