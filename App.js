@@ -8,10 +8,12 @@ import { Ionicons } from "@expo/vector-icons";
 import AppNavigator from "./navigation/AppNavigator";
 import SocketContext from "./components/SocketContext";
 import GameContext from "./components/GameContext";
+import io from "socket.io-client";
+import { server } from "./config";
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
-  const [socket, setSocket] = useState({});
+  const [socket, setSocket] = useState(io(server));
   const SocketValue = { socket, setSocket };
   const [game, setGame] = useState({
     isGameInProgress: false,

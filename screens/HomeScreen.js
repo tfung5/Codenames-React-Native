@@ -14,8 +14,6 @@ import {
   Keyboard,
   KeyboardAvoidingView,
 } from "react-native";
-import io from "socket.io-client";
-import { server } from "../config";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationActions } from "react-navigation";
@@ -38,21 +36,17 @@ import {
 } from "../constants/Actions";
 import { RED, BLUE } from "../constants/Cards";
 import SnackBars from "../components/SnackBars";
+import LobbyList from "../components/LobbyList";
 
 export default function HomeScreen({ navigation }) {
-  const { socket, setSocket } = useContext(SocketContext);
+  const { socket } = useContext(SocketContext);
   const { game, setGame } = useContext(GameContext);
 
   // componentDidMount
   useEffect(() => {
-    setSocket(io(server));
     subscribeToLobbyListUpdates();
     fetchLobbyList();
   }, []);
-
-  useEffect(() => {
-    console.log("lobbyList:", lobbyList);
-  }, [lobbyList]);
 
   const [lobbyList, setLobbyList] = React.useState({});
   const [name, setName] = React.useState("");
@@ -88,10 +82,11 @@ export default function HomeScreen({ navigation }) {
     >
       <View
         style={{
-          flex: 29,
           flexDirection: "column",
           justifyContent: "center",
+          alignItems: "center",
           backgroundColor: "#EAE7F2",
+          height: "100%",
         }}
       >
         <View
@@ -99,7 +94,6 @@ export default function HomeScreen({ navigation }) {
             flexDirection: "row",
             justifyContent: "space-around",
             alignItems: "center",
-            padding: 25,
           }}
         >
           <Text style={{ fontSize: 25 }}>Name:</Text>
@@ -120,6 +114,7 @@ export default function HomeScreen({ navigation }) {
             value={name}
           />
         </View>
+        <LobbyList {...{ lobbyList }} />
         <View style={{ justifyContent: "center", alignItems: "center" }}>
           <TouchableOpacity
             style={{
