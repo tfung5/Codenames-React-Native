@@ -25,6 +25,7 @@ import SocketContext from "../components/SocketContext";
 import GameContext from "../components/GameContext";
 import {
   FETCH_LOBBY,
+  FETCH_LOBBY_LIST,
   JOIN_GAME,
   JOIN_LOBBY,
   JOIN_SLOT,
