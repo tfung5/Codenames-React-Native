@@ -33,6 +33,7 @@ import {
   RESET_LOBBY,
   START_GAME,
   UPDATE_LOBBY,
+  UPDATE_LOBBY_LIST,
 } from "../constants/Actions";
 import { RED, BLUE } from "../constants/Cards";
 import SnackBars from "../components/SnackBars";
@@ -44,9 +45,26 @@ export default function HomeScreen({ navigation }) {
   // componentDidMount
   useEffect(() => {
     setSocket(io(server));
+    subscribeToLobbyListUpdates();
+    fetchLobbyList();
   }, []);
 
+  useEffect(() => {
+    console.log("lobbyList:", lobbyList);
+  }, [lobbyList]);
+
+  const [lobbyList, setLobbyList] = React.useState({});
   const [name, setName] = React.useState("");
+
+  const fetchLobbyList = () => {
+    socket.emit(FETCH_LOBBY_LIST);
+  };
+
+  const subscribeToLobbyListUpdates = () => {
+    socket.on(UPDATE_LOBBY_LIST, (payload) => {
+      setLobbyList(payload);
+    });
+  };
 
   const joinLobby = () => {
     const lobby = 7; // TODO: Get the lobby number from the onPress event's value
