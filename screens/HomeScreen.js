@@ -39,6 +39,7 @@ import SnackBars from "../components/SnackBars";
 
 export default function HomeScreen({ navigation }) {
   const { socket, setSocket } = useContext(SocketContext);
+  const { game, setGame } = useContext(GameContext);
 
   // componentDidMount
   useEffect(() => {
@@ -48,8 +49,17 @@ export default function HomeScreen({ navigation }) {
   const [name, setName] = React.useState("");
 
   const joinLobby = () => {
-    socket.emit(JOIN_LOBBY, name);
-    navigation.navigate("Lobby", { name });
+    const lobby = 7; // TODO: Get the lobby number from the onPress event's value
+
+    // Store the current lobby number in GameContext
+    setGame({
+      ...game,
+      lobby
+    });
+
+    socket.emit(JOIN_LOBBY, { name, lobby }); // Join lobby on server-side
+
+    navigation.navigate("Lobby", { name }); // Navigate to LobbyScreen
   };
 
   return (
