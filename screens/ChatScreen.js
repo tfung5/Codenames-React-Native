@@ -20,11 +20,11 @@ import ProvideCombinedContext from "../components/ProvideCombinedContext";
 import { GiftedChat } from "react-native-gifted-chat";
 import {
   CHAT_MESSAGE,
-  GET_PLAYER_INFO,
+  FETCH_PLAYER_INFO,
   UPDATE_PLAYER_INFO,
   GET_MESSAGES,
   SAVE_LATEST_TIME,
-  UPDATE_NOTIFICATION
+  UPDATE_NOTIFICATION,
 } from "../constants/Actions";
 
 class ChatScreen extends React.Component {
@@ -60,7 +60,7 @@ class ChatScreen extends React.Component {
 
   updateTimeOfLastReadMessage = () => {
     this.context.GameContext.game.timeOfLastReadMessage = Date.now();
-  }
+  };
 
   runSetup = async () => {
     await this.saveSocket();
@@ -112,7 +112,7 @@ class ChatScreen extends React.Component {
   };
 
   getPlayerInfo = () => {
-    this.socket.emit(GET_PLAYER_INFO);
+    this.socket.emit(FETCH_PLAYER_INFO);
   };
 
   subscribeToPlayerUpdates = () => {

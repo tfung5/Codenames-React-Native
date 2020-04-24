@@ -25,7 +25,7 @@ import SocketContext from "../components/SocketContext";
 import GameContext from "../components/GameContext";
 import {
   LEAVE_GAME,
-  FETCH_TEAMS,
+  FETCH_LOBBY,
   JOIN_GAME,
   JOIN_LOBBY,
   JOIN_SLOT,
@@ -54,7 +54,7 @@ export default function HomeScreen({ navigation }) {
     // Store the current lobby number in GameContext
     setGame({
       ...game,
-      lobby
+      lobby,
     });
 
     socket.emit(JOIN_LOBBY, { name, lobby }); // Join lobby on server-side
@@ -177,7 +177,7 @@ export function LobbyScreen({ navigation }) {
 
   // componentDidMount
   useEffect(() => {
-    socket.emit(FETCH_TEAMS);
+    socket.emit(FETCH_LOBBY);
     subscribeToGameStart();
     subscribeToLobbyUpdates();
   }, []);

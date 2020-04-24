@@ -21,8 +21,8 @@ import {
   CHOOSE_CARD,
   CHOOSE_CARD_RESPONSE,
   END_TURN,
-  GET_GAME,
-  GET_PLAYER_INFO,
+  FETCH_GAME,
+  FETCH_PLAYER_INFO,
   LOAD_PRESET_BOARD,
   RESTART_GAME,
   UPDATE_GAME,
@@ -156,11 +156,11 @@ class GameScreen extends React.Component {
   };
 
   getGame = () => {
-    this.socket.emit(GET_GAME);
+    this.socket.emit(FETCH_GAME);
   };
 
   getPlayerInfo = () => {
-    this.socket.emit(GET_PLAYER_INFO);
+    this.socket.emit(FETCH_PLAYER_INFO);
   };
 
   loadPresetBoard = () => {
