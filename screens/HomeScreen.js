@@ -24,11 +24,11 @@ import CardsLeft from "../components/CardsLeft";
 import SocketContext from "../components/SocketContext";
 import GameContext from "../components/GameContext";
 import {
-  LEAVE_GAME,
   FETCH_LOBBY,
   JOIN_GAME,
   JOIN_LOBBY,
   JOIN_SLOT,
+  LEAVE_GAME,
   REQUEST_INDIVIDUAL_START_GAME,
   RESET_LOBBY,
   START_GAME,

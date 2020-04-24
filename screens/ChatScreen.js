@@ -21,10 +21,10 @@ import { GiftedChat } from "react-native-gifted-chat";
 import {
   CHAT_MESSAGE,
   FETCH_PLAYER_INFO,
-  UPDATE_PLAYER_INFO,
   GET_MESSAGES,
   SAVE_LATEST_TIME,
   UPDATE_NOTIFICATION,
+  UPDATE_PLAYER_INFO,
 } from "../constants/Actions";
 
 class ChatScreen extends React.Component {
