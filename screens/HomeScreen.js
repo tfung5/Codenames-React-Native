@@ -223,38 +223,14 @@ export function LobbyScreen({ navigation }) {
   const renderGameButton = () => {
     if (isGameInProgress) {
       return (
-        <TouchableOpacity
-          onPress={joinGame}
-          style={{
-            borderRadius: 10,
-            margin: 16,
-            borderWidth: 2,
-            paddingHorizontal: 16,
-            paddingVertical: 4,
-            backgroundColor: "white",
-          }}
-        >
-          <Text style={{ fontSize: 20, width: slotWidth, textAlign: "center" }}>
-            Join Game
-          </Text>
+        <TouchableOpacity onPress={joinGame} style={styles.defaultButton}>
+          <Text style={styles.defaultButtonText}>Join Game</Text>
         </TouchableOpacity>
       );
     } else {
       return (
-        <TouchableOpacity
-          onPress={startGame}
-          style={{
-            borderRadius: 10,
-            margin: 16,
-            borderWidth: 2,
-            paddingHorizontal: 16,
-            paddingVertical: 4,
-            backgroundColor: "white",
-          }}
-        >
-          <Text style={{ fontSize: 20, width: slotWidth, textAlign: "center" }}>
-            Start Game
-          </Text>
+        <TouchableOpacity onPress={startGame} style={styles.defaultButton}>
+          <Text style={styles.defaultButtonText}>Start Game</Text>
         </TouchableOpacity>
       );
     }
@@ -262,19 +238,8 @@ export function LobbyScreen({ navigation }) {
 
   const renderResetLobbyButton = () => {
     return (
-      <TouchableOpacity
-        onPress={resetLobby}
-        style={{
-          borderRadius: 10,
-          borderWidth: 2,
-          paddingHorizontal: 16,
-          paddingVertical: 4,
-          backgroundColor: "white",
-        }}
-      >
-        <Text style={{ fontSize: 20, width: slotWidth, textAlign: "center" }}>
-          Reset Lobby
-        </Text>
+      <TouchableOpacity onPress={resetLobby} style={styles.defaultButton}>
+        <Text style={styles.defaultButtonText}>Reset Lobby</Text>
       </TouchableOpacity>
     );
   };
@@ -284,15 +249,15 @@ export function LobbyScreen({ navigation }) {
       <View style={styles.centerItems}>
         <TouchableOpacity
           onPress={handleLeaveGame}
-          style={styles.testingButton}
+          style={styles.defaultButton}
         >
-          <Text style={styles.testingButtonText}>Leave Game</Text>
+          <Text style={styles.defaultButtonText}>Leave Game</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={navigateToGameScreen}
-          style={styles.testingButton}
+          style={styles.defaultButton}
         >
-          <Text style={styles.testingButtonText}>Back to Game</Text>
+          <Text style={styles.defaultButtonText}>Back to Game</Text>
         </TouchableOpacity>
       </View>
     );
@@ -509,19 +474,21 @@ export function TestScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  testingButton: {
-    borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 25,
-    width: 150,
-    padding: 10,
-    marginTop: 5,
-  },
-  testingButtonText: {
-    textAlign: "center",
-  },
   centerItems: {
     alignItems: "center",
     justifyContent: "center",
+  },
+  defaultButton: {
+    borderRadius: 10,
+    borderWidth: 2,
+    marginTop: 16,
+    width: 175,
+    paddingHorizontal: 16,
+    paddingVertical: 4,
+    backgroundColor: "white",
+  },
+  defaultButtonText: {
+    fontSize: 20,
+    textAlign: "center",
   },
 });
