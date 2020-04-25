@@ -12,6 +12,7 @@ import { NavigationActions, NavigationEvents } from "react-navigation";
 import SocketContext from "../components/SocketContext";
 import GameContext from "../components/GameContext";
 import {
+  CREATE_LOBBY,
   FETCH_LOBBY,
   FETCH_LOBBY_LIST,
   JOIN_GAME,
@@ -52,6 +53,12 @@ export default function HomeScreen({ navigation }) {
     });
   };
 
+  const createLobby = () => {
+    socket.emit(CREATE_LOBBY, { name: name ? name : defaultPlayerName });
+
+    navigation.navigate("Lobby", { name: name ? name : defaultPlayerName }); // Navigate to LobbyScreen
+  };
+
   const joinLobby = () => {
     const lobbyId = selectedLobbyId;
 
@@ -64,6 +71,17 @@ export default function HomeScreen({ navigation }) {
     socket.emit(JOIN_LOBBY, { name: name ? name : defaultPlayerName, lobbyId }); // Join lobby by id on server-side
 
     navigation.navigate("Lobby", { name: name ? name : defaultPlayerName }); // Navigate to LobbyScreen
+  };
+
+  const renderCreateLobbyButton = () => {
+    return (
+      <TouchableOpacity
+        onPress={createLobby}
+        style={[styles.defaultButton, styles.defaultButtonHome]}
+      >
+        <Text style={styles.defaultButtonText}>Create Lobby</Text>
+      </TouchableOpacity>
+    );
   };
 
   const renderJoinLobbyButton = () => {
@@ -132,6 +150,7 @@ export default function HomeScreen({ navigation }) {
           />
         </View>
         <LobbyList {...{ lobbyList, selectedLobbyId, setSelectedLobbyId }} />
+        {renderCreateLobbyButton()}
         {renderJoinLobbyButton()}
         {renderRefreshLobbyListButton()}
       </View>
