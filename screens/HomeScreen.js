@@ -66,11 +66,22 @@ export default function HomeScreen({ navigation }) {
     navigation.navigate("Lobby", { name: name ? name : defaultPlayerName }); // Navigate to LobbyScreen
   };
 
+  const renderJoinLobbyButton = () => {
+    return (
+      <TouchableOpacity
+        onPress={joinLobby}
+        style={[styles.defaultButton, styles.defaultButtonHome]}
+      >
+        <Text style={styles.defaultButtonText}>Join Lobby</Text>
+      </TouchableOpacity>
+    );
+  };
+
   const renderRefreshLobbyListButton = () => {
     return (
       <TouchableOpacity
         onPress={fetchLobbyList}
-        style={[styles.defaultButton, { width: 250, marginTop: 16 }]}
+        style={[styles.defaultButton, styles.defaultButtonHome]}
       >
         <Text style={styles.defaultButtonText}>Refresh List</Text>
       </TouchableOpacity>
@@ -121,20 +132,7 @@ export default function HomeScreen({ navigation }) {
           />
         </View>
         <LobbyList {...{ lobbyList, selectedLobbyId, setSelectedLobbyId }} />
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <TouchableOpacity
-            style={{
-              alignItems: "center",
-              backgroundColor: "white",
-              borderWidth: 2,
-              borderRadius: 10,
-              width: 250,
-            }}
-            onPress={joinLobby}
-          >
-            <Text style={{ fontSize: 25 }}>Join Lobby</Text>
-          </TouchableOpacity>
-        </View>
+        {renderJoinLobbyButton()}
         {renderRefreshLobbyListButton()}
       </View>
     </KeyboardAvoidingView>
@@ -463,7 +461,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     marginTop: 16,
     width: 175,
-    paddingHorizontal: 16,
     paddingVertical: 4,
     backgroundColor: "white",
   },
@@ -471,4 +468,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
   },
+  defaultButtonHome: { width: 250, marginTop: 0, marginBottom: 8 },
 });
