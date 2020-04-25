@@ -95,7 +95,7 @@ export default function HomeScreen({ navigation }) {
       behavior="padding"
       style={{ flex: 1, flexDirection: "column" }}
     >
-      <NavigationEvents onDidFocus={fetchLobbyList()} />
+      <NavigationEvents onDidFocus={fetchLobbyList} />
       <View
         style={{
           flexDirection: "column",
