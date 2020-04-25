@@ -54,11 +54,13 @@ export default function HomeScreen({ navigation }) {
   const defaultPlayerName = "Player";
 
   const fetchLobbyList = () => {
+    console.log("fetching lobby list");
     socket.emit(FETCH_LOBBY_LIST);
   };
 
   const subscribeToLobbyListUpdates = () => {
     socket.on(UPDATE_LOBBY_LIST, (payload) => {
+      console.log("received lobby list:", payload);
       setLobbyList(payload);
     });
   };
@@ -75,6 +77,17 @@ export default function HomeScreen({ navigation }) {
     socket.emit(JOIN_LOBBY, { name: name ? name : defaultPlayerName, lobbyId }); // Join lobby by id on server-side
 
     navigation.navigate("Lobby", { name: name ? name : defaultPlayerName }); // Navigate to LobbyScreen
+  };
+
+  const renderRefreshLobbyListButton = () => {
+    return (
+      <TouchableOpacity
+        onPress={fetchLobbyList}
+        style={[styles.defaultButton, { width: 250, marginTop: 16 }]}
+      >
+        <Text style={styles.defaultButtonText}>Refresh List</Text>
+      </TouchableOpacity>
+    );
   };
 
   return (
@@ -133,6 +146,7 @@ export default function HomeScreen({ navigation }) {
             <Text style={{ fontSize: 25 }}>Join Lobby</Text>
           </TouchableOpacity>
         </View>
+        {renderRefreshLobbyListButton()}
       </View>
     </KeyboardAvoidingView>
   );
