@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationActions } from "react-navigation";
+import { NavigationActions, NavigationEvents } from "react-navigation";
 import Clues from "../components/Clues";
 import CardsLeft from "../components/CardsLeft";
 import SocketContext from "../components/SocketContext";
@@ -82,6 +82,7 @@ export default function HomeScreen({ navigation }) {
       behavior="padding"
       style={{ flex: 1, flexDirection: "column" }}
     >
+      <NavigationEvents onDidFocus={fetchLobbyList()} />
       <View
         style={{
           flexDirection: "column",
