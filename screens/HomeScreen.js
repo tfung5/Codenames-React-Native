@@ -49,6 +49,7 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
   const [lobbyList, setLobbyList] = React.useState({});
+  const [selectedLobbyId, setSelectedLobbyId] = React.useState(null);
   const [name, setName] = React.useState("");
 
   const fetchLobbyList = () => {
@@ -114,7 +115,7 @@ export default function HomeScreen({ navigation }) {
             value={name}
           />
         </View>
-        <LobbyList {...{ lobbyList }} />
+        <LobbyList {...{ lobbyList, selectedLobbyId, setSelectedLobbyId }} />
         <View style={{ justifyContent: "center", alignItems: "center" }}>
           <TouchableOpacity
             style={{

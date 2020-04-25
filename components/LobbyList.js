@@ -2,8 +2,18 @@ import React from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Divider from "./Divider";
 
-export default ({ lobbyList }) => {
+export default ({ lobbyList, selectedLobbyId, setSelectedLobbyId }) => {
   const lobbyIds = Object.keys(lobbyList);
+
+  const determineLobbyStyle = (lobby) => {
+    let style = [styles.lobby];
+
+    if (lobby.id === selectedLobbyId) {
+      style.push(styles.selectedLobby);
+    }
+
+    return style;
+  };
 
   const renderLobbyList = () => {
     if (lobbyIds.length === 0) {
@@ -17,7 +27,10 @@ export default ({ lobbyList }) => {
         const lobby = lobbyList[lobbyId];
         return (
           <React.Fragment key={lobby.id}>
-            <TouchableOpacity style={styles.lobby}>
+            <TouchableOpacity
+              style={determineLobbyStyle(lobby)}
+              onPress={() => setSelectedLobbyId(lobby.id)}
+            >
               <Text style={styles.lobbyText}>{lobby.name}</Text>
             </TouchableOpacity>
             <Divider />
@@ -42,6 +55,9 @@ const styles = {
   },
   lobby: {
     padding: 10,
+  },
+  selectedLobby: {
+    backgroundColor: "lightblue",
   },
   lobbyText: {
     textAlign: "center",
