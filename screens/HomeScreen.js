@@ -43,13 +43,11 @@ export default function HomeScreen({ navigation }) {
   const defaultPlayerName = "Player";
 
   const fetchLobbyList = () => {
-    console.log("fetching lobby list");
     socket.emit(FETCH_LOBBY_LIST);
   };
 
   const subscribeToLobbyListUpdates = () => {
     socket.on(UPDATE_LOBBY_LIST, (payload) => {
-      console.log("received lobby list:", payload);
       setLobbyList(payload);
     });
   };
