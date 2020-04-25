@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Credit for this script: https://stackoverflow.com/questions/53924934/can-i-run-my-expo-app-on-multiple-ios-simulators-at-once
+# Credit: https://stackoverflow.com/questions/53924934/can-i-run-my-expo-app-on-multiple-ios-simulators-at-once
 
 # The device IDs will differ on every computer and install. You will likely have to find the correct ones in Xcode, or look at what's printed out on the terminal after running this command.
 
