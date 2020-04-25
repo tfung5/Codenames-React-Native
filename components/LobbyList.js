@@ -15,6 +15,18 @@ export default ({ lobbyList, selectedLobbyId, setSelectedLobbyId }) => {
     return style;
   };
 
+  const determineLobbyTextStyle = (lobby) => {
+    let style = [styles.lobbyText];
+
+    if (lobby.isGameInProgress) {
+      style.push(styles.lobbyTextInProgress);
+    } else {
+      style.push(styles.lobbyTextWaiting);
+    }
+
+    return style;
+  };
+
   const renderLobbyList = () => {
     if (lobbyIds.length === 0) {
       return (
@@ -33,7 +45,7 @@ export default ({ lobbyList, selectedLobbyId, setSelectedLobbyId }) => {
               style={determineLobbyStyle(lobby)}
               onPress={() => setSelectedLobbyId(lobby.id)}
             >
-              <Text style={styles.lobbyText}>
+              <Text style={determineLobbyTextStyle(lobby)}>
                 {lobby.name} ({playerCount}/{lobby.maxPlayers})
               </Text>
             </TouchableOpacity>
@@ -65,6 +77,12 @@ const styles = {
   },
   lobbyText: {
     textAlign: "center",
+  },
+  lobbyTextInProgress: {
+    color: "orange",
+  },
+  lobbyTextWaiting: {
+    color: "green",
   },
   noLobbiesFound: {
     height: 295,
