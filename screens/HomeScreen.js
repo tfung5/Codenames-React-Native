@@ -1,55 +1,120 @@
 import "react-native-gesture-handler";
-import * as WebBrowser from "expo-web-browser";
 import React, { useContext, useEffect } from "react";
 import {
-  Image,
-  Platform,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
   TextInput,
-  Button,
-  Keyboard,
   KeyboardAvoidingView,
 } from "react-native";
-import io from "socket.io-client";
-import { server } from "../config";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationActions } from "react-navigation";
-import Clues from "../components/Clues";
-import CardsLeft from "../components/CardsLeft";
+import { NavigationActions, NavigationEvents } from "react-navigation";
 import SocketContext from "../components/SocketContext";
 import GameContext from "../components/GameContext";
 import {
-  LEAVE_GAME,
-  FETCH_TEAMS,
+  CREATE_LOBBY,
+  FETCH_LOBBY,
+  FETCH_LOBBY_LIST,
   JOIN_GAME,
   JOIN_LOBBY,
   JOIN_SLOT,
+  LEAVE_GAME,
   REQUEST_INDIVIDUAL_START_GAME,
   RESET_LOBBY,
   START_GAME,
   UPDATE_LOBBY,
+  UPDATE_LOBBY_LIST,
 } from "../constants/Actions";
 import { RED, BLUE } from "../constants/Cards";
-import SnackBars from "../components/SnackBars";
+import LobbyList from "../components/LobbyList";
 
 export default function HomeScreen({ navigation }) {
-  const { socket, setSocket } = useContext(SocketContext);
+  const { socket } = useContext(SocketContext);
+  const { game, setGame } = useContext(GameContext);
 
   // componentDidMount
   useEffect(() => {
-    setSocket(io(server));
+    subscribeToLobbyListUpdates();
+    fetchLobbyList();
   }, []);
 
+  const [lobbyList, setLobbyList] = React.useState({});
+  const [selectedLobbyId, setSelectedLobbyId] = React.useState(null);
   const [name, setName] = React.useState("");
+  const defaultPlayerName = "Player";
+
+  const fetchLobbyList = () => {
+    socket.emit(FETCH_LOBBY_LIST);
+  };
+
+  const subscribeToLobbyListUpdates = () => {
+    socket.on(UPDATE_LOBBY_LIST, (payload) => {
+      setLobbyList(payload);
+    });
+  };
+
+  const createLobby = () => {
+    socket.emit(CREATE_LOBBY, { name: name ? name : defaultPlayerName });
+
+    navigation.navigate("Lobby", { name: name ? name : defaultPlayerName }); // Navigate to LobbyScreen
+  };
 
   const joinLobby = () => {
-    socket.emit(JOIN_LOBBY, name);
-    navigation.navigate("Lobby", { name });
+    const lobbyId = selectedLobbyId;
+
+    // Store the current lobby id in GameContext
+    setGame({
+      ...game,
+      lobbyId,
+    });
+
+    socket.emit(JOIN_LOBBY, { name: name ? name : defaultPlayerName, lobbyId }); // Join lobby by id on server-side
+
+    navigation.navigate("Lobby", { name: name ? name : defaultPlayerName }); // Navigate to LobbyScreen
+  };
+
+  const renderCreateLobbyButton = () => {
+    return (
+      <TouchableOpacity
+        onPress={createLobby}
+        style={[styles.defaultButton, styles.defaultButtonHome]}
+      >
+        <Text style={styles.defaultButtonText}>Create Lobby</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  const renderJoinLobbyButton = () => {
+    return (
+      <TouchableOpacity
+        onPress={joinLobby}
+        disabled={!selectedLobbyId} // Disabled if a lobby hasn't been selected yet
+        style={determineJoinLobbyButtonStyle()}
+      >
+        <Text style={styles.defaultButtonText}>Join Lobby</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  const renderRefreshLobbyListButton = () => {
+    return (
+      <TouchableOpacity
+        onPress={fetchLobbyList}
+        style={[styles.defaultButton, styles.defaultButtonHome]}
+      >
+        <Text style={styles.defaultButtonText}>Refresh List</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  const determineJoinLobbyButtonStyle = () => {
+    let style = [styles.defaultButton, styles.defaultButtonHome];
+
+    if (!selectedLobbyId) {
+      style.push(styles.disabledButton);
+    }
+
+    return style;
   };
 
   return (
@@ -57,12 +122,14 @@ export default function HomeScreen({ navigation }) {
       behavior="padding"
       style={{ flex: 1, flexDirection: "column" }}
     >
+      <NavigationEvents onDidFocus={fetchLobbyList} />
       <View
         style={{
-          flex: 29,
           flexDirection: "column",
           justifyContent: "center",
+          alignItems: "center",
           backgroundColor: "#EAE7F2",
+          height: "100%",
         }}
       >
         <View
@@ -70,10 +137,8 @@ export default function HomeScreen({ navigation }) {
             flexDirection: "row",
             justifyContent: "space-around",
             alignItems: "center",
-            padding: 25,
           }}
         >
-          <Text style={{ fontSize: 25 }}>Name:</Text>
           <TextInput
             style={{
               fontSize: 18,
@@ -86,25 +151,18 @@ export default function HomeScreen({ navigation }) {
               textAlign: "center",
             }}
             onChangeText={(text) => {
-              setName(text);
+              if (text.length <= 10) {
+                setName(text);
+              }
             }}
             value={name}
+            placeholder="Enter name..."
           />
         </View>
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <TouchableOpacity
-            style={{
-              alignItems: "center",
-              backgroundColor: "white",
-              borderWidth: 2,
-              borderRadius: 10,
-              width: 250,
-            }}
-            onPress={joinLobby}
-          >
-            <Text style={{ fontSize: 25 }}>Join Lobby</Text>
-          </TouchableOpacity>
-        </View>
+        <LobbyList {...{ lobbyList, selectedLobbyId, setSelectedLobbyId }} />
+        {renderCreateLobbyButton()}
+        {renderJoinLobbyButton()}
+        {renderRefreshLobbyListButton()}
       </View>
     </KeyboardAvoidingView>
   );
@@ -167,7 +225,7 @@ export function LobbyScreen({ navigation }) {
 
   // componentDidMount
   useEffect(() => {
-    socket.emit(FETCH_TEAMS);
+    socket.emit(FETCH_LOBBY);
     subscribeToGameStart();
     subscribeToLobbyUpdates();
   }, []);
@@ -196,38 +254,14 @@ export function LobbyScreen({ navigation }) {
   const renderGameButton = () => {
     if (isGameInProgress) {
       return (
-        <TouchableOpacity
-          onPress={joinGame}
-          style={{
-            borderRadius: 10,
-            margin: 16,
-            borderWidth: 2,
-            paddingHorizontal: 16,
-            paddingVertical: 4,
-            backgroundColor: "white",
-          }}
-        >
-          <Text style={{ fontSize: 20, width: slotWidth, textAlign: "center" }}>
-            Join Game
-          </Text>
+        <TouchableOpacity onPress={joinGame} style={styles.defaultButton}>
+          <Text style={styles.defaultButtonText}>Join Game</Text>
         </TouchableOpacity>
       );
     } else {
       return (
-        <TouchableOpacity
-          onPress={startGame}
-          style={{
-            borderRadius: 10,
-            margin: 16,
-            borderWidth: 2,
-            paddingHorizontal: 16,
-            paddingVertical: 4,
-            backgroundColor: "white",
-          }}
-        >
-          <Text style={{ fontSize: 20, width: slotWidth, textAlign: "center" }}>
-            Start Game
-          </Text>
+        <TouchableOpacity onPress={startGame} style={styles.defaultButton}>
+          <Text style={styles.defaultButtonText}>Start Game</Text>
         </TouchableOpacity>
       );
     }
@@ -235,19 +269,8 @@ export function LobbyScreen({ navigation }) {
 
   const renderResetLobbyButton = () => {
     return (
-      <TouchableOpacity
-        onPress={resetLobby}
-        style={{
-          borderRadius: 10,
-          borderWidth: 2,
-          paddingHorizontal: 16,
-          paddingVertical: 4,
-          backgroundColor: "white",
-        }}
-      >
-        <Text style={{ fontSize: 20, width: slotWidth, textAlign: "center" }}>
-          Reset Lobby
-        </Text>
+      <TouchableOpacity onPress={resetLobby} style={styles.defaultButton}>
+        <Text style={styles.defaultButtonText}>Reset Lobby</Text>
       </TouchableOpacity>
     );
   };
@@ -257,17 +280,25 @@ export function LobbyScreen({ navigation }) {
       <View style={styles.centerItems}>
         <TouchableOpacity
           onPress={handleLeaveGame}
-          style={styles.testingButton}
+          style={styles.defaultButton}
         >
-          <Text style={styles.testingButtonText}>Leave Game</Text>
+          <Text style={styles.defaultButtonText}>Leave Game</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={navigateToGameScreen}
-          style={styles.testingButton}
+          style={styles.defaultButton}
         >
-          <Text style={styles.testingButtonText}>Back to Game</Text>
+          <Text style={styles.defaultButtonText}>Back to Game</Text>
         </TouchableOpacity>
       </View>
+    );
+  };
+
+  const renderBackToHomeButton = () => {
+    return (
+      <TouchableOpacity onPress={handleLeaveGame} style={styles.defaultButton}>
+        <Text style={styles.defaultButtonText}>Back to Home</Text>
+      </TouchableOpacity>
     );
   };
 
@@ -437,64 +468,34 @@ export function LobbyScreen({ navigation }) {
           >
             {listBlueItems}
           </View>
-          {/* <Text
-            style={{ fontSize: 25 }}
-            onPress={() => navigation.navigate("Test")}
-          >
-            Touch for Test
-          </Text> */}
           {renderGameButton()}
           {renderResetLobbyButton()}
+          {renderBackToHomeButton()}
         </View>
       </View>
     );
   }
 }
 
-export function TestScreen({ navigation }) {
-  const [buttonPressed, setButtonPressed] = React.useState(false);
-  const pressButton = (buttonPressed) => {
-    setButtonPressed(true);
-  };
-  return (
-    <View style={{ flex: 1 }}>
-      <Clues canEdit={false} />
-      <Clues canEdit={true} />
-      <Text>{"\n"}</Text>
-      <CardsLeft redLeft={6} blueLeft={3} canEnd={true} />
-      <CardsLeft redLeft={3} blueLeft={4} canEnd={false} />
-      <TouchableOpacity
-        style={{ backgroundColor: "green" }}
-        onPress={(buttonPressed) => {
-          pressButton(buttonPressed);
-        }}
-      >
-        <Text>Touch for Snack</Text>
-      </TouchableOpacity>
-      <SnackBars
-        visible={buttonPressed}
-        setVisible={setButtonPressed}
-        correct={true}
-        number={1}
-      />
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
-  testingButton: {
-    borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 25,
-    width: 150,
-    padding: 10,
-    marginTop: 5,
-  },
-  testingButtonText: {
-    textAlign: "center",
-  },
   centerItems: {
     alignItems: "center",
     justifyContent: "center",
+  },
+  defaultButton: {
+    borderRadius: 10,
+    borderWidth: 2,
+    marginTop: 16,
+    width: 175,
+    paddingVertical: 4,
+    backgroundColor: "white",
+  },
+  defaultButtonText: {
+    fontSize: 20,
+    textAlign: "center",
+  },
+  defaultButtonHome: { width: 250, marginTop: 0, marginBottom: 8 },
+  disabledButton: {
+    backgroundColor: "lightgray",
   },
 });

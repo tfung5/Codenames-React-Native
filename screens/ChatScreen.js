@@ -1,17 +1,9 @@
 /**
- * Credit to https://github.com/FaridSafi/react-native-gifted-chat/issues/1272
+ * Credit: https://github.com/FaridSafi/react-native-gifted-chat/issues/1272
  * for help fixing the keyboard hiding GiftedChat input
  */
 
 import React from "react";
-import {
-  StyleSheet,
-  Image,
-  Text,
-  TextInput,
-  View,
-  AsyncStorage,
-} from "react-native";
 import { NavigationActions } from "react-navigation";
 
 import CombinedContext from "../components/CombinedContext";
@@ -20,11 +12,11 @@ import ProvideCombinedContext from "../components/ProvideCombinedContext";
 import { GiftedChat } from "react-native-gifted-chat";
 import {
   CHAT_MESSAGE,
-  GET_PLAYER_INFO,
-  UPDATE_PLAYER_INFO,
+  FETCH_PLAYER_INFO,
   GET_MESSAGES,
   SAVE_LATEST_TIME,
-  UPDATE_NOTIFICATION
+  UPDATE_NOTIFICATION,
+  UPDATE_PLAYER_INFO,
 } from "../constants/Actions";
 
 class ChatScreen extends React.Component {
@@ -60,7 +52,7 @@ class ChatScreen extends React.Component {
 
   updateTimeOfLastReadMessage = () => {
     this.context.GameContext.game.timeOfLastReadMessage = Date.now();
-  }
+  };
 
   runSetup = async () => {
     await this.saveSocket();
@@ -112,7 +104,7 @@ class ChatScreen extends React.Component {
   };
 
   getPlayerInfo = () => {
-    this.socket.emit(GET_PLAYER_INFO);
+    this.socket.emit(FETCH_PLAYER_INFO);
   };
 
   subscribeToPlayerUpdates = () => {

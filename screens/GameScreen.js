@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Keyboard, Text, TouchableOpacity, View, Image } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-// https://stackoverflow.com/questions/48018084/componentdidmount-function-is-not-called-after-navigation
+// Credit: https://stackoverflow.com/questions/48018084/componentdidmount-function-is-not-called-after-navigation
 import { NavigationActions, NavigationEvents } from "react-navigation";
 
 import CombinedContext from "../components/CombinedContext";
@@ -21,8 +21,8 @@ import {
   CHOOSE_CARD,
   CHOOSE_CARD_RESPONSE,
   END_TURN,
-  GET_GAME,
-  GET_PLAYER_INFO,
+  FETCH_GAME,
+  FETCH_PLAYER_INFO,
   LOAD_PRESET_BOARD,
   RESTART_GAME,
   UPDATE_GAME,
@@ -156,11 +156,11 @@ class GameScreen extends React.Component {
   };
 
   getGame = () => {
-    this.socket.emit(GET_GAME);
+    this.socket.emit(FETCH_GAME);
   };
 
   getPlayerInfo = () => {
-    this.socket.emit(GET_PLAYER_INFO);
+    this.socket.emit(FETCH_PLAYER_INFO);
   };
 
   loadPresetBoard = () => {
@@ -236,23 +236,15 @@ class GameScreen extends React.Component {
       clue,
       isSnackbarVisible,
       isGuessCorrect,
-      timeOfLatestMessage,
+      hasClueBeenSet,
     } = this.state;
     const { name, team, role } = player;
 
     const gameOver = (endedGame, blueTurn) => {
       if (endedGame === BLUE || endedGame === RED) {
-        return (
-          <>
-            <Winner blueTurn={endedGame} />
-          </>
-        );
+        return <Winner blueTurn={endedGame} />;
       }
-      return (
-        <>
-          <CurrentTurn blueTurn={blueTurn} />
-        </>
-      );
+      return <CurrentTurn blueTurn={blueTurn} />;
     };
 
     return (
@@ -276,7 +268,9 @@ class GameScreen extends React.Component {
             chooseCard={this.chooseCard}
           />
         </View>
-        <Clues {...{ clue, player, currentTeam, board, winningTeam }} />
+        <Clues
+          {...{ clue, player, currentTeam, board, winningTeam, hasClueBeenSet }}
+        />
         {clue && clue.word && clue.number >= 0 && (
           <Text style={styles.optionsTitleText}>
             Number of Guesses Remaining: {guessCounter}

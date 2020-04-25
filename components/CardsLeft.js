@@ -1,29 +1,27 @@
-import React, { Component } from "react";
-import { TouchableOpacity, Image, Text, TextInput, View } from "react-native";
+import React from "react";
+import { TouchableOpacity, Text, View } from "react-native";
 
 export default ({ redLeft, blueLeft, canEnd }) => {
   const hidden = (canEnd) => {
     if (canEnd === false) {
-      return <>{null}</>;
+      return null;
     }
     return (
-      <>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "white",
-            borderColor: "red",
-            borderRadius: 10,
-            borderWidth: 2,
-            alignItems: "center",
-            justifyContent: "center",
-            margin: 10,
-            paddingHorizontal: 10,
-            paddingVertical: 2,
-          }}
-        >
-          <Text style={{ color: "red", fontSize: 18 }}>End Turn</Text>
-        </TouchableOpacity>
-      </>
+      <TouchableOpacity
+        style={{
+          backgroundColor: "white",
+          borderColor: "red",
+          borderRadius: 10,
+          borderWidth: 2,
+          alignItems: "center",
+          justifyContent: "center",
+          margin: 10,
+          paddingHorizontal: 10,
+          paddingVertical: 2,
+        }}
+      >
+        <Text style={{ color: "red", fontSize: 18 }}>End Turn</Text>
+      </TouchableOpacity>
     );
   };
   return (
