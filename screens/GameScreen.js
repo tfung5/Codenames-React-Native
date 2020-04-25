@@ -236,6 +236,7 @@ class GameScreen extends React.Component {
       clue,
       isSnackbarVisible,
       isGuessCorrect,
+      hasClueBeenSet,
     } = this.state;
     const { name, team, role } = player;
 
@@ -267,7 +268,9 @@ class GameScreen extends React.Component {
             chooseCard={this.chooseCard}
           />
         </View>
-        <Clues {...{ clue, player, currentTeam, board, winningTeam }} />
+        <Clues
+          {...{ clue, player, currentTeam, board, winningTeam, hasClueBeenSet }}
+        />
         {clue && clue.word && clue.number >= 0 && (
           <Text style={styles.optionsTitleText}>
             Number of Guesses Remaining: {guessCounter}
