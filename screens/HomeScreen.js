@@ -145,7 +145,7 @@ export default function HomeScreen({ navigation }) {
               }
             }}
             value={name}
-            placeholder={defaultPlayerName}
+            placeholder="Enter name..."
           />
         </View>
         <LobbyList {...{ lobbyList, selectedLobbyId, setSelectedLobbyId }} />
