@@ -440,12 +440,6 @@ export function LobbyScreen({ navigation }) {
           >
             {listBlueItems}
           </View>
-          {/* <Text
-            style={{ fontSize: 25 }}
-            onPress={() => navigation.navigate("Test")}
-          >
-            Touch for Test
-          </Text> */}
           {renderGameButton()}
           {renderResetLobbyButton()}
           {renderBackToHomeButton()}
@@ -453,36 +447,6 @@ export function LobbyScreen({ navigation }) {
       </View>
     );
   }
-}
-
-export function TestScreen({ navigation }) {
-  const [buttonPressed, setButtonPressed] = React.useState(false);
-  const pressButton = (buttonPressed) => {
-    setButtonPressed(true);
-  };
-  return (
-    <View style={{ flex: 1 }}>
-      <Clues canEdit={false} />
-      <Clues canEdit={true} />
-      <Text>{"\n"}</Text>
-      <CardsLeft redLeft={6} blueLeft={3} canEnd={true} />
-      <CardsLeft redLeft={3} blueLeft={4} canEnd={false} />
-      <TouchableOpacity
-        style={{ backgroundColor: "green" }}
-        onPress={(buttonPressed) => {
-          pressButton(buttonPressed);
-        }}
-      >
-        <Text>Touch for Snack</Text>
-      </TouchableOpacity>
-      <SnackBars
-        visible={buttonPressed}
-        setVisible={setButtonPressed}
-        correct={true}
-        number={1}
-      />
-    </View>
-  );
 }
 
 const styles = StyleSheet.create({
