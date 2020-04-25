@@ -286,10 +286,7 @@ export function LobbyScreen({ navigation }) {
 
   const renderBackToHomeButton = () => {
     return (
-      <TouchableOpacity
-        onPress={navigateToHomeScreen}
-        style={styles.defaultButton}
-      >
+      <TouchableOpacity onPress={handleLeaveGame} style={styles.defaultButton}>
         <Text style={styles.defaultButtonText}>Back to Home</Text>
       </TouchableOpacity>
     );
