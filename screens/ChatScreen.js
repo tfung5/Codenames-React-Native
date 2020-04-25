@@ -1,17 +1,9 @@
 /**
- * Credit to https://github.com/FaridSafi/react-native-gifted-chat/issues/1272
+ * Credit: https://github.com/FaridSafi/react-native-gifted-chat/issues/1272
  * for help fixing the keyboard hiding GiftedChat input
  */
 
 import React from "react";
-import {
-  StyleSheet,
-  Image,
-  Text,
-  TextInput,
-  View,
-  AsyncStorage,
-} from "react-native";
 import { NavigationActions } from "react-navigation";
 
 import CombinedContext from "../components/CombinedContext";

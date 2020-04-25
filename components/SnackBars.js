@@ -1,5 +1,5 @@
 import SnackBar from "react-native-snackbar-component";
-import React, { useEffect } from "react";
+import React from "react";
 
 // Commented here is what is needed before calling SnackBars component
 // const [buttonPressed, setButtonPressed] = React.useState(false)
@@ -33,23 +33,21 @@ export default ({ visible, setVisible, correct, number }) => {
   };
 
   return (
-    <>
-      <SnackBar
-        visible={visible}
-        textMessage={determineMessage(correct, number)}
-        backgroundColor={determineBackgroundColor(correct)}
-        messageColor={"black"}
-        bottom={15}
-        containerStyle={{
-          borderRadius: 10,
-          borderWidth: 0.5,
-          marginLeft: 15,
-          marginRight: 15,
-        }}
-        messageStyle={{
-          textAlign: "center",
-        }}
-      />
-    </>
+    <SnackBar
+      visible={visible}
+      textMessage={determineMessage(correct, number)}
+      backgroundColor={determineBackgroundColor(correct)}
+      messageColor={"black"}
+      bottom={15}
+      containerStyle={{
+        borderRadius: 10,
+        borderWidth: 0.5,
+        marginLeft: 15,
+        marginRight: 15,
+      }}
+      messageStyle={{
+        textAlign: "center",
+      }}
+    />
   );
 };

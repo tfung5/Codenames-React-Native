@@ -61,8 +61,6 @@ const determineCardTextStyle = (card) => {
   return style;
 };
 
-const images = { checkMark: require("../assets/images/check-mark.png") };
-
 export default ({ board, player, currentTeam, chooseCard, winningTeam }) => {
   return (
     <View>

@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, Component } from "react";
+import React, { useEffect, useContext } from "react";
 import { TouchableOpacity, Image, Text, TextInput, View } from "react-native";
 import { SET_CLUE } from "../constants/Actions";
 import { SPYMASTER } from "../constants/Roles";
@@ -66,17 +66,15 @@ export default (props) => {
 
   const hidden = (canEdit) => {
     if (canEdit === false) {
-      return <>{null}</>;
+      return null;
     }
     return (
-      <>
-        <TouchableOpacity onPress={submitClues}>
-          <Image
-            style={{ margin: 4, width: 40, height: 40 }}
-            source={require("../assets/images/play-icon.png")}
-          />
-        </TouchableOpacity>
-      </>
+      <TouchableOpacity onPress={submitClues}>
+        <Image
+          style={{ margin: 4, width: 40, height: 40 }}
+          source={require("../assets/images/play-icon.png")}
+        />
+      </TouchableOpacity>
     );
   };
 

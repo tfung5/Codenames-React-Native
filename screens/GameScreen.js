@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Keyboard, Text, TouchableOpacity, View, Image } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-// https://stackoverflow.com/questions/48018084/componentdidmount-function-is-not-called-after-navigation
+// Credit: https://stackoverflow.com/questions/48018084/componentdidmount-function-is-not-called-after-navigation
 import { NavigationActions, NavigationEvents } from "react-navigation";
 
 import CombinedContext from "../components/CombinedContext";
@@ -236,23 +236,14 @@ class GameScreen extends React.Component {
       clue,
       isSnackbarVisible,
       isGuessCorrect,
-      timeOfLatestMessage,
     } = this.state;
     const { name, team, role } = player;
 
     const gameOver = (endedGame, blueTurn) => {
       if (endedGame === BLUE || endedGame === RED) {
-        return (
-          <>
-            <Winner blueTurn={endedGame} />
-          </>
-        );
+        return <Winner blueTurn={endedGame} />;
       }
-      return (
-        <>
-          <CurrentTurn blueTurn={blueTurn} />
-        </>
-      );
+      return <CurrentTurn blueTurn={blueTurn} />;
     };
 
     return (

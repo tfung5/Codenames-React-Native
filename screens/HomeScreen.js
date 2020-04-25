@@ -1,24 +1,14 @@
 import "react-native-gesture-handler";
-import * as WebBrowser from "expo-web-browser";
 import React, { useContext, useEffect } from "react";
 import {
-  Image,
-  Platform,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
   TextInput,
-  Button,
-  Keyboard,
   KeyboardAvoidingView,
 } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationActions, NavigationEvents } from "react-navigation";
-import Clues from "../components/Clues";
-import CardsLeft from "../components/CardsLeft";
 import SocketContext from "../components/SocketContext";
 import GameContext from "../components/GameContext";
 import {
@@ -35,7 +25,6 @@ import {
   UPDATE_LOBBY_LIST,
 } from "../constants/Actions";
 import { RED, BLUE } from "../constants/Cards";
-import SnackBars from "../components/SnackBars";
 import LobbyList from "../components/LobbyList";
 
 export default function HomeScreen({ navigation }) {
