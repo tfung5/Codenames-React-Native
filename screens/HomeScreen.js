@@ -51,6 +51,7 @@ export default function HomeScreen({ navigation }) {
   const [lobbyList, setLobbyList] = React.useState({});
   const [selectedLobbyId, setSelectedLobbyId] = React.useState(null);
   const [name, setName] = React.useState("");
+  const defaultPlayerName = "Player";
 
   const fetchLobbyList = () => {
     socket.emit(FETCH_LOBBY_LIST);
@@ -71,9 +72,9 @@ export default function HomeScreen({ navigation }) {
       lobbyId,
     });
 
-    socket.emit(JOIN_LOBBY, { name, lobbyId }); // Join lobby by id on server-side
+    socket.emit(JOIN_LOBBY, { name: name ? name : defaultPlayerName, lobbyId }); // Join lobby by id on server-side
 
-    navigation.navigate("Lobby", { name }); // Navigate to LobbyScreen
+    navigation.navigate("Lobby", { name: name ? name : defaultPlayerName }); // Navigate to LobbyScreen
   };
 
   return (
@@ -113,6 +114,7 @@ export default function HomeScreen({ navigation }) {
               setName(text);
             }}
             value={name}
+            placeholder={defaultPlayerName}
           />
         </View>
         <LobbyList {...{ lobbyList, selectedLobbyId, setSelectedLobbyId }} />
