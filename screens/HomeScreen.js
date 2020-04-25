@@ -128,7 +128,6 @@ export default function HomeScreen({ navigation }) {
             alignItems: "center",
           }}
         >
-          <Text style={{ fontSize: 25 }}>Name:</Text>
           <TextInput
             style={{
               fontSize: 18,
