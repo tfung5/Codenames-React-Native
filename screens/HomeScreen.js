@@ -263,6 +263,17 @@ export function LobbyScreen({ navigation }) {
     );
   };
 
+  const renderBackToHomeButton = () => {
+    return (
+      <TouchableOpacity
+        onPress={navigateToHomeScreen}
+        style={styles.defaultButton}
+      >
+        <Text style={styles.defaultButtonText}>Back to Home</Text>
+      </TouchableOpacity>
+    );
+  };
+
   const listRedItems = redTeam.map((buttonnum, index) => {
     let slotColor = "lightgrey";
     let slotName = "Player Slot";
@@ -437,6 +448,7 @@ export function LobbyScreen({ navigation }) {
           </Text> */}
           {renderGameButton()}
           {renderResetLobbyButton()}
+          {renderBackToHomeButton()}
         </View>
       </View>
     );
