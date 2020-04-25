@@ -112,7 +112,9 @@ export default function HomeScreen({ navigation }) {
               textAlign: "center",
             }}
             onChangeText={(text) => {
-              setName(text);
+              if (text.length <= 10) {
+                setName(text);
+              }
             }}
             value={name}
             placeholder={defaultPlayerName}
