@@ -63,15 +63,15 @@ export default function HomeScreen({ navigation }) {
   };
 
   const joinLobby = () => {
-    const lobby = 7; // TODO: Get the lobby number from the onPress event's value
+    const lobbyId = selectedLobbyId;
 
-    // Store the current lobby number in GameContext
+    // Store the current lobby id in GameContext
     setGame({
       ...game,
-      lobby,
+      lobbyId,
     });
 
-    socket.emit(JOIN_LOBBY, { name, lobby }); // Join lobby on server-side
+    socket.emit(JOIN_LOBBY, { name, lobbyId }); // Join lobby by id on server-side
 
     navigation.navigate("Lobby", { name }); // Navigate to LobbyScreen
   };
