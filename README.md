@@ -1,3 +1,8 @@
 # Codenames React Native
 
-## Members
+## Installation & Running
+
+```
+npm i
+npm start
+```
