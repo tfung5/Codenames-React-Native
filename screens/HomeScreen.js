@@ -88,7 +88,8 @@ export default function HomeScreen({ navigation }) {
     return (
       <TouchableOpacity
         onPress={joinLobby}
-        style={[styles.defaultButton, styles.defaultButtonHome]}
+        disabled={!selectedLobbyId} // Disabled if a lobby hasn't been selected yet
+        style={determineJoinLobbyButtonStyle()}
       >
         <Text style={styles.defaultButtonText}>Join Lobby</Text>
       </TouchableOpacity>
@@ -104,6 +105,16 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.defaultButtonText}>Refresh List</Text>
       </TouchableOpacity>
     );
+  };
+
+  const determineJoinLobbyButtonStyle = () => {
+    let style = [styles.defaultButton, styles.defaultButtonHome];
+
+    if (!selectedLobbyId) {
+      style.push(styles.disabledButton);
+    }
+
+    return style;
   };
 
   return (
@@ -484,4 +495,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   defaultButtonHome: { width: 250, marginTop: 0, marginBottom: 8 },
+  disabledButton: {
+    backgroundColor: "lightgray",
+  },
 });
