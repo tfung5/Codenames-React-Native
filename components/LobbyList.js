@@ -8,8 +8,14 @@ export default ({ lobbyList, selectedLobbyId, setSelectedLobbyId }) => {
   const determineLobbyStyle = (lobby) => {
     let style = [styles.lobby];
 
-    if (lobby.id === selectedLobbyId) {
+    const { id, playerCount, maxPlayers } = lobby;
+
+    if (id === selectedLobbyId) {
       style.push(styles.selectedLobby);
+    }
+
+    if (playerCount >= maxPlayers) {
+      style.push(styles.fullLobby);
     }
 
     return style;
@@ -91,5 +97,8 @@ const styles = {
   },
   noLobbiesFoundText: {
     fontSize: 24,
+  },
+  fullLobby: {
+    backgroundColor: "lightgray",
   },
 };
