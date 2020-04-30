@@ -68,9 +68,21 @@ export default function HomeScreen({ navigation }) {
       lobbyId,
     });
 
-    socket.emit(JOIN_LOBBY, { name: name ? name : defaultPlayerName, lobbyId }); // Join lobby by id on server-side
-
-    navigation.navigate("Lobby", { name: name ? name : defaultPlayerName }); // Navigate to LobbyScreen
+    socket.emit(
+      JOIN_LOBBY,
+      { name: name ? name : defaultPlayerName, lobbyId },
+      (res) => {
+        // res is expected to be true if there is space available in the lobby
+        if (res) {
+          navigation.navigate("Lobby", {
+            name: name ? name : defaultPlayerName,
+          }); // Navigate to LobbyScreen
+        } else {
+          fetchLobbyList(); // Unable to join, so get the latest lobbyList to see that it's full
+          setSelectedLobbyId(null); // Clear selectedLobbyId if user selected one already
+        }
+      }
+    ); // Join lobby by id on server-side
   };
 
   const renderCreateLobbyButton = () => {
