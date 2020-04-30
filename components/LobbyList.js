@@ -37,16 +37,16 @@ export default ({ lobbyList, selectedLobbyId, setSelectedLobbyId }) => {
     } else {
       return lobbyIds.map((lobbyId) => {
         const lobby = lobbyList[lobbyId];
-        const playerCount = Object.keys(lobby.playerList).length;
-
+        const { id, name, playerCount, maxPlayers } = lobby;
         return (
-          <React.Fragment key={lobby.id}>
+          <React.Fragment key={id}>
             <TouchableOpacity
               style={determineLobbyStyle(lobby)}
-              onPress={() => setSelectedLobbyId(lobby.id)}
+              disabled={playerCount >= maxPlayers}
+              onPress={() => setSelectedLobbyId(id)}
             >
               <Text style={determineLobbyTextStyle(lobby)}>
-                {lobby.name} ({playerCount}/{lobby.maxPlayers})
+                {name} ({playerCount}/{maxPlayers})
               </Text>
             </TouchableOpacity>
             <Divider />
