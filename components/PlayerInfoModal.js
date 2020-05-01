@@ -10,7 +10,7 @@ import {
 } from "react-native";
 
 //Get player team, role, and name as prop
-export default ({visible, setVisible, number, playerInfo}) => {
+export default ({visible, setVisible, playerInfo}) => {
 
   const listRedPlayers = () => {
     var redNames = [];
@@ -94,7 +94,7 @@ export default ({visible, setVisible, number, playerInfo}) => {
           </View>
        </View>
       </Modal>
-);
+  );
 };
 
 const styles = StyleSheet.create({

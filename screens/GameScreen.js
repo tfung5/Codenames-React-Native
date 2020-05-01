@@ -69,7 +69,6 @@ class GameScreen extends React.Component {
       "keyboardDidHide",
       this._keyboardDidHide
     );
-    console.log (this.state.isModalVisible);
   };
 
   componentWillUnmount = () => {
@@ -138,9 +137,8 @@ class GameScreen extends React.Component {
        * Payload includes:
        * currentTeam, board, redCardCounter,
        * blueCardCounter, guessCounter, clue,
-       * winningTeam, timeOfLatestMessage
+       * winningTeam, timeOfLatestMessage, playerList
        */
-       console.log(this.state.playerList);
     });
   };
 
@@ -336,7 +334,6 @@ class GameScreen extends React.Component {
           <PlayerInfoModal
             visible={isModalVisible}
             setVisible={this.setModalVisible}
-            number={5}
             playerInfo={playerList}
           />
           )}
