@@ -1,7 +1,6 @@
 import React from "react";
 import { Keyboard, Text, TouchableOpacity, View, Image } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
 // Credit: https://stackoverflow.com/questions/48018084/componentdidmount-function-is-not-called-after-navigation
 import { NavigationActions, NavigationEvents } from "react-navigation";
 
@@ -16,6 +15,7 @@ import Clues from "../components/Clues";
 import Winner from "../components/Winner";
 import CurrentTurn from "../components/CurrentTurn";
 import SnackBars from "../components/SnackBars";
+import PlayerInfoModal from "../components/PlayerInfoModal";
 
 import {
   CHOOSE_CARD,
@@ -44,9 +44,11 @@ class GameScreen extends React.Component {
       guessCounter: 0,
       winningTeam: "",
       isSnackbarVisible: false,
+      isModalVisible: false,
       isGuessCorrect: false,
       keyboardOffset: 0,
       timeOfLatestMessage: 0,
+      playerList: [],
     };
 
     this.state = this.initialState;
@@ -67,6 +69,7 @@ class GameScreen extends React.Component {
       "keyboardDidHide",
       this._keyboardDidHide
     );
+    console.log (this.state.isModalVisible);
   };
 
   componentWillUnmount = () => {
@@ -137,6 +140,7 @@ class GameScreen extends React.Component {
        * blueCardCounter, guessCounter, clue,
        * winningTeam, timeOfLatestMessage
        */
+       console.log(this.state.playerList);
     });
   };
 
@@ -189,6 +193,18 @@ class GameScreen extends React.Component {
     });
   };
 
+  setModalVisible = (value) => {
+    this.setState({
+      isModalVisible: value,
+    });
+  };
+
+  renderModal = () => {
+    this.setState({
+      isModalVisible: true,
+    });
+  }
+
   // Sets isGuessCorrect to either true or false, depending on the response
   setGuessCorrect = (value) => {
     this.setState({
@@ -235,8 +251,10 @@ class GameScreen extends React.Component {
       winningTeam,
       clue,
       isSnackbarVisible,
+      isModalVisible,
       isGuessCorrect,
       hasClueBeenSet,
+      playerList
     } = this.state;
     const { name, team, role } = player;
 
@@ -304,7 +322,25 @@ class GameScreen extends React.Component {
             {this.renderChatNotificationIfNeeded()}
             <Text style={styles.testingButtonText}>Open Chat</Text>
           </TouchableOpacity>
+          {isModalVisible === false && (
+          <TouchableOpacity
+            onPress={this.renderModal} // Should open modal
+            style={styles.testingButton}
+          >
+            <Text style={styles.testingButtonText}>Show Players in Game</Text>
+          </TouchableOpacity>
+        )}
         </View>
+        <View style={styles.infoModal}>
+          {isModalVisible && (
+          <PlayerInfoModal
+            visible={isModalVisible}
+            setVisible={this.setModalVisible}
+            number={5}
+            playerInfo={playerList}
+          />
+          )}
+          </View>
         <SnackBars
           visible={isSnackbarVisible}
           setVisible={this.setSnackbarVisible}
@@ -368,4 +404,9 @@ const styles = {
   boardWrapper: {
     marginVertical: 10,
   },
+  infoModal:{
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 5,
+  }
 };
