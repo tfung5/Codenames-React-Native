@@ -1,7 +1,6 @@
 import React from "react";
 import { Keyboard, Text, TouchableOpacity, View, Image } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
 // Credit: https://stackoverflow.com/questions/48018084/componentdidmount-function-is-not-called-after-navigation
 import { NavigationActions, NavigationEvents } from "react-navigation";
 
@@ -16,6 +15,7 @@ import Clues from "../components/Clues";
 import Winner from "../components/Winner";
 import CurrentTurn from "../components/CurrentTurn";
 import SnackBars from "../components/SnackBars";
+import PlayerInfoModal from "../components/PlayerInfoModal";
 
 import {
   CHOOSE_CARD,
@@ -44,9 +44,11 @@ class GameScreen extends React.Component {
       guessCounter: 0,
       winningTeam: "",
       isSnackbarVisible: false,
+      isModalVisible: false,
       isGuessCorrect: false,
       keyboardOffset: 0,
       timeOfLatestMessage: 0,
+      playerList: [],
     };
 
     this.state = this.initialState;
@@ -135,7 +137,7 @@ class GameScreen extends React.Component {
        * Payload includes:
        * currentTeam, board, redCardCounter,
        * blueCardCounter, guessCounter, clue,
-       * winningTeam, timeOfLatestMessage
+       * winningTeam, timeOfLatestMessage, playerList
        */
     });
   };
@@ -145,6 +147,7 @@ class GameScreen extends React.Component {
       this.setState({
         player,
       });
+      console.log(this.state.player.name)
     });
   };
 
@@ -186,6 +189,12 @@ class GameScreen extends React.Component {
   setSnackbarVisible = (value) => {
     this.setState({
       isSnackbarVisible: value,
+    });
+  };
+
+  setModalVisible = (value) => {
+    this.setState({
+      isModalVisible: value,
     });
   };
 
@@ -235,8 +244,10 @@ class GameScreen extends React.Component {
       winningTeam,
       clue,
       isSnackbarVisible,
+      isModalVisible,
       isGuessCorrect,
       hasClueBeenSet,
+      playerList
     } = this.state;
     const { name, team, role } = player;
 
@@ -255,7 +266,7 @@ class GameScreen extends React.Component {
         <NavigationEvents onDidFocus={this.componentDidMount} />
         {gameOver(this.state.winningTeam, currentTeam)}
         <Text style={styles.optionsTitleText}>
-          You are on {team === RED ? "Red Team" : "Blue Team"}
+          {player.name}, you are on the {team === RED ? "Red Team" : "Blue Team"}
         </Text>
         <CardsLeft
           redLeft={redCardCounter}
@@ -304,6 +315,23 @@ class GameScreen extends React.Component {
             {this.renderChatNotificationIfNeeded()}
             <Text style={styles.testingButtonText}>Open Chat</Text>
           </TouchableOpacity>
+          {isModalVisible === false && (
+          <TouchableOpacity
+            onPress={() => this.setModalVisible(true)} // Should open modal
+            style={styles.testingButton}
+          >
+            <Text style={styles.testingButtonText}>Show Players in Game</Text>
+          </TouchableOpacity>
+        )}
+        </View>
+        <View style={styles.infoModal}>
+          {isModalVisible && (
+          <PlayerInfoModal
+            visible={isModalVisible}
+            setVisible={this.setModalVisible}
+            playerInfo={playerList}
+          />
+          )}
         </View>
         <SnackBars
           visible={isSnackbarVisible}
@@ -368,4 +396,9 @@ const styles = {
   boardWrapper: {
     marginVertical: 10,
   },
+  infoModal:{
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 5,
+  }
 };
