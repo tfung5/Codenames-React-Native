@@ -147,6 +147,7 @@ class GameScreen extends React.Component {
       this.setState({
         player,
       });
+      console.log(this.state.player.name)
     });
   };
 
@@ -265,7 +266,7 @@ class GameScreen extends React.Component {
         <NavigationEvents onDidFocus={this.componentDidMount} />
         {gameOver(this.state.winningTeam, currentTeam)}
         <Text style={styles.optionsTitleText}>
-          You are on {team === RED ? "Red Team" : "Blue Team"}
+          {player.name}, you are on the {team === RED ? "Red Team" : "Blue Team"}
         </Text>
         <CardsLeft
           redLeft={redCardCounter}
