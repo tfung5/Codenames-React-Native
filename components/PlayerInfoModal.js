@@ -137,7 +137,6 @@ const styles = StyleSheet.create({
   },
   modalBorder: {
     borderWidth: 0,
-    borderColor:'none'
   },
   chartText:{
     marginLeft: 8,
