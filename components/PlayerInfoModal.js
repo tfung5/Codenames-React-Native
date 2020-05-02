@@ -87,7 +87,7 @@ export default ({visible, setVisible, playerInfo}) => {
             </View>
             <TouchableHighlight
              style={styles.openButton}
-             onPress={() => {setVisible(!visible);}}
+             onPress={() => setVisible(false)}
             >
             <Text style={styles.textStyle}>Close</Text>
             </TouchableHighlight>

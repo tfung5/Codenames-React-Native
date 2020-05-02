@@ -197,12 +197,6 @@ class GameScreen extends React.Component {
     });
   };
 
-  renderModal = () => {
-    this.setState({
-      isModalVisible: true,
-    });
-  }
-
   // Sets isGuessCorrect to either true or false, depending on the response
   setGuessCorrect = (value) => {
     this.setState({
@@ -322,7 +316,7 @@ class GameScreen extends React.Component {
           </TouchableOpacity>
           {isModalVisible === false && (
           <TouchableOpacity
-            onPress={this.renderModal} // Should open modal
+            onPress={() => this.setModalVisible(true)} // Should open modal
             style={styles.testingButton}
           >
             <Text style={styles.testingButtonText}>Show Players in Game</Text>
@@ -337,7 +331,7 @@ class GameScreen extends React.Component {
             playerInfo={playerList}
           />
           )}
-          </View>
+        </View>
         <SnackBars
           visible={isSnackbarVisible}
           setVisible={this.setSnackbarVisible}
