@@ -18,12 +18,12 @@ export default ({visible, setVisible, playerInfo}) => {
     let items = Object.values(playerInfo);
     for (const key of items) {
       if (key.team === "RED"){
-        redNames.push(<Text style={styles.chartText}>{key.name}</Text>)
+        redNames.push(<Text style={styles.chartText} key={key.id}>{key.name}</Text>)
         if (key.role === "SPYMASTER"){
-          redRoles.push(<Text style={styles.chartText}>Spymaster</Text>)
+          redRoles.push(<Text style={styles.chartText} key={key.id}>Spymaster</Text>)
         }
         else if (key.role === "FIELD_OPERATIVE"){
-          redRoles.push(<Text style={styles.chartText}>Player</Text>)
+          redRoles.push(<Text style={styles.chartText} key={key.id}>Player</Text>)
         }
       }
     }
@@ -45,12 +45,12 @@ export default ({visible, setVisible, playerInfo}) => {
     let items = Object.values(playerInfo);
     for (const key of items) {
       if (key.team === "BLUE"){
-        blueNames.push(<Text style={styles.chartText}>{key.name}</Text>)
+        blueNames.push(<Text style={styles.chartText} key={key.id}>{key.name}</Text>)
         if (key.role === "SPYMASTER"){
-          blueRoles.push(<Text style={styles.chartText}>Spymaster</Text>)
+          blueRoles.push(<Text style={styles.chartText} key={key.id}>Spymaster</Text>)
         }
         else if (key.role === "FIELD_OPERATIVE"){
-          blueRoles.push(<Text style={styles.chartText}>Player</Text>)
+          blueRoles.push(<Text style={styles.chartText} key={key.id}>Player</Text>)
         }
       }
     }
