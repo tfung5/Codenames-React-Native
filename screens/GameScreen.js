@@ -147,7 +147,6 @@ class GameScreen extends React.Component {
       this.setState({
         player,
       });
-      console.log(this.state.player.name)
     });
   };
 
