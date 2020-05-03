@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { TouchableOpacity, Image, Text, TextInput, View } from "react-native";
-import { SET_CLUE } from "../constants/Actions";
+import {SET_CLUE} from "../constants/Actions";
 import { SPYMASTER } from "../constants/Roles";
 import SocketContext from "../components/SocketContext";
 
@@ -17,6 +17,7 @@ export default (props) => {
   const { socket } = useContext(SocketContext);
   const [word, setWord] = React.useState("");
   const [number, setNumber] = React.useState("");
+  const [resubmitMsg, setResubmitMsg] = React.useState("");
   const [canEdit, setCanEdit] = React.useState(false);
 
   // Executes whenever clue is updated
@@ -60,8 +61,23 @@ export default (props) => {
   };
 
   const submitClues = () => {
-    const payload = { word, number: parseInt(number) };
-    socket.emit(SET_CLUE, payload);
+    if (isNaN(parseInt(number)) && word === "") {
+      setResubmitMsg("Enter a clue word and number");
+    }
+    else if (isNaN(parseInt(number))) {
+      setResubmitMsg("Enter a clue number");
+    }
+    else if (word === ""){
+      setResubmitMsg("Enter a clue word");
+    }
+    else if (parseInt(number) < 0){
+      setResubmitMsg("Enter a clue number that is 0 or greater");
+    }
+    else{
+      const payload = { word, number: parseInt(number)};
+      setResubmitMsg("");
+      socket.emit(SET_CLUE, payload);
+    }
   };
 
   const hidden = (canEdit) => {
@@ -79,52 +95,60 @@ export default (props) => {
   };
 
   return (
-    <View
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Text style={{ margin: 4, fontSize: 25 }}>Clue:</Text>
-      <TextInput
-        editable={canEdit}
+    <View>
+      <Text style={{
+        textAlign: "center",
+        fontSize: 15
+      }}>
+      {resubmitMsg}
+      </Text>
+      <View
         style={{
-          fontSize: 18,
-          margin: 4,
-          backgroundColor: "white",
-          borderColor: "lightskyblue",
-          padding: 5,
-          borderWidth: 2,
-          borderRadius: 10,
-          width: 180,
-          textAlign: "center",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
         }}
-        onChangeText={(text) => {
-          setWord(text);
-        }}
-        value={word}
-      />
-      <TextInput
-        editable={canEdit}
-        style={{
-          fontSize: 18,
-          margin: 4,
-          backgroundColor: "white",
-          borderColor: "lightskyblue",
-          padding: 5,
-          borderWidth: 2,
-          borderRadius: 10,
-          width: 50,
-          textAlign: "center",
-        }}
-        keyboardType={"numeric"}
-        onChangeText={(text) => {
-          setNumber(text);
-        }}
-        value={number}
-      />
-      {hidden(canEdit)}
+      >
+        <Text style={{ margin: 4, fontSize: 25 }}>Clue:</Text>
+        <TextInput
+          editable={canEdit}
+          style={{
+            fontSize: 18,
+            margin: 4,
+            backgroundColor: "white",
+            borderColor: "lightskyblue",
+            padding: 5,
+            borderWidth: 2,
+            borderRadius: 10,
+            width: 180,
+            textAlign: "center",
+          }}
+          onChangeText={(text) => {
+            setWord(text);
+          }}
+          value={word}
+        />
+        <TextInput
+          editable={canEdit}
+          style={{
+            fontSize: 18,
+            margin: 4,
+            backgroundColor: "white",
+            borderColor: "lightskyblue",
+            padding: 5,
+            borderWidth: 2,
+            borderRadius: 10,
+            width: 50,
+            textAlign: "center",
+          }}
+          keyboardType={"numeric"}
+          onChangeText={(text) => {
+            setNumber(text);
+          }}
+          value={number}
+        />
+        {hidden(canEdit)}
+      </View>
     </View>
   );
 };
