@@ -257,11 +257,11 @@ class GameScreen extends React.Component {
       return <CurrentTurn blueTurn={blueTurn} />;
     };
 
-    const turnEnder = (isGuessCorrect, currentTeam, role) => {
+    const turnEnder = (hasClueBeenSet, isGuessCorrect, currentTeam, role) => {
       if(!isGuessCorrect){
         return <>{null}</>;
       }
-      if(isGuessCorrect === true && currentTeam === team && role === FIELD_OPERATIVE){
+      if(hasClueBeenSet === true && isGuessCorrect === true && currentTeam === team && role === FIELD_OPERATIVE){
         return (
           <TouchableOpacity
             onPress={this.endTurn}
@@ -290,7 +290,7 @@ class GameScreen extends React.Component {
             blueLeft={blueCardCounter}
             canEnd={false}
           />
-          {turnEnder(isGuessCorrect, currentTeam, role)}
+          {turnEnder(hasClueBeenSet, isGuessCorrect, currentTeam, role)}
         </View>
         <View style={styles.boardWrapper}>
           <Board

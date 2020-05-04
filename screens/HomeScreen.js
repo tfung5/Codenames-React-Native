@@ -328,8 +328,6 @@ export function LobbyScreen({ navigation }) {
   const canStartGame = (readyRed, readyBlue) => {
     let totalPlayers = 0;
     let totalReady = 0;
-    console.log(readyRed);
-    console.log(readyBlue)
     for(let i in readyRed){
       if(readyRed[i] !== null){
         totalPlayers += 1;
@@ -370,7 +368,6 @@ export function LobbyScreen({ navigation }) {
               const redTeamCopy = [...redTeam];
               const blueTeamCopy = [...blueTeam];
               if (slotName === name){
-                console.log("help", LEAVE_SLOT);
                 socket.emit(LEAVE_SLOT);
                 if (team === "RED"){
                   const existingIndexR = redTeam.findIndex(
