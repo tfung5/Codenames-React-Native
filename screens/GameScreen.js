@@ -257,6 +257,23 @@ class GameScreen extends React.Component {
       return <CurrentTurn blueTurn={blueTurn} />;
     };
 
+    const turnEnder = (isGuessCorrect, currentTeam, role) => {
+      if(!isGuessCorrect){
+        return <>{null}</>;
+      }
+      if(isGuessCorrect === true && currentTeam === team && role === FIELD_OPERATIVE){
+        return (
+          <TouchableOpacity
+            onPress={this.endTurn}
+            style={styles.testingButton}
+          >
+            <Text style={styles.testingButtonText}>End Turn</Text>
+          </TouchableOpacity>
+        );
+      }
+      return <>{null}</>;
+    }
+
     return (
       <KeyboardAwareScrollView
         resetScrollToCoords={{ x: 0, y: 0 }}
@@ -267,11 +284,14 @@ class GameScreen extends React.Component {
         <Text style={styles.optionsTitleText}>
           {player.name}, you are on the {team === RED ? "Red Team" : "Blue Team"}
         </Text>
-        <CardsLeft
-          redLeft={redCardCounter}
-          blueLeft={blueCardCounter}
-          canEnd={false}
-        />
+        <View style = {{flexDirection: "row", margin: 10}}>
+          <CardsLeft
+            redLeft={redCardCounter}
+            blueLeft={blueCardCounter}
+            canEnd={false}
+          />
+          {turnEnder(isGuessCorrect, currentTeam, role)}
+        </View>
         <View style={styles.boardWrapper}>
           <Board
             {...{ board, player, currentTeam, winningTeam, clue}}
