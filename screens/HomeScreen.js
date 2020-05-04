@@ -341,7 +341,7 @@ export function LobbyScreen({ navigation }) {
     if(totalPlayers === totalReady){
       return(
         <TouchableOpacity onPress={startGame} style={styles.readyButton}>
-          <Text style={styles.defaultButtonText}>({totalReady}/{totalPlayers})Start Game</Text>
+          <Text style={styles.readyButtonText}>({totalReady}/{totalPlayers})Start Game</Text>
         </TouchableOpacity>
       );
     }
@@ -377,7 +377,7 @@ export function LobbyScreen({ navigation }) {
             }}
           >
             <Image
-              style={{margin: 4, width: 40, height: 40}}
+              style={{margin: 10, width: 20, height: 20}}
               source={require("../assets/images/redx.png")}
             />
           </TouchableOpacity>
@@ -397,7 +397,7 @@ export function LobbyScreen({ navigation }) {
           }}
         >
           <Image
-            style={{margin: 4, width: 30, height: 30}}
+            style={{margin: 10, width: 20, height: 20}}
             source={require("../assets/images/greycheck.png")}
           />
         </TouchableOpacity>
@@ -413,7 +413,7 @@ export function LobbyScreen({ navigation }) {
           }}
         >
           <Image
-            style={{margin: 4, width:30, height: 30}}
+            style={{margin: 10, width:20, height: 20}}
             source={require("../assets/images/greencheck.png")}
           />
           </TouchableOpacity>

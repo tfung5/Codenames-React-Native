@@ -255,9 +255,9 @@ class GameScreen extends React.Component {
         return (
           <TouchableOpacity
             onPress={this.endTurn}
-            style={styles.testingButton}
+            style={styles.turnEndButton}
           >
-            <Text style={styles.testingButtonText}>End Turn</Text>
+            <Text style={styles.turnEndButtonText}>End Turn</Text>
           </TouchableOpacity>
         );
       }
@@ -366,8 +366,23 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
   },
+  turnEndButton: {
+    margin: 10,
+    borderWidth: 1,
+    borderColor: "red",
+    borderRadius: 25,
+    width: 100,
+    padding: 10,
+    marginTop: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   testingButtonText: {
     textAlign: "center",
+  },
+  turnEndButtonText: {
+    textAlign: "center",
+    color: "red",
   },
   notificationIcon: {
     width: 22,
