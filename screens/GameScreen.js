@@ -274,7 +274,7 @@ class GameScreen extends React.Component {
         />
         <View style={styles.boardWrapper}>
           <Board
-            {...{ board, player, currentTeam, winningTeam }}
+            {...{ board, player, currentTeam, winningTeam, clue}}
             chooseCard={this.chooseCard}
           />
         </View>
