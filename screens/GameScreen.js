@@ -257,6 +257,23 @@ class GameScreen extends React.Component {
       return <CurrentTurn blueTurn={blueTurn} />;
     };
 
+    const turnEnder = (hasClueBeenSet, isGuessCorrect, currentTeam, role) => {
+      if(!isGuessCorrect){
+        return <>{null}</>;
+      }
+      if(hasClueBeenSet === true && isGuessCorrect === true && currentTeam === team && role === FIELD_OPERATIVE){
+        return (
+          <TouchableOpacity
+            onPress={this.endTurn}
+            style={styles.turnEndButton}
+          >
+            <Text style={styles.turnEndButtonText}>End Turn</Text>
+          </TouchableOpacity>
+        );
+      }
+      return <>{null}</>;
+    }
+
     return (
       <KeyboardAwareScrollView
         resetScrollToCoords={{ x: 0, y: 0 }}
@@ -267,11 +284,14 @@ class GameScreen extends React.Component {
         <Text style={styles.optionsTitleText}>
           {player.name}, you are on the {team === RED ? "Red Team" : "Blue Team"}
         </Text>
-        <CardsLeft
-          redLeft={redCardCounter}
-          blueLeft={blueCardCounter}
-          canEnd={false}
-        />
+        <View style = {{flexDirection: "row", margin: 10}}>
+          <CardsLeft
+            redLeft={redCardCounter}
+            blueLeft={blueCardCounter}
+            canEnd={false}
+          />
+          {turnEnder(hasClueBeenSet, isGuessCorrect, currentTeam, role)}
+        </View>
         <View style={styles.boardWrapper}>
           <Board
             {...{ board, player, currentTeam, winningTeam, clue}}
@@ -373,8 +393,23 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
   },
+  turnEndButton: {
+    margin: 10,
+    borderWidth: 1,
+    borderColor: "red",
+    borderRadius: 25,
+    width: 100,
+    padding: 10,
+    marginTop: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   testingButtonText: {
     textAlign: "center",
+  },
+  turnEndButtonText: {
+    textAlign: "center",
+    color: "red",
   },
   notificationIcon: {
     width: 22,
