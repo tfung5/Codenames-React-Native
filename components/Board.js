@@ -11,12 +11,14 @@ import uuid from "uuid/v4";
 import { RED, BLUE, BLACK, GRAY, CHOSEN, UNCHOSEN } from "../constants/Cards";
 import { FIELD_OPERATIVE, SPYMASTER } from "../constants/Roles";
 
-const canChooseCard = (card, player, currentTeam, winningTeam) => {
+const canChooseCard = (card, player, currentTeam, winningTeam, clue) => {
   return (
     !winningTeam &&
     player.role === FIELD_OPERATIVE &&
     player.team === currentTeam &&
-    card.state === UNCHOSEN
+    card.state === UNCHOSEN &&
+    clue.word != null &&
+    clue.number != null
   );
 };
 
@@ -61,7 +63,7 @@ const determineCardTextStyle = (card) => {
   return style;
 };
 
-export default ({ board, player, currentTeam, chooseCard, winningTeam }) => {
+export default ({ board, player, currentTeam, chooseCard, winningTeam, clue}) => {
   return (
     <View>
       {board.length > 0 &&
@@ -74,7 +76,7 @@ export default ({ board, player, currentTeam, chooseCard, winningTeam }) => {
                     <View
                       key={card.word}
                       pointerEvents={
-                        canChooseCard(card, player, currentTeam, winningTeam)
+                        canChooseCard(card, player, currentTeam, winningTeam, clue)
                           ? "auto"
                           : "none"
                       }
