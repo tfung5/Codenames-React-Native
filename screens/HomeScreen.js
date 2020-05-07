@@ -325,6 +325,34 @@ export function LobbyScreen({ navigation }) {
   const [redReady, setRedReady] = React.useState(new Array(4).fill(null));
   const [blueReady, setBlueReady] = React.useState(new Array(4).fill(null));
 
+  const isOnATeam = () => {
+    let res = false;
+
+    for (let player of redTeam) {
+      if (player?.id === socket.id) {
+        res = true;
+      }
+    }
+
+    for (let player of blueTeam) {
+      if (player?.id === socket.id) {
+        res = true;
+      }
+    }
+
+    return res;
+  }
+
+  const determineJoinGameButtonStyle = () => {
+    let style = [styles.defaultButton];
+
+    if (!isOnATeam()) {
+      style.push(styles.disabledButton);
+    }
+
+    return style;
+  }
+
   const canStartGame = (readyRed, readyBlue) => {
     let totalPlayers = 0;
     let totalReady = 0;
@@ -344,19 +372,27 @@ export function LobbyScreen({ navigation }) {
         totalReady += 1;
       }
     }
-    if(totalPlayers != totalReady){
-      return(
-        <TouchableOpacity style={styles.defaultButton}>
-          <Text style={styles.defaultButtonText}>({totalReady}/{totalPlayers})Start Game</Text>
+    if (isGameInProgress) {
+      return (
+        <TouchableOpacity onPress={joinGame} style={determineJoinGameButtonStyle()} disabled={isOnATeam() ? false : true}>
+          <Text style={styles.defaultButtonText}>Join Game</Text>
         </TouchableOpacity>
       );
-    }
-    if(totalPlayers === totalReady){
-      return(
-        <TouchableOpacity onPress={startGame} style={styles.readyButton}>
-          <Text style={styles.readyButtonText}>({totalReady}/{totalPlayers})Start Game</Text>
-        </TouchableOpacity>
-      );
+    } else {
+      if(totalPlayers != totalReady){
+        return(
+          <TouchableOpacity style={styles.defaultButton}>
+            <Text style={styles.defaultButtonText}>({totalReady}/{totalPlayers})Start Game</Text>
+          </TouchableOpacity>
+        );
+      }
+      if(totalPlayers === totalReady){
+        return(
+          <TouchableOpacity onPress={startGame} style={styles.readyButton}>
+            <Text style={styles.readyButtonText}>({totalReady}/{totalPlayers})Start Game</Text>
+          </TouchableOpacity>
+        );
+      }
     }
   }
 
