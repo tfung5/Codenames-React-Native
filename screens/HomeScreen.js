@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import React, { useContext, useEffect} from "react";
+import React, { useContext, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -251,7 +251,13 @@ export function LobbyScreen({ navigation }) {
   const subscribeToLobbyUpdates = () => {
     // Handle UPDATE_LOBBY
     socket.on(UPDATE_LOBBY, (payload) => {
-      const { redTeam, blueTeam, isGameInProgress, redReadys, blueReadys } = payload;
+      const {
+        redTeam,
+        blueTeam,
+        isGameInProgress,
+        redReadys,
+        blueReadys,
+      } = payload;
       setRedTeam(redTeam);
       setBlueTeam(blueTeam);
       setIsGameInProgress(isGameInProgress);
@@ -341,7 +347,7 @@ export function LobbyScreen({ navigation }) {
     }
 
     return res;
-  }
+  };
 
   const determineJoinGameButtonStyle = () => {
     let style = [styles.defaultButton];
@@ -351,120 +357,141 @@ export function LobbyScreen({ navigation }) {
     }
 
     return style;
-  }
+  };
 
   const canStartGame = (readyRed, readyBlue) => {
     let totalPlayers = 0;
     let totalReady = 0;
-    for(let i in readyRed){
-      if(readyRed[i] !== null){
+    for (let i in readyRed) {
+      if (readyRed[i] !== null) {
         totalPlayers += 1;
       }
-      if(readyRed[i] === true){
+      if (readyRed[i] === true) {
         totalReady += 1;
       }
     }
-    for(let i in readyBlue){
-      if(readyBlue[i] !== null){
+    for (let i in readyBlue) {
+      if (readyBlue[i] !== null) {
         totalPlayers += 1;
       }
-      if(readyBlue[i] === true){
+      if (readyBlue[i] === true) {
         totalReady += 1;
       }
     }
     if (isGameInProgress) {
       return (
-        <TouchableOpacity onPress={joinGame} style={determineJoinGameButtonStyle()} disabled={isOnATeam() ? false : true}>
+        <TouchableOpacity
+          onPress={joinGame}
+          style={determineJoinGameButtonStyle()}
+          disabled={isOnATeam() ? false : true}
+        >
           <Text style={styles.defaultButtonText}>Join Game</Text>
         </TouchableOpacity>
       );
     } else {
-      if(totalPlayers != totalReady){
-        return(
+      if (totalPlayers != totalReady) {
+        return (
           <TouchableOpacity style={styles.defaultButton}>
-            <Text style={styles.defaultButtonText}>({totalReady}/{totalPlayers})Start Game</Text>
+            <Text style={styles.defaultButtonText}>
+              ({totalReady}/{totalPlayers})Start Game
+            </Text>
           </TouchableOpacity>
         );
       }
-      if(totalPlayers === totalReady){
-        return(
+      if (totalPlayers === totalReady) {
+        return (
           <TouchableOpacity onPress={startGame} style={styles.readyButton}>
-            <Text style={styles.readyButtonText}>({totalReady}/{totalPlayers})Start Game</Text>
+            <Text style={styles.readyButtonText}>
+              ({totalReady}/{totalPlayers})Start Game
+            </Text>
           </TouchableOpacity>
         );
       }
     }
-  }
+  };
 
   const leaveSlotButton = (visible, slotName, team) => {
-    if (visible === true && slotName != "Player Slot" && slotName != "Spymaster Slot"){
-      return(
-          <TouchableOpacity
-            onPress={() =>{
-              const redTeamCopy = [...redTeam];
-              const blueTeamCopy = [...blueTeam];
-              if (slotName === name){
+    if (
+      visible === true &&
+      slotName != "Player Slot" &&
+      slotName != "Spymaster Slot"
+    ) {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            const redTeamCopy = [...redTeam];
+            const blueTeamCopy = [...blueTeam];
+            if (slotName === name) {
+              socket.emit(LEAVE_SLOT);
+              if (team === "RED") {
+                const existingIndexR = redTeam.findIndex(
+                  (element) => element == name
+                );
+                redTeamCopy[existingIndexR] = null;
                 socket.emit(LEAVE_SLOT);
-                if (team === "RED"){
-                  const existingIndexR = redTeam.findIndex(
-                    (element) => element == name
-                  );
-                  redTeamCopy[existingIndexR] = null;
-                  socket.emit(LEAVE_SLOT);
-                  setRedTeam(redTeamCopy);
-                }
-                if (team === "BLUE"){
-                  const existingIndexB = blueTeam.findIndex(
-                    (element) => element == name
-                  );
-                  blueTeamCopy[existingIndexB] = null;
-                  setBlueTeam(blueTeamCopy);
-                  socket.emit(LEAVE_SLOT);
-                }
+                setRedTeam(redTeamCopy);
               }
-            }}
-          >
-            <Image
-              style={{margin: 10, width: 20, height: 20}}
-              source={require("../assets/images/redx.png")}
-            />
-          </TouchableOpacity>
+              if (team === "BLUE") {
+                const existingIndexB = blueTeam.findIndex(
+                  (element) => element == name
+                );
+                blueTeamCopy[existingIndexB] = null;
+                setBlueTeam(blueTeamCopy);
+                socket.emit(LEAVE_SLOT);
+              }
+            }
+          }}
+        >
+          <Image
+            style={{ margin: 10, width: 20, height: 20 }}
+            source={require("../assets/images/redx.png")}
+          />
+        </TouchableOpacity>
       );
     }
     return null;
   };
 
   const readySlotButton = (visible, slotName, readiness, index, team) => {
-    if (readiness[index] === false && visible === true && slotName != "Player Slot" && slotName != "Spymaster Slot"){
-      return(
+    if (
+      readiness[index] === false &&
+      visible === true &&
+      slotName != "Player Slot" &&
+      slotName != "Spymaster Slot"
+    ) {
+      return (
         <TouchableOpacity
-            onPress={() =>{
-            if(slotName === name){
-              socket.emit(READY_CHANGE, {team, index});
+          onPress={() => {
+            if (slotName === name) {
+              socket.emit(READY_CHANGE, { team, index });
             }
           }}
         >
           <Image
-            style={{margin: 10, width: 20, height: 20}}
+            style={{ margin: 10, width: 20, height: 20 }}
             source={require("../assets/images/greycheck.png")}
           />
         </TouchableOpacity>
       );
-    }
-    else if(readiness[index] === true && visible === true && slotName != "Player Slot" && slotName != "Spymaster Slot"){
-      return(
+    } else if (
+      readiness[index] === true &&
+      visible === true &&
+      slotName != "Player Slot" &&
+      slotName != "Spymaster Slot"
+    ) {
+      return (
         <TouchableOpacity
-          onPress={() =>{
-            if(slotName === name){
-              socket.emit(READY_CHANGE, {team, index});
-              }
+          onPress={() => {
+            if (slotName === name) {
+              socket.emit(READY_CHANGE, { team, index });
+            }
           }}
         >
           <Image
-            style={{margin: 10, width:20, height: 20}}
+            style={{ margin: 10, width: 20, height: 20 }}
             source={require("../assets/images/greencheck.png")}
           />
-          </TouchableOpacity>
+        </TouchableOpacity>
       );
     }
     return null;
@@ -486,8 +513,7 @@ export function LobbyScreen({ navigation }) {
     if (redTeam[index] === null) {
       slotColor = "white";
       showButtons = false;
-    }
-    else {
+    } else {
       // If slot is taken
       slotColor = "lightgrey"; // Set color to gray
       slotName = redPlayer.name; // Set name to player's name
@@ -497,7 +523,7 @@ export function LobbyScreen({ navigation }) {
         slotColor = "#FFC58E"; // Set color to orange
       }
     }
-    
+
     return (
       <TouchableOpacity
         key={index}
@@ -555,7 +581,7 @@ export function LobbyScreen({ navigation }) {
       slotName = "Spymaster Slot";
       slotBorderColor = "dodgerblue";
     }
-    if (index != 0){
+    if (index != 0) {
       slotName = "Player Slot";
       slotBorderColor = "black";
     }

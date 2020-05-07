@@ -246,7 +246,7 @@ class GameScreen extends React.Component {
       isModalVisible,
       isGuessCorrect,
       hasClueBeenSet,
-      playerList
+      playerList,
     } = this.state;
     const { name, team, role } = player;
 
@@ -258,21 +258,23 @@ class GameScreen extends React.Component {
     };
 
     const turnEnder = (hasClueBeenSet, isGuessCorrect, currentTeam, role) => {
-      if(!isGuessCorrect){
+      if (!isGuessCorrect) {
         return <>{null}</>;
       }
-      if(hasClueBeenSet === true && isGuessCorrect === true && currentTeam === team && role === FIELD_OPERATIVE){
+      if (
+        hasClueBeenSet === true &&
+        isGuessCorrect === true &&
+        currentTeam === team &&
+        role === FIELD_OPERATIVE
+      ) {
         return (
-          <TouchableOpacity
-            onPress={this.endTurn}
-            style={styles.turnEndButton}
-          >
+          <TouchableOpacity onPress={this.endTurn} style={styles.turnEndButton}>
             <Text style={styles.turnEndButtonText}>End Turn</Text>
           </TouchableOpacity>
         );
       }
       return <>{null}</>;
-    }
+    };
 
     return (
       <KeyboardAwareScrollView
@@ -282,9 +284,10 @@ class GameScreen extends React.Component {
         <NavigationEvents onDidFocus={this.componentDidMount} />
         {gameOver(this.state.winningTeam, currentTeam)}
         <Text style={styles.optionsTitleText}>
-          {player.name}, you are on the {team === RED ? "Red Team" : "Blue Team"}
+          {player.name}, you are on the{" "}
+          {team === RED ? "Red Team" : "Blue Team"}
         </Text>
-        <View style = {{flexDirection: "row", margin: 10}}>
+        <View style={{ flexDirection: "row", margin: 10 }}>
           <CardsLeft
             redLeft={redCardCounter}
             blueLeft={blueCardCounter}
@@ -294,7 +297,7 @@ class GameScreen extends React.Component {
         </View>
         <View style={styles.boardWrapper}>
           <Board
-            {...{ board, player, currentTeam, winningTeam, clue}}
+            {...{ board, player, currentTeam, winningTeam, clue }}
             chooseCard={this.chooseCard}
           />
         </View>
@@ -335,21 +338,21 @@ class GameScreen extends React.Component {
             <Text style={styles.testingButtonText}>Open Chat</Text>
           </TouchableOpacity>
           {isModalVisible === false && (
-          <TouchableOpacity
-            onPress={() => this.setModalVisible(true)} // Should open modal
-            style={styles.testingButton}
-          >
-            <Text style={styles.testingButtonText}>Show Players in Game</Text>
-          </TouchableOpacity>
-        )}
+            <TouchableOpacity
+              onPress={() => this.setModalVisible(true)} // Should open modal
+              style={styles.testingButton}
+            >
+              <Text style={styles.testingButtonText}>Show Players in Game</Text>
+            </TouchableOpacity>
+          )}
         </View>
         <View style={styles.infoModal}>
           {isModalVisible && (
-          <PlayerInfoModal
-            visible={isModalVisible}
-            setVisible={this.setModalVisible}
-            playerInfo={playerList}
-          />
+            <PlayerInfoModal
+              visible={isModalVisible}
+              setVisible={this.setModalVisible}
+              playerInfo={playerList}
+            />
           )}
         </View>
         <SnackBars
@@ -430,9 +433,9 @@ const styles = {
   boardWrapper: {
     marginVertical: 10,
   },
-  infoModal:{
+  infoModal: {
     justifyContent: "center",
     alignItems: "center",
     marginTop: 5,
-  }
+  },
 };

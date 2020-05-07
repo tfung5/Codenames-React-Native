@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { TouchableOpacity, Image, Text, TextInput, View } from "react-native";
-import {SET_CLUE} from "../constants/Actions";
+import { SET_CLUE } from "../constants/Actions";
 import { SPYMASTER } from "../constants/Roles";
 import SocketContext from "../components/SocketContext";
 
@@ -63,18 +63,14 @@ export default (props) => {
   const submitClues = () => {
     if (isNaN(parseInt(number)) && word === "") {
       setResubmitMsg("Enter a clue word and number");
-    }
-    else if (isNaN(parseInt(number))) {
+    } else if (isNaN(parseInt(number))) {
       setResubmitMsg("Enter a clue number");
-    }
-    else if (word === ""){
+    } else if (word === "") {
       setResubmitMsg("Enter a clue word");
-    }
-    else if (parseInt(number) < 0){
+    } else if (parseInt(number) < 0) {
       setResubmitMsg("Enter a clue number that is 0 or greater");
-    }
-    else{
-      const payload = { word, number: parseInt(number)};
+    } else {
+      const payload = { word, number: parseInt(number) };
       setResubmitMsg("");
       socket.emit(SET_CLUE, payload);
     }
@@ -96,11 +92,13 @@ export default (props) => {
 
   return (
     <View>
-      <Text style={{
-        textAlign: "center",
-        fontSize: 15
-      }}>
-      {resubmitMsg}
+      <Text
+        style={{
+          textAlign: "center",
+          fontSize: 15,
+        }}
+      >
+        {resubmitMsg}
       </Text>
       <View
         style={{

@@ -63,7 +63,14 @@ const determineCardTextStyle = (card) => {
   return style;
 };
 
-export default ({ board, player, currentTeam, chooseCard, winningTeam, clue}) => {
+export default ({
+  board,
+  player,
+  currentTeam,
+  chooseCard,
+  winningTeam,
+  clue,
+}) => {
   return (
     <View>
       {board.length > 0 &&
@@ -76,7 +83,13 @@ export default ({ board, player, currentTeam, chooseCard, winningTeam, clue}) =>
                     <View
                       key={card.word}
                       pointerEvents={
-                        canChooseCard(card, player, currentTeam, winningTeam, clue)
+                        canChooseCard(
+                          card,
+                          player,
+                          currentTeam,
+                          winningTeam,
+                          clue
+                        )
                           ? "auto"
                           : "none"
                       }
