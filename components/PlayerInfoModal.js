@@ -4,6 +4,7 @@ import {
   Button,
   StyleSheet,
   Modal,
+  Platform,
   Text,
   TouchableHighlight,
   View,
@@ -158,6 +159,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
     textAlign: "center",
     width: 90,
+    fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
   },
   chartRow: {
     flexDirection: "row",

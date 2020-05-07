@@ -1,6 +1,7 @@
 import "react-native-gesture-handler";
 import React, { useContext, useEffect } from "react";
 import {
+  Platform,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -239,7 +240,7 @@ export function LobbyScreen({ navigation }) {
   const [blueTeam, setBlueTeam] = React.useState(new Array(4).fill(null));
   const [isGameInProgress, setIsGameInProgress] = React.useState(false);
 
-  const slotWidth = 175;
+  const slotWidth = 200;
   const slotHeight = 35;
 
   // componentDidMount
@@ -567,7 +568,14 @@ export function LobbyScreen({ navigation }) {
           }}
         >
           {leaveSlotButton(showButtons, slotName, "RED")}
-          <Text style={{ fontSize: 20 }}>{slotName}</Text>
+          <Text
+            style={{
+              fontSize: 20,
+              fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
+            }}
+          >
+            {slotName}
+          </Text>
           {readySlotButton(showButtons, slotName, redReady, index, "RED")}
         </View>
       </TouchableOpacity>
@@ -642,7 +650,14 @@ export function LobbyScreen({ navigation }) {
           }}
         >
           {leaveSlotButton(showButtons, slotName, "BLUE")}
-          <Text style={{ fontSize: 20 }}>{slotName}</Text>
+          <Text
+            style={{
+              fontSize: 20,
+              fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
+            }}
+          >
+            {slotName}
+          </Text>
           {readySlotButton(showButtons, slotName, blueReady, index, "BLUE")}
         </View>
       </TouchableOpacity>
@@ -711,7 +726,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 2,
     marginTop: 16,
-    width: 175,
+    width: 200,
     paddingVertical: 4,
     backgroundColor: "white",
   },
@@ -719,7 +734,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 2,
     marginTop: 16,
-    width: 175,
+    width: 200,
     paddingVertical: 4,
     backgroundColor: "green",
   },
