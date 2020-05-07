@@ -1,14 +1,16 @@
 import "react-native-gesture-handler";
-import React, { useContext, useEffect} from "react";
+import React, { useContext, useEffect } from "react";
 import {
+  Platform,
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
   TextInput,
-  KeyboardAvoidingView,
   Image,
 } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { NavigationActions, NavigationEvents } from "react-navigation";
 import SocketContext from "../components/SocketContext";
 import GameContext from "../components/GameContext";
@@ -136,9 +138,9 @@ export default function HomeScreen({ navigation }) {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior="padding"
-      style={{ flex: 1, flexDirection: "column" }}
+    <KeyboardAwareScrollView
+      resetScrollToCoords={{ x: 0, y: 0 }}
+      contentContainerStyle={{ height: "100%", backgroundColor: "#EAE7F2" }}
     >
       <NavigationEvents onDidFocus={fetchLobbyList} />
       <View
@@ -153,7 +155,7 @@ export default function HomeScreen({ navigation }) {
         <View
           style={{
             flexDirection: "row",
-            justifyContent: "space-around",
+            justifyContent: "space-evenly",
             alignItems: "center",
           }}
         >
@@ -182,7 +184,7 @@ export default function HomeScreen({ navigation }) {
         {renderJoinLobbyButton()}
         {renderRefreshLobbyListButton()}
       </View>
-    </KeyboardAvoidingView>
+    </KeyboardAwareScrollView>
   );
 }
 
@@ -238,7 +240,7 @@ export function LobbyScreen({ navigation }) {
   const [blueTeam, setBlueTeam] = React.useState(new Array(4).fill(null));
   const [isGameInProgress, setIsGameInProgress] = React.useState(false);
 
-  const slotWidth = 175;
+  const slotWidth = 200;
   const slotHeight = 35;
 
   // componentDidMount
@@ -251,7 +253,13 @@ export function LobbyScreen({ navigation }) {
   const subscribeToLobbyUpdates = () => {
     // Handle UPDATE_LOBBY
     socket.on(UPDATE_LOBBY, (payload) => {
-      const { redTeam, blueTeam, isGameInProgress, redReadys, blueReadys } = payload;
+      const {
+        redTeam,
+        blueTeam,
+        isGameInProgress,
+        redReadys,
+        blueReadys,
+      } = payload;
       setRedTeam(redTeam);
       setBlueTeam(blueTeam);
       setIsGameInProgress(isGameInProgress);
@@ -297,7 +305,7 @@ export function LobbyScreen({ navigation }) {
 
   const renderLeaveGameScreen = () => {
     return (
-      <View style={styles.centerItems}>
+      <SafeAreaView style={[styles.leaveGameScreen, styles.centerItems]}>
         <TouchableOpacity
           onPress={handleLeaveGame}
           style={styles.defaultButton}
@@ -310,7 +318,7 @@ export function LobbyScreen({ navigation }) {
         >
           <Text style={styles.defaultButtonText}>Back to Game</Text>
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     );
   };
 
@@ -325,110 +333,167 @@ export function LobbyScreen({ navigation }) {
   const [redReady, setRedReady] = React.useState(new Array(4).fill(null));
   const [blueReady, setBlueReady] = React.useState(new Array(4).fill(null));
 
+  const isOnATeam = () => {
+    let res = false;
+
+    for (let player of redTeam) {
+      if (player?.id === socket.id) {
+        res = true;
+      }
+    }
+
+    for (let player of blueTeam) {
+      if (player?.id === socket.id) {
+        res = true;
+      }
+    }
+
+    return res;
+  };
+
+  const determineJoinGameButtonStyle = () => {
+    let style = [styles.defaultButton];
+
+    if (!isOnATeam()) {
+      style.push(styles.disabledButton);
+    }
+
+    return style;
+  };
+
   const canStartGame = (readyRed, readyBlue) => {
     let totalPlayers = 0;
     let totalReady = 0;
-    for(let i in readyRed){
-      if(readyRed[i] !== null){
+    for (let i in readyRed) {
+      if (readyRed[i] !== null) {
         totalPlayers += 1;
       }
-      if(readyRed[i] === true){
+      if (readyRed[i] === true) {
         totalReady += 1;
       }
     }
-    for(let i in readyBlue){
-      if(readyBlue[i] !== null){
+    for (let i in readyBlue) {
+      if (readyBlue[i] !== null) {
         totalPlayers += 1;
       }
-      if(readyBlue[i] === true){
+      if (readyBlue[i] === true) {
         totalReady += 1;
       }
     }
-    if(totalPlayers != totalReady){
-      return(
-        <TouchableOpacity style={styles.defaultButton}>
-          <Text style={styles.defaultButtonText}>({totalReady}/{totalPlayers})Start Game</Text>
+    if (isGameInProgress) {
+      return (
+        <TouchableOpacity
+          onPress={joinGame}
+          style={determineJoinGameButtonStyle()}
+          disabled={isOnATeam() ? false : true}
+        >
+          <Text style={styles.defaultButtonText}>Join Game</Text>
         </TouchableOpacity>
       );
+    } else {
+      if (totalPlayers != totalReady) {
+        return (
+          <TouchableOpacity style={styles.defaultButton}>
+            <Text style={styles.defaultButtonText}>
+              ({totalReady}/{totalPlayers})Start Game
+            </Text>
+          </TouchableOpacity>
+        );
+      }
+      if (totalPlayers === totalReady) {
+        return (
+          <TouchableOpacity onPress={startGame} style={styles.readyButton}>
+            <Text style={styles.readyButtonText}>
+              ({totalReady}/{totalPlayers})Start Game
+            </Text>
+          </TouchableOpacity>
+        );
+      }
     }
-    if(totalPlayers === totalReady){
-      return(
-        <TouchableOpacity onPress={startGame} style={styles.readyButton}>
-          <Text style={styles.readyButtonText}>({totalReady}/{totalPlayers})Start Game</Text>
-        </TouchableOpacity>
-      );
-    }
-  }
+  };
 
   const leaveSlotButton = (visible, slotName, team) => {
-    if (visible === true && slotName != "Player Slot" && slotName != "Spymaster Slot"){
-      return(
-          <TouchableOpacity
-            onPress={() =>{
-              const redTeamCopy = [...redTeam];
-              const blueTeamCopy = [...blueTeam];
-              if (slotName === name){
+    if (
+      visible === true &&
+      slotName != "Player Slot" &&
+      slotName != "Spymaster Slot"
+    ) {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            const redTeamCopy = [...redTeam];
+            const blueTeamCopy = [...blueTeam];
+            if (slotName === name) {
+              socket.emit(LEAVE_SLOT);
+              if (team === "RED") {
+                const existingIndexR = redTeam.findIndex(
+                  (element) => element == name
+                );
+                redTeamCopy[existingIndexR] = null;
                 socket.emit(LEAVE_SLOT);
-                if (team === "RED"){
-                  const existingIndexR = redTeam.findIndex(
-                    (element) => element == name
-                  );
-                  redTeamCopy[existingIndexR] = null;
-                  socket.emit(LEAVE_SLOT);
-                  setRedTeam(redTeamCopy);
-                }
-                if (team === "BLUE"){
-                  const existingIndexB = blueTeam.findIndex(
-                    (element) => element == name
-                  );
-                  blueTeamCopy[existingIndexB] = null;
-                  setBlueTeam(blueTeamCopy);
-                  socket.emit(LEAVE_SLOT);
-                }
+                setRedTeam(redTeamCopy);
               }
-            }}
-          >
-            <Image
-              style={{margin: 10, width: 20, height: 20}}
-              source={require("../assets/images/redx.png")}
-            />
-          </TouchableOpacity>
+              if (team === "BLUE") {
+                const existingIndexB = blueTeam.findIndex(
+                  (element) => element == name
+                );
+                blueTeamCopy[existingIndexB] = null;
+                setBlueTeam(blueTeamCopy);
+                socket.emit(LEAVE_SLOT);
+              }
+            }
+          }}
+        >
+          <Image
+            style={{ margin: 10, width: 20, height: 20 }}
+            source={require("../assets/images/redx.png")}
+          />
+        </TouchableOpacity>
       );
     }
     return null;
   };
 
   const readySlotButton = (visible, slotName, readiness, index, team) => {
-    if (readiness[index] === false && visible === true && slotName != "Player Slot" && slotName != "Spymaster Slot"){
-      return(
+    if (
+      readiness[index] === false &&
+      visible === true &&
+      slotName != "Player Slot" &&
+      slotName != "Spymaster Slot"
+    ) {
+      return (
         <TouchableOpacity
-            onPress={() =>{
-            if(slotName === name){
-              socket.emit(READY_CHANGE, {team, index});
+          onPress={() => {
+            if (slotName === name) {
+              socket.emit(READY_CHANGE, { team, index });
             }
           }}
         >
           <Image
-            style={{margin: 10, width: 20, height: 20}}
+            style={{ margin: 10, width: 20, height: 20 }}
             source={require("../assets/images/greycheck.png")}
           />
         </TouchableOpacity>
       );
-    }
-    else if(readiness[index] === true && visible === true && slotName != "Player Slot" && slotName != "Spymaster Slot"){
-      return(
+    } else if (
+      readiness[index] === true &&
+      visible === true &&
+      slotName != "Player Slot" &&
+      slotName != "Spymaster Slot"
+    ) {
+      return (
         <TouchableOpacity
-          onPress={() =>{
-            if(slotName === name){
-              socket.emit(READY_CHANGE, {team, index});
-              }
+          onPress={() => {
+            if (slotName === name) {
+              socket.emit(READY_CHANGE, { team, index });
+            }
           }}
         >
           <Image
-            style={{margin: 10, width:20, height: 20}}
+            style={{ margin: 10, width: 20, height: 20 }}
             source={require("../assets/images/greencheck.png")}
           />
-          </TouchableOpacity>
+        </TouchableOpacity>
       );
     }
     return null;
@@ -450,8 +515,7 @@ export function LobbyScreen({ navigation }) {
     if (redTeam[index] === null) {
       slotColor = "white";
       showButtons = false;
-    }
-    else {
+    } else {
       // If slot is taken
       slotColor = "lightgrey"; // Set color to gray
       slotName = redPlayer.name; // Set name to player's name
@@ -461,7 +525,7 @@ export function LobbyScreen({ navigation }) {
         slotColor = "#FFC58E"; // Set color to orange
       }
     }
-    
+
     return (
       <TouchableOpacity
         key={index}
@@ -504,8 +568,16 @@ export function LobbyScreen({ navigation }) {
           }}
         >
           {leaveSlotButton(showButtons, slotName, "RED")}
-          <Text style={{ fontSize: 20 }}>{slotName}</Text>
-          {readySlotButton(showButtons, slotName, redReady, index, "RED")}
+          <Text
+            style={{
+              fontSize: 20,
+              fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
+            }}
+          >
+            {slotName}
+          </Text>
+          {!isGameInProgress &&
+            readySlotButton(showButtons, slotName, redReady, index, "RED")}
         </View>
       </TouchableOpacity>
     );
@@ -519,7 +591,7 @@ export function LobbyScreen({ navigation }) {
       slotName = "Spymaster Slot";
       slotBorderColor = "dodgerblue";
     }
-    if (index != 0){
+    if (index != 0) {
       slotName = "Player Slot";
       slotBorderColor = "black";
     }
@@ -579,7 +651,14 @@ export function LobbyScreen({ navigation }) {
           }}
         >
           {leaveSlotButton(showButtons, slotName, "BLUE")}
-          <Text style={{ fontSize: 20 }}>{slotName}</Text>
+          <Text
+            style={{
+              fontSize: 20,
+              fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
+            }}
+          >
+            {slotName}
+          </Text>
           {readySlotButton(showButtons, slotName, blueReady, index, "BLUE")}
         </View>
       </TouchableOpacity>
@@ -606,7 +685,7 @@ export function LobbyScreen({ navigation }) {
               borderColor: "firebrick",
               borderWidth: 2,
               borderRadius: 10,
-              paddingHorizontal: "9%",
+              paddingHorizontal: 50,
               paddingVertical: 10,
               marginBottom: 10,
             }}
@@ -619,7 +698,7 @@ export function LobbyScreen({ navigation }) {
               borderColor: "dodgerblue",
               borderWidth: 2,
               borderRadius: 10,
-              paddingHorizontal: "9%",
+              paddingHorizontal: 50,
               padding: 10,
               marginTop: 10,
             }}
@@ -641,11 +720,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  leaveGameScreen: {
+    flex: 1,
+  },
   defaultButton: {
     borderRadius: 10,
     borderWidth: 2,
     marginTop: 16,
-    width: 175,
+    width: 200,
     paddingVertical: 4,
     backgroundColor: "white",
   },
@@ -653,7 +735,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 2,
     marginTop: 16,
-    width: 175,
+    width: 200,
     paddingVertical: 4,
     backgroundColor: "green",
   },

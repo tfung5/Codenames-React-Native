@@ -1,5 +1,12 @@
 import React from "react";
-import { Keyboard, Text, TouchableOpacity, View, Image } from "react-native";
+import {
+  Keyboard,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+  Image,
+} from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 // Credit: https://stackoverflow.com/questions/48018084/componentdidmount-function-is-not-called-after-navigation
 import { NavigationActions, NavigationEvents } from "react-navigation";
@@ -246,7 +253,7 @@ class GameScreen extends React.Component {
       isModalVisible,
       isGuessCorrect,
       hasClueBeenSet,
-      playerList
+      playerList,
     } = this.state;
     const { name, team, role } = player;
 
@@ -258,106 +265,117 @@ class GameScreen extends React.Component {
     };
 
     const turnEnder = (hasClueBeenSet, isGuessCorrect, currentTeam, role) => {
-      if(!isGuessCorrect){
+      if (!isGuessCorrect) {
         return <>{null}</>;
       }
-      if(hasClueBeenSet === true && isGuessCorrect === true && currentTeam === team && role === FIELD_OPERATIVE){
+      if (
+        hasClueBeenSet === true &&
+        isGuessCorrect === true &&
+        currentTeam === team &&
+        role === FIELD_OPERATIVE
+      ) {
         return (
-          <TouchableOpacity
-            onPress={this.endTurn}
-            style={styles.turnEndButton}
-          >
+          <TouchableOpacity onPress={this.endTurn} style={styles.turnEndButton}>
             <Text style={styles.turnEndButtonText}>End Turn</Text>
           </TouchableOpacity>
         );
       }
       return <>{null}</>;
-    }
+    };
 
     return (
-      <KeyboardAwareScrollView
-        resetScrollToCoords={{ x: 0, y: 0 }}
-        contentContainerStyle={this.determineContentContainerStyle()}
-      >
-        <NavigationEvents onDidFocus={this.componentDidMount} />
-        {gameOver(this.state.winningTeam, currentTeam)}
-        <Text style={styles.optionsTitleText}>
-          {player.name}, you are on the {team === RED ? "Red Team" : "Blue Team"}
-        </Text>
-        <View style = {{flexDirection: "row", margin: 10}}>
-          <CardsLeft
-            redLeft={redCardCounter}
-            blueLeft={blueCardCounter}
-            canEnd={false}
-          />
-          {turnEnder(hasClueBeenSet, isGuessCorrect, currentTeam, role)}
-        </View>
-        <View style={styles.boardWrapper}>
-          <Board
-            {...{ board, player, currentTeam, winningTeam, clue}}
-            chooseCard={this.chooseCard}
-          />
-        </View>
-        <Clues
-          {...{ clue, player, currentTeam, board, winningTeam, hasClueBeenSet }}
-        />
-        {clue && clue.word && clue.number >= 0 && (
+      <KeyboardAwareScrollView resetScrollToCoords={{ x: 0, y: 0 }}>
+        <SafeAreaView style={this.determineContentContainerStyle()}>
+          <NavigationEvents onDidFocus={this.componentDidMount} />
+          {gameOver(this.state.winningTeam, currentTeam)}
           <Text style={styles.optionsTitleText}>
-            Number of Guesses Remaining: {guessCounter}
+            {player.name}, you are on the{" "}
+            {team === RED ? "Red Team" : "Blue Team"}
           </Text>
-        )}
-        <View style={styles.testingButtons}>
-          <TouchableOpacity
-            onPress={this.loadPresetBoard}
-            style={styles.testingButton}
-          >
-            <Text style={styles.testingButtonText}>Load Preset Board</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={this.restartGame}
-            style={styles.testingButton}
-          >
-            <Text style={styles.testingButtonText}>Restart Game</Text>
-          </TouchableOpacity>
-          {currentTeam === team && role === FIELD_OPERATIVE && (
+          <View style={{ flexDirection: "row", margin: 10 }}>
+            <CardsLeft
+              redLeft={redCardCounter}
+              blueLeft={blueCardCounter}
+              canEnd={false}
+            />
+            {turnEnder(hasClueBeenSet, isGuessCorrect, currentTeam, role)}
+          </View>
+          <View style={styles.boardWrapper}>
+            <Board
+              {...{ board, player, currentTeam, winningTeam, clue }}
+              chooseCard={this.chooseCard}
+            />
+          </View>
+          <Clues
+            {...{
+              clue,
+              player,
+              currentTeam,
+              board,
+              winningTeam,
+              hasClueBeenSet,
+            }}
+          />
+          {clue && clue.word && clue.number >= 0 && (
+            <Text style={styles.optionsTitleText}>
+              Number of Guesses Remaining: {guessCounter}
+            </Text>
+          )}
+          <View style={styles.testingButtons}>
             <TouchableOpacity
-              onPress={this.endTurn}
+              onPress={this.loadPresetBoard}
               style={styles.testingButton}
             >
-              <Text style={styles.testingButtonText}>End Turn</Text>
+              <Text style={styles.testingButtonText}>Load Preset Board</Text>
             </TouchableOpacity>
-          )}
-          <TouchableOpacity
-            onPress={this.navigateToChat}
-            style={styles.testingButton}
-          >
-            {this.renderChatNotificationIfNeeded()}
-            <Text style={styles.testingButtonText}>Open Chat</Text>
-          </TouchableOpacity>
-          {isModalVisible === false && (
-          <TouchableOpacity
-            onPress={() => this.setModalVisible(true)} // Should open modal
-            style={styles.testingButton}
-          >
-            <Text style={styles.testingButtonText}>Show Players in Game</Text>
-          </TouchableOpacity>
-        )}
-        </View>
-        <View style={styles.infoModal}>
-          {isModalVisible && (
-          <PlayerInfoModal
-            visible={isModalVisible}
-            setVisible={this.setModalVisible}
-            playerInfo={playerList}
+            <TouchableOpacity
+              onPress={this.restartGame}
+              style={styles.testingButton}
+            >
+              <Text style={styles.testingButtonText}>Restart Game</Text>
+            </TouchableOpacity>
+            {currentTeam === team && role === FIELD_OPERATIVE && (
+              <TouchableOpacity
+                onPress={this.endTurn}
+                style={styles.testingButton}
+              >
+                <Text style={styles.testingButtonText}>End Turn</Text>
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity
+              onPress={this.navigateToChat}
+              style={styles.testingButton}
+            >
+              {this.renderChatNotificationIfNeeded()}
+              <Text style={styles.testingButtonText}>Open Chat</Text>
+            </TouchableOpacity>
+            {isModalVisible === false && (
+              <TouchableOpacity
+                onPress={() => this.setModalVisible(true)} // Should open modal
+                style={styles.testingButton}
+              >
+                <Text style={styles.testingButtonText}>
+                  Show Players in Game
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          <View style={styles.infoModal}>
+            {isModalVisible && (
+              <PlayerInfoModal
+                visible={isModalVisible}
+                setVisible={this.setModalVisible}
+                playerInfo={playerList}
+              />
+            )}
+          </View>
+          <SnackBars
+            visible={isSnackbarVisible}
+            setVisible={this.setSnackbarVisible}
+            correct={isGuessCorrect}
+            number={guessCounter}
           />
-          )}
-        </View>
-        <SnackBars
-          visible={isSnackbarVisible}
-          setVisible={this.setSnackbarVisible}
-          correct={isGuessCorrect}
-          number={guessCounter}
-        />
+        </SafeAreaView>
       </KeyboardAwareScrollView>
     );
   }
@@ -384,14 +402,13 @@ const styles = {
     marginTop: 8,
   },
   testingButton: {
-    borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 25,
-    width: 150,
     padding: 10,
     marginTop: 5,
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 10,
+    borderWidth: 1,
+    width: 175,
   },
   turnEndButton: {
     margin: 10,
@@ -420,6 +437,7 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     paddingBottom: 55,
+    flex: 1,
   },
   keyboardInFocus: {
     justifyContent: "center",
@@ -430,9 +448,9 @@ const styles = {
   boardWrapper: {
     marginVertical: 10,
   },
-  infoModal:{
+  infoModal: {
     justifyContent: "center",
     alignItems: "center",
     marginTop: 5,
-  }
+  },
 };
