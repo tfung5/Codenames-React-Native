@@ -167,7 +167,7 @@ export default function HomeScreen({ navigation }) {
               borderRadius: 10,
               borderColor: "lightskyblue",
               padding: 5,
-              width: 220,
+              width: 250,
               textAlign: "center",
             }}
             onChangeText={(text) => {
