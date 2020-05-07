@@ -402,14 +402,13 @@ const styles = {
     marginTop: 8,
   },
   testingButton: {
-    borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 25,
-    width: 150,
     padding: 10,
     marginTop: 5,
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 10,
+    borderWidth: 1,
+    width: 175,
   },
   turnEndButton: {
     margin: 10,
