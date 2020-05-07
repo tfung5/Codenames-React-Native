@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   View,
   TextInput,
-  KeyboardAvoidingView,
   Image,
 } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { NavigationActions, NavigationEvents } from "react-navigation";
 import SocketContext from "../components/SocketContext";
 import GameContext from "../components/GameContext";
@@ -137,53 +137,55 @@ export default function HomeScreen({ navigation }) {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior="padding"
-      style={{ flex: 1, flexDirection: "column" }}
+    <KeyboardAwareScrollView
+      resetScrollToCoords={{ x: 0, y: 0 }}
+      contentContainerStyle={{ height: "100%", backgroundColor: "#EAE7F2" }}
     >
-      <NavigationEvents onDidFocus={fetchLobbyList} />
-      <View
-        style={{
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#EAE7F2",
-          height: "100%",
-        }}
-      >
+      <SafeAreaView>
+        <NavigationEvents onDidFocus={fetchLobbyList} />
         <View
           style={{
-            flexDirection: "row",
-            justifyContent: "space-around",
+            flexDirection: "column",
+            justifyContent: "center",
             alignItems: "center",
+            backgroundColor: "#EAE7F2",
+            height: "100%",
           }}
         >
-          <TextInput
+          <View
             style={{
-              fontSize: 18,
-              backgroundColor: "white",
-              borderWidth: 2,
-              borderRadius: 10,
-              borderColor: "lightskyblue",
-              padding: 5,
-              width: 220,
-              textAlign: "center",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              alignItems: "center",
             }}
-            onChangeText={(text) => {
-              if (text.length <= 10) {
-                setName(text);
-              }
-            }}
-            value={name}
-            placeholder="Enter name..."
-          />
+          >
+            <TextInput
+              style={{
+                fontSize: 18,
+                backgroundColor: "white",
+                borderWidth: 2,
+                borderRadius: 10,
+                borderColor: "lightskyblue",
+                padding: 5,
+                width: 220,
+                textAlign: "center",
+              }}
+              onChangeText={(text) => {
+                if (text.length <= 10) {
+                  setName(text);
+                }
+              }}
+              value={name}
+              placeholder="Enter name..."
+            />
+          </View>
+          <LobbyList {...{ lobbyList, selectedLobbyId, setSelectedLobbyId }} />
+          {renderCreateLobbyButton()}
+          {renderJoinLobbyButton()}
+          {renderRefreshLobbyListButton()}
         </View>
-        <LobbyList {...{ lobbyList, selectedLobbyId, setSelectedLobbyId }} />
-        {renderCreateLobbyButton()}
-        {renderJoinLobbyButton()}
-        {renderRefreshLobbyListButton()}
-      </View>
-    </KeyboardAvoidingView>
+      </SafeAreaView>
+    </KeyboardAwareScrollView>
   );
 }
 
