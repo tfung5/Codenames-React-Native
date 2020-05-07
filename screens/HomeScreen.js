@@ -669,7 +669,7 @@ export function LobbyScreen({ navigation }) {
               borderColor: "firebrick",
               borderWidth: 2,
               borderRadius: 10,
-              paddingHorizontal: "9%",
+              paddingHorizontal: 50,
               paddingVertical: 10,
               marginBottom: 10,
             }}
@@ -682,7 +682,7 @@ export function LobbyScreen({ navigation }) {
               borderColor: "dodgerblue",
               borderWidth: 2,
               borderRadius: 10,
-              paddingHorizontal: "9%",
+              paddingHorizontal: 50,
               padding: 10,
               marginTop: 10,
             }}
