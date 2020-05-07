@@ -141,50 +141,48 @@ export default function HomeScreen({ navigation }) {
       resetScrollToCoords={{ x: 0, y: 0 }}
       contentContainerStyle={{ height: "100%", backgroundColor: "#EAE7F2" }}
     >
-      <SafeAreaView>
-        <NavigationEvents onDidFocus={fetchLobbyList} />
+      <NavigationEvents onDidFocus={fetchLobbyList} />
+      <View
+        style={{
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#EAE7F2",
+          height: "100%",
+        }}
+      >
         <View
           style={{
-            flexDirection: "column",
-            justifyContent: "center",
+            flexDirection: "row",
+            justifyContent: "space-evenly",
             alignItems: "center",
-            backgroundColor: "#EAE7F2",
-            height: "100%",
           }}
         >
-          <View
+          <TextInput
             style={{
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              alignItems: "center",
+              fontSize: 18,
+              backgroundColor: "white",
+              borderWidth: 2,
+              borderRadius: 10,
+              borderColor: "lightskyblue",
+              padding: 5,
+              width: 220,
+              textAlign: "center",
             }}
-          >
-            <TextInput
-              style={{
-                fontSize: 18,
-                backgroundColor: "white",
-                borderWidth: 2,
-                borderRadius: 10,
-                borderColor: "lightskyblue",
-                padding: 5,
-                width: 220,
-                textAlign: "center",
-              }}
-              onChangeText={(text) => {
-                if (text.length <= 10) {
-                  setName(text);
-                }
-              }}
-              value={name}
-              placeholder="Enter name..."
-            />
-          </View>
-          <LobbyList {...{ lobbyList, selectedLobbyId, setSelectedLobbyId }} />
-          {renderCreateLobbyButton()}
-          {renderJoinLobbyButton()}
-          {renderRefreshLobbyListButton()}
+            onChangeText={(text) => {
+              if (text.length <= 10) {
+                setName(text);
+              }
+            }}
+            value={name}
+            placeholder="Enter name..."
+          />
         </View>
-      </SafeAreaView>
+        <LobbyList {...{ lobbyList, selectedLobbyId, setSelectedLobbyId }} />
+        {renderCreateLobbyButton()}
+        {renderJoinLobbyButton()}
+        {renderRefreshLobbyListButton()}
+      </View>
     </KeyboardAwareScrollView>
   );
 }
