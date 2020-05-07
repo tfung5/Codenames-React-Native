@@ -52,7 +52,7 @@ class GameScreen extends React.Component {
       winningTeam: "",
       isSnackbarVisible: false,
       isModalVisible: false,
-      isGuessCorrect: false,
+      guess: {},
       keyboardOffset: 0,
       timeOfLatestMessage: 0,
       playerList: [],
@@ -159,7 +159,7 @@ class GameScreen extends React.Component {
 
   subscribeToChooseCardUpdates = () => {
     this.socket.on(CHOOSE_CARD_RESPONSE, async (res) => {
-      await this.setGuessCorrect(res);
+      await this.setGuess(res);
       await this.setSnackbarVisible(true);
     });
   };
@@ -204,10 +204,9 @@ class GameScreen extends React.Component {
     });
   };
 
-  // Sets isGuessCorrect to either true or false, depending on the response
-  setGuessCorrect = (value) => {
+  setGuess = (value) => {
     this.setState({
-      isGuessCorrect: value,
+      guess: value,
     });
   };
 
@@ -251,7 +250,7 @@ class GameScreen extends React.Component {
       clue,
       isSnackbarVisible,
       isModalVisible,
-      isGuessCorrect,
+      guess,
       hasClueBeenSet,
       playerList,
     } = this.state;
@@ -298,7 +297,12 @@ class GameScreen extends React.Component {
               blueLeft={blueCardCounter}
               canEnd={false}
             />
-            {turnEnder(hasClueBeenSet, isGuessCorrect, currentTeam, role)}
+            {turnEnder(
+              hasClueBeenSet,
+              guess?.isGuessCorrect,
+              currentTeam,
+              role
+            )}
           </View>
           <View style={styles.boardWrapper}>
             <Board
@@ -372,7 +376,7 @@ class GameScreen extends React.Component {
           <SnackBars
             visible={isSnackbarVisible}
             setVisible={this.setSnackbarVisible}
-            correct={isGuessCorrect}
+            guess={guess}
             number={guessCounter}
           />
         </SafeAreaView>

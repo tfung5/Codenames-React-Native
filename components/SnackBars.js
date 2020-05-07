@@ -1,5 +1,6 @@
 import SnackBar from "react-native-snackbar-component";
 import React from "react";
+import { RED } from "../constants/Cards";
 
 // Commented here is what is needed before calling SnackBars component
 // const [buttonPressed, setButtonPressed] = React.useState(false)
@@ -7,7 +8,7 @@ import React from "react";
 //   setButtonPressed(true)
 // });
 
-export default ({ visible, setVisible, correct, number }) => {
+export default ({ visible, setVisible, guess, number }) => {
   React.useEffect(() => {
     if (visible === true) {
       const timer = setTimeout(() => {
@@ -16,16 +17,27 @@ export default ({ visible, setVisible, correct, number }) => {
     }
   }, [visible]);
 
-  const determineMessage = (correct, number) => {
-    if (correct) {
-      return "Correct! " + number + " guesses remaining.";
-    } else {
-      return "Incorrect!";
+  const determineMessage = (guess) => {
+    const { isGuessCorrect, guesser, guessedWord } = guess;
+    let message = "'" + guessedWord + "'" + " was guessed";
+
+    if (guesser) {
+      message += " by " + guesser;
     }
+
+    message += ", which is";
+
+    if (isGuessCorrect) {
+      message += " correct! " + number + " guesses remaining.";
+    } else {
+      message += " incorrect!";
+    }
+
+    return message;
   };
 
-  const determineBackgroundColor = (correct) => {
-    if (correct) {
+  const determineBackgroundColor = (guess) => {
+    if (guess?.isGuessCorrect) {
       return "#d3f5e9"; // Light green
     } else {
       return "#F8B2B2"; // Sundown red
@@ -35,8 +47,8 @@ export default ({ visible, setVisible, correct, number }) => {
   return (
     <SnackBar
       visible={visible}
-      textMessage={determineMessage(correct, number)}
-      backgroundColor={determineBackgroundColor(correct)}
+      textMessage={determineMessage(guess)}
+      backgroundColor={determineBackgroundColor(guess)}
       messageColor={"black"}
       bottom={15}
       containerStyle={{
