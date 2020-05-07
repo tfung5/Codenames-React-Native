@@ -1,6 +1,7 @@
 import "react-native-gesture-handler";
 import React, { useContext, useEffect } from "react";
 import {
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -303,7 +304,7 @@ export function LobbyScreen({ navigation }) {
 
   const renderLeaveGameScreen = () => {
     return (
-      <View style={styles.centerItems}>
+      <SafeAreaView style={[styles.leaveGameScreen, styles.centerItems]}>
         <TouchableOpacity
           onPress={handleLeaveGame}
           style={styles.defaultButton}
@@ -316,7 +317,7 @@ export function LobbyScreen({ navigation }) {
         >
           <Text style={styles.defaultButtonText}>Back to Game</Text>
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     );
   };
 
@@ -702,6 +703,9 @@ const styles = StyleSheet.create({
   centerItems: {
     alignItems: "center",
     justifyContent: "center",
+  },
+  leaveGameScreen: {
+    flex: 1,
   },
   defaultButton: {
     borderRadius: 10,
