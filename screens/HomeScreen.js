@@ -576,7 +576,8 @@ export function LobbyScreen({ navigation }) {
           >
             {slotName}
           </Text>
-          {readySlotButton(showButtons, slotName, redReady, index, "RED")}
+          {!isGameInProgress &&
+            readySlotButton(showButtons, slotName, redReady, index, "RED")}
         </View>
       </TouchableOpacity>
     );
