@@ -391,20 +391,20 @@ export function LobbyScreen({ navigation }) {
         </TouchableOpacity>
       );
     } else {
-      if (totalPlayers != totalReady) {
+      if (totalPlayers != totalReady || totalPlayers === 0) {
         return (
           <TouchableOpacity style={styles.defaultButton}>
             <Text style={styles.defaultButtonText}>
-              ({totalReady}/{totalPlayers})Start Game
+              ({totalReady}/{totalPlayers}) Start Game
             </Text>
           </TouchableOpacity>
         );
       }
-      if (totalPlayers === totalReady) {
+      if (totalPlayers === totalReady && totalPlayers != 0) {
         return (
           <TouchableOpacity onPress={startGame} style={styles.readyButton}>
             <Text style={styles.readyButtonText}>
-              ({totalReady}/{totalPlayers})Start Game
+              ({totalReady}/{totalPlayers}) Start Game
             </Text>
           </TouchableOpacity>
         );
@@ -412,14 +412,16 @@ export function LobbyScreen({ navigation }) {
     }
   };
 
-  const leaveSlotButton = (visible, slotName, team) => {
+  const leaveSlotButton = (visible, slotName, team, current) => {
     if (
       visible === true &&
       slotName != "Player Slot" &&
-      slotName != "Spymaster Slot"
+      slotName != "Spymaster Slot" &&
+      current === true
     ) {
       return (
         <TouchableOpacity
+          style={{flex: 1}}
           onPress={() => {
             const redTeamCopy = [...redTeam];
             const blueTeamCopy = [...blueTeam];
@@ -445,7 +447,7 @@ export function LobbyScreen({ navigation }) {
           }}
         >
           <Image
-            style={{ margin: 10, width: 20, height: 20 }}
+            style={{ margin: 10, width: 15, height: 15 }}
             source={require("../assets/images/redx.png")}
           />
         </TouchableOpacity>
@@ -454,15 +456,17 @@ export function LobbyScreen({ navigation }) {
     return null;
   };
 
-  const readySlotButton = (visible, slotName, readiness, index, team) => {
+  const readySlotButton = (visible, slotName, readiness, index, team, current) => {
     if (
       readiness[index] === false &&
       visible === true &&
       slotName != "Player Slot" &&
-      slotName != "Spymaster Slot"
+      slotName != "Spymaster Slot" &&
+      current === true
     ) {
       return (
         <TouchableOpacity
+          style={{flex: 1}}
           onPress={() => {
             if (slotName === name) {
               socket.emit(READY_CHANGE, { team, index });
@@ -479,10 +483,12 @@ export function LobbyScreen({ navigation }) {
       readiness[index] === true &&
       visible === true &&
       slotName != "Player Slot" &&
-      slotName != "Spymaster Slot"
+      slotName != "Spymaster Slot" &&
+      current === true
     ) {
       return (
         <TouchableOpacity
+          style={{flex: 1}}
           onPress={() => {
             if (slotName === name) {
               socket.emit(READY_CHANGE, { team, index });
@@ -504,6 +510,7 @@ export function LobbyScreen({ navigation }) {
     let slotName = "Player Slot";
     let slotBorderColor = "black";
     let showButtons = false;
+    let currentPlayer = false;
     if (index === 0) {
       slotName = "Spymaster Slot";
       slotBorderColor = "firebrick";
@@ -522,6 +529,7 @@ export function LobbyScreen({ navigation }) {
       showButtons = true;
       // But if slot is the current player
       if (redPlayer.id === socket.id) {
+        currentPlayer = true;
         slotColor = "#FFC58E"; // Set color to orange
       }
     }
@@ -565,9 +573,10 @@ export function LobbyScreen({ navigation }) {
         <View
           style={{
             flexDirection: "row",
+            alignItems: "center",
           }}
         >
-          {leaveSlotButton(showButtons, slotName, "RED")}
+          {leaveSlotButton(showButtons, slotName, "RED", currentPlayer)}
           <Text
             style={{
               fontSize: 20,
@@ -577,7 +586,7 @@ export function LobbyScreen({ navigation }) {
             {slotName}
           </Text>
           {!isGameInProgress &&
-            readySlotButton(showButtons, slotName, redReady, index, "RED")}
+            readySlotButton(showButtons, slotName, redReady, index, "RED", currentPlayer)}
         </View>
       </TouchableOpacity>
     );
@@ -587,6 +596,7 @@ export function LobbyScreen({ navigation }) {
     let slotName = "Player Slot";
     let slotBorderColor = "black";
     let showButtons = false;
+    let currentPlayer = false;
     if (index === 0) {
       slotName = "Spymaster Slot";
       slotBorderColor = "dodgerblue";
@@ -605,6 +615,7 @@ export function LobbyScreen({ navigation }) {
       showButtons = true;
       // But if slot is the current player
       if (bluePlayer.id === socket.id) {
+        currentPlayer = true;
         slotColor = "#A89CD0"; // Set color to purple
       }
     }
@@ -648,9 +659,10 @@ export function LobbyScreen({ navigation }) {
         <View
           style={{
             flexDirection: "row",
+            alignItems: "center",
           }}
         >
-          {leaveSlotButton(showButtons, slotName, "BLUE")}
+          {leaveSlotButton(showButtons, slotName, "BLUE", currentPlayer)}
           <Text
             style={{
               fontSize: 20,
@@ -659,7 +671,7 @@ export function LobbyScreen({ navigation }) {
           >
             {slotName}
           </Text>
-          {readySlotButton(showButtons, slotName, blueReady, index, "BLUE")}
+          {readySlotButton(showButtons, slotName, blueReady, index, "BLUE", currentPlayer)}
         </View>
       </TouchableOpacity>
     );
@@ -679,6 +691,7 @@ export function LobbyScreen({ navigation }) {
             backgroundColor: "#EAE7F2",
           }}
         >
+          <Text style={{margin: 20, fontSize: 20}}>To ready up, press the check mark</Text>
           <View
             style={{
               backgroundColor: "white",
