@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   Image,
+  Modal,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 // Credit: https://stackoverflow.com/questions/48018084/componentdidmount-function-is-not-called-after-navigation
@@ -52,10 +53,12 @@ class GameScreen extends React.Component {
       winningTeam: "",
       isSnackbarVisible: false,
       isModalVisible: false,
+      victoryVisible: true,
       guess: {},
       keyboardOffset: 0,
       timeOfLatestMessage: 0,
       playerList: [],
+      isGuessCorrect: false,
     };
 
     this.state = this.initialState;
@@ -160,6 +163,7 @@ class GameScreen extends React.Component {
   subscribeToChooseCardUpdates = () => {
     this.socket.on(CHOOSE_CARD_RESPONSE, async (res) => {
       await this.setGuess(res);
+      await this.setIsGuessCorrect(res.isGuessCorrect);
       await this.setSnackbarVisible(true);
     });
   };
@@ -210,6 +214,18 @@ class GameScreen extends React.Component {
     });
   };
 
+  setVictoryVisible = (value) => {
+    this.setState({
+      victoryVisible: value,
+    });
+  };
+
+  setIsGuessCorrect = (value) => {
+    this.setState({
+      isGuessCorrect: value
+    });
+  };
+
   determineContentContainerStyle = () => {
     const { keyboardOffset } = this.state;
 
@@ -250,9 +266,11 @@ class GameScreen extends React.Component {
       clue,
       isSnackbarVisible,
       isModalVisible,
+      victoryVisible,
       guess,
       hasClueBeenSet,
       playerList,
+      isGuessCorrect,
     } = this.state;
     const { name, team, role } = player;
 
@@ -282,11 +300,107 @@ class GameScreen extends React.Component {
       return <>{null}</>;
     };
 
+    const victoryModal = (winner, visibility, setVisibility) => {
+      if (winner === "BLUE" && visibility === true){
+        return (
+          <Modal
+            animationType = "fade"
+            transparent={true}
+            visible={visibility}
+            style={{borderWidth: 0}}
+          >
+            <View
+              style={{
+                flex:1,
+                justifyContent: "center",
+                alignItems: "center",
+                margin: 10
+              }}
+            >
+              <View
+                style={{
+                  backgroundColor: "#A89CD0",
+                  borderRadius: 10,
+                  padding: 20,
+                  margin: 10,
+                  alignItems: "center",
+                  borderWidth: 2,
+                  borderColor: "dodgerblue",
+                }}
+              >
+                <Text style={{fontSize: 20, fontWeight: "bold"}}>Blue Team Wins!</Text>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "white",
+                    borderRadius: 5,
+                    borderWidth: 1,
+                    padding: 6,
+                  }}
+                  onPress={() => setVisibility(false)}
+                >
+                  <Text style={{fontSize: 15}}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        );
+      }
+      if (winner === "RED"){
+        return (
+          <Modal
+            animationType = "fade"
+            transparent={true}
+            visible={visibility}
+            style={{borderWidth: 0}}
+          >
+            <View
+              style={{
+                flex:1,
+                justifyContent: "center",
+                alignItems: "center",
+                margin: 10
+              }}
+            >
+              <View
+                style={{
+                  backgroundColor: "#FFC58E",
+                  borderRadius: 10,
+                  padding: 20,
+                  margin: 10,
+                  paddingHorizontal: 30,
+                  alignItems: "center",
+                  borderColor: "firebrick",
+                  borderWidth: 2,
+                }}
+              >
+                <Text style={{fontSize: 20, fontWeight: "bold"}}>Red Team Wins!</Text>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "white",
+                    borderRadius: 5,
+                    borderWidth: 1,
+                    padding: 6,
+                  }}
+                  onPress={() => setVisibility(false)}
+                >
+                  <Text style={{fontSize: 15}}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        );
+      }
+      return <>{null}</>;
+    };
+
     return (
       <KeyboardAwareScrollView resetScrollToCoords={{ x: 0, y: 0 }}>
         <SafeAreaView style={this.determineContentContainerStyle()}>
           <NavigationEvents onDidFocus={this.componentDidMount} />
           {gameOver(this.state.winningTeam, currentTeam)}
+          <View style = {styles.infoModal}>
+            {victoryModal(this.state.winningTeam, victoryVisible, this.setVictoryVisible)}
+          </View>
           <Text style={styles.optionsTitleText}>
             {player.name}, you are on the{" "}
             {team === RED ? "Red Team" : "Blue Team"}
@@ -299,7 +413,7 @@ class GameScreen extends React.Component {
             />
             {turnEnder(
               hasClueBeenSet,
-              guess?.isGuessCorrect,
+              isGuessCorrect,
               currentTeam,
               role
             )}
