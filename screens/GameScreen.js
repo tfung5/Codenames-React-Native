@@ -455,14 +455,6 @@ class GameScreen extends React.Component {
             >
               <Text style={styles.testingButtonText}>Restart Game</Text>
             </TouchableOpacity>
-            {currentTeam === team && role === FIELD_OPERATIVE && (
-              <TouchableOpacity
-                onPress={this.endTurn}
-                style={styles.testingButton}
-              >
-                <Text style={styles.testingButtonText}>End Turn</Text>
-              </TouchableOpacity>
-            )}
             <TouchableOpacity
               onPress={this.navigateToChat}
               style={styles.testingButton}
