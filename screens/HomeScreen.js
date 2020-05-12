@@ -456,20 +456,12 @@ export function LobbyScreen({ navigation }) {
     return null;
   };
 
-  const readySlotButton = (
-    visible,
-    slotName,
-    readiness,
-    index,
-    team,
-    current
-  ) => {
+  const readySlotButton = (visible, slotName, readiness, index, team) => {
     if (
       readiness[index] === false &&
       visible === true &&
       slotName != "Player Slot" &&
-      slotName != "Spymaster Slot" &&
-      current === true
+      slotName != "Spymaster Slot"
     ) {
       return (
         <TouchableOpacity
@@ -490,8 +482,7 @@ export function LobbyScreen({ navigation }) {
       readiness[index] === true &&
       visible === true &&
       slotName != "Player Slot" &&
-      slotName != "Spymaster Slot" &&
-      current === true
+      slotName != "Spymaster Slot"
     ) {
       return (
         <TouchableOpacity
@@ -593,14 +584,7 @@ export function LobbyScreen({ navigation }) {
             {slotName}
           </Text>
           {!isGameInProgress &&
-            readySlotButton(
-              showButtons,
-              slotName,
-              redReady,
-              index,
-              "RED",
-              currentPlayer
-            )}
+            readySlotButton(showButtons, slotName, redReady, index, "RED")}
         </View>
       </TouchableOpacity>
     );
@@ -685,14 +669,7 @@ export function LobbyScreen({ navigation }) {
           >
             {slotName}
           </Text>
-          {readySlotButton(
-            showButtons,
-            slotName,
-            blueReady,
-            index,
-            "BLUE",
-            currentPlayer
-          )}
+          {readySlotButton(showButtons, slotName, blueReady, index, "BLUE")}
         </View>
       </TouchableOpacity>
     );
