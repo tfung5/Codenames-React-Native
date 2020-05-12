@@ -222,7 +222,7 @@ class GameScreen extends React.Component {
 
   setIsGuessCorrect = (value) => {
     this.setState({
-      isGuessCorrect: value
+      isGuessCorrect: value,
     });
   };
 
@@ -301,20 +301,20 @@ class GameScreen extends React.Component {
     };
 
     const victoryModal = (winner, visibility, setVisibility) => {
-      if (winner === "BLUE" && visibility === true){
+      if (winner === "BLUE" && visibility === true) {
         return (
           <Modal
-            animationType = "fade"
+            animationType="fade"
             transparent={true}
             visible={visibility}
-            style={{borderWidth: 0}}
+            style={{ borderWidth: 0 }}
           >
             <View
               style={{
-                flex:1,
+                flex: 1,
                 justifyContent: "center",
                 alignItems: "center",
-                margin: 10
+                margin: 10,
               }}
             >
               <View
@@ -328,7 +328,9 @@ class GameScreen extends React.Component {
                   borderColor: "dodgerblue",
                 }}
               >
-                <Text style={{fontSize: 20, fontWeight: "bold"}}>Blue Team Wins!</Text>
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                  Blue Team Wins!
+                </Text>
                 <TouchableOpacity
                   style={{
                     backgroundColor: "white",
@@ -338,27 +340,27 @@ class GameScreen extends React.Component {
                   }}
                   onPress={() => setVisibility(false)}
                 >
-                  <Text style={{fontSize: 15}}>Close</Text>
+                  <Text style={{ fontSize: 15 }}>Close</Text>
                 </TouchableOpacity>
               </View>
             </View>
           </Modal>
         );
       }
-      if (winner === "RED"){
+      if (winner === "RED") {
         return (
           <Modal
-            animationType = "fade"
+            animationType="fade"
             transparent={true}
             visible={visibility}
-            style={{borderWidth: 0}}
+            style={{ borderWidth: 0 }}
           >
             <View
               style={{
-                flex:1,
+                flex: 1,
                 justifyContent: "center",
                 alignItems: "center",
-                margin: 10
+                margin: 10,
               }}
             >
               <View
@@ -373,7 +375,9 @@ class GameScreen extends React.Component {
                   borderWidth: 2,
                 }}
               >
-                <Text style={{fontSize: 20, fontWeight: "bold"}}>Red Team Wins!</Text>
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                  Red Team Wins!
+                </Text>
                 <TouchableOpacity
                   style={{
                     backgroundColor: "white",
@@ -383,7 +387,7 @@ class GameScreen extends React.Component {
                   }}
                   onPress={() => setVisibility(false)}
                 >
-                  <Text style={{fontSize: 15}}>Close</Text>
+                  <Text style={{ fontSize: 15 }}>Close</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -398,8 +402,12 @@ class GameScreen extends React.Component {
         <SafeAreaView style={this.determineContentContainerStyle()}>
           <NavigationEvents onDidFocus={this.componentDidMount} />
           {gameOver(this.state.winningTeam, currentTeam)}
-          <View style = {styles.infoModal}>
-            {victoryModal(this.state.winningTeam, victoryVisible, this.setVictoryVisible)}
+          <View style={styles.infoModal}>
+            {victoryModal(
+              this.state.winningTeam,
+              victoryVisible,
+              this.setVictoryVisible
+            )}
           </View>
           <Text style={styles.optionsTitleText}>
             {player.name}, you are on the{" "}
@@ -411,12 +419,7 @@ class GameScreen extends React.Component {
               blueLeft={blueCardCounter}
               canEnd={false}
             />
-            {turnEnder(
-              hasClueBeenSet,
-              isGuessCorrect,
-              currentTeam,
-              role
-            )}
+            {turnEnder(hasClueBeenSet, isGuessCorrect, currentTeam, role)}
           </View>
           <View style={styles.boardWrapper}>
             <Board
