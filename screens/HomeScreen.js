@@ -421,7 +421,6 @@ export function LobbyScreen({ navigation }) {
     ) {
       return (
         <TouchableOpacity
-          style={{flex: 1}}
           onPress={() => {
             const redTeamCopy = [...redTeam];
             const blueTeamCopy = [...blueTeam];
@@ -453,20 +452,22 @@ export function LobbyScreen({ navigation }) {
         </TouchableOpacity>
       );
     }
+    // Placeholder image instead of the leave slot image to keep spacing even for each slot
+    else if (slotName != "Player Slot" && slotName != "Spymaster Slot") {
+      return <View style={{ margin: 10, width: 15, height: 15 }} />;
+    }
     return null;
   };
 
-  const readySlotButton = (visible, slotName, readiness, index, team, current) => {
+  const readySlotButton = (visible, slotName, readiness, index, team) => {
     if (
       readiness[index] === false &&
       visible === true &&
       slotName != "Player Slot" &&
-      slotName != "Spymaster Slot" &&
-      current === true
+      slotName != "Spymaster Slot"
     ) {
       return (
         <TouchableOpacity
-          style={{flex: 1}}
           onPress={() => {
             if (slotName === name) {
               socket.emit(READY_CHANGE, { team, index });
@@ -483,12 +484,10 @@ export function LobbyScreen({ navigation }) {
       readiness[index] === true &&
       visible === true &&
       slotName != "Player Slot" &&
-      slotName != "Spymaster Slot" &&
-      current === true
+      slotName != "Spymaster Slot"
     ) {
       return (
         <TouchableOpacity
-          style={{flex: 1}}
           onPress={() => {
             if (slotName === name) {
               socket.emit(READY_CHANGE, { team, index });
@@ -574,6 +573,8 @@ export function LobbyScreen({ navigation }) {
           style={{
             flexDirection: "row",
             alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
           }}
         >
           {leaveSlotButton(showButtons, slotName, "RED", currentPlayer)}
@@ -586,7 +587,7 @@ export function LobbyScreen({ navigation }) {
             {slotName}
           </Text>
           {!isGameInProgress &&
-            readySlotButton(showButtons, slotName, redReady, index, "RED", currentPlayer)}
+            readySlotButton(showButtons, slotName, redReady, index, "RED")}
         </View>
       </TouchableOpacity>
     );
@@ -671,7 +672,7 @@ export function LobbyScreen({ navigation }) {
           >
             {slotName}
           </Text>
-          {readySlotButton(showButtons, slotName, blueReady, index, "BLUE", currentPlayer)}
+          {readySlotButton(showButtons, slotName, blueReady, index, "BLUE")}
         </View>
       </TouchableOpacity>
     );
@@ -691,7 +692,9 @@ export function LobbyScreen({ navigation }) {
             backgroundColor: "#EAE7F2",
           }}
         >
-          <Text style={{margin: 20, fontSize: 20}}>To ready up, press the check mark</Text>
+          <Text style={{ margin: 20, fontSize: 20 }}>
+            To ready up, press the check mark
+          </Text>
           <View
             style={{
               backgroundColor: "white",
