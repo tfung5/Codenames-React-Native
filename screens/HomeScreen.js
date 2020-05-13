@@ -421,7 +421,6 @@ export function LobbyScreen({ navigation }) {
     ) {
       return (
         <TouchableOpacity
-          style={{ flex: 1 }}
           onPress={() => {
             const redTeamCopy = [...redTeam];
             const blueTeamCopy = [...blueTeam];
@@ -453,6 +452,10 @@ export function LobbyScreen({ navigation }) {
         </TouchableOpacity>
       );
     }
+    // Placeholder image instead of the leave slot image to keep spacing even for each slot
+    else if (slotName != "Player Slot" && slotName != "Spymaster Slot") {
+      return <View style={{ margin: 10, width: 15, height: 15 }} />;
+    }
     return null;
   };
 
@@ -465,7 +468,6 @@ export function LobbyScreen({ navigation }) {
     ) {
       return (
         <TouchableOpacity
-          style={{ flex: 1 }}
           onPress={() => {
             if (slotName === name) {
               socket.emit(READY_CHANGE, { team, index });
@@ -486,7 +488,6 @@ export function LobbyScreen({ navigation }) {
     ) {
       return (
         <TouchableOpacity
-          style={{ flex: 1 }}
           onPress={() => {
             if (slotName === name) {
               socket.emit(READY_CHANGE, { team, index });
@@ -572,6 +573,8 @@ export function LobbyScreen({ navigation }) {
           style={{
             flexDirection: "row",
             alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
           }}
         >
           {leaveSlotButton(showButtons, slotName, "RED", currentPlayer)}
