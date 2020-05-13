@@ -398,7 +398,10 @@ class GameScreen extends React.Component {
     };
 
     return (
-      <KeyboardAwareScrollView resetScrollToCoords={{ x: 0, y: 0 }}>
+      <KeyboardAwareScrollView
+        resetScrollToCoords={{ x: 0, y: 0 }}
+        contentContainerStyle={styles.contentContainer}
+      >
         <SafeAreaView style={this.determineContentContainerStyle()}>
           <NavigationEvents onDidFocus={this.componentDidMount} />
           {gameOver(this.state.winningTeam, currentTeam)}
@@ -545,8 +548,10 @@ const styles = {
     width: 22,
     height: 22,
   },
-  gameScreen: {
+  contentContainer: {
     height: "100%",
+  },
+  gameScreen: {
     flexDirection: "column",
     alignItems: "center",
     paddingBottom: 55,
